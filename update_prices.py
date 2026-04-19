@@ -26,7 +26,7 @@ CARDS = [
     {"id": "charizard-v-ssv",   "query": "PSA 10 Charizard V Shiny Star V"},
     {"id": "mentali-v-eh",      "query": "PSA 10 Espeon V Eevee Heroes"},
     {"id": "dracaufeu-ex-151",  "query": "PSA 10 Charizard ex 201 Pokemon 151"},
-    {"id": "pikachu-ex-sv8",    "query": "PSA 10 Pikachu ex Super Electric Breaker"},
+    {"id": "pikachu-ex-sv8",    "query": "PSA 10 Pikachu ex 132 Super Electric Breaker"},
     {"id": "umbreon-ex-sv8a",   "query": "PSA 10 Umbreon ex Terastal Festival"},
 ]
 
