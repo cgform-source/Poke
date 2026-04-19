@@ -1,10 +1,9 @@
 {
-  "last_update": "2026-04-19T22:45:52+00:00",
+  "last_update": "2026-04-19T22:54:12+00:00",
   "cards": {
     "charizard-v-ssv": {
       "price": 250,
       "history": [
-        280,
         270,
         260,
         255,
@@ -14,15 +13,15 @@
         255,
         260,
         255,
+        250,
         250
       ],
-      "sales_count": 0,
-      "last_update": null
+      "sales_count": 30,
+      "last_update": "2026-04-19T22:54:12+00:00"
     },
     "mentali-v-eh": {
-      "price": 320,
+      "price": 235,
       "history": [
-        280,
         285,
         290,
         300,
@@ -32,15 +31,15 @@
         320,
         325,
         320,
-        320
+        320,
+        235
       ],
-      "sales_count": 0,
-      "last_update": null
+      "sales_count": 30,
+      "last_update": "2026-04-19T22:54:12+00:00"
     },
     "dracaufeu-ex-151": {
-      "price": 580,
+      "price": 917,
       "history": [
-        420,
         440,
         460,
         480,
@@ -50,15 +49,15 @@
         540,
         560,
         575,
-        580
+        580,
+        917
       ],
-      "sales_count": 0,
-      "last_update": null
+      "sales_count": 30,
+      "last_update": "2026-04-19T22:54:12+00:00"
     },
     "pikachu-ex-sv8": {
-      "price": 380,
+      "price": 66,
       "history": [
-        520,
         490,
         470,
         450,
@@ -68,15 +67,15 @@
         390,
         385,
         380,
-        380
+        380,
+        66
       ],
-      "sales_count": 0,
-      "last_update": null
+      "sales_count": 30,
+      "last_update": "2026-04-19T22:54:12+00:00"
     },
     "umbreon-ex-sv8a": {
-      "price": 720,
+      "price": 699,
       "history": [
-        450,
         490,
         530,
         570,
@@ -86,10 +85,11 @@
         680,
         700,
         720,
-        720
+        720,
+        699
       ],
-      "sales_count": 0,
-      "last_update": null
+      "sales_count": 30,
+      "last_update": "2026-04-19T22:54:12+00:00"
     }
   }
 }
