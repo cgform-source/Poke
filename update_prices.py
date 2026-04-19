@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""
-PKMN VAULT - Price Updater
-Scrape eBay.fr ventes complétées PSA 10 pour chaque carte,
-calcule la médiane robuste (exclut les outliers 2σ),
-met à jour prices.json.
-"""
+“””
+PKMN VAULT - Price Updater v2
+
+- Scrape ebay.com (gros volume de ventes PSA 10 Japanese vs ebay.fr vide)
+- Conversion USD -> EUR automatique via API publique
+- Requetes simplifiees
+- Selecteurs CSS multiples (fallback si eBay change son HTML)
+- Logs detailles pour diagnostic
+  “””
 
 import json
 import os
@@ -18,183 +21,204 @@ import requests
 from bs4 import BeautifulSoup
 
 # ═══════════════════════════════════════════════════════════════════
-# CARTES A TRACKER - doit correspondre aux ids dans index.html
+
+# CARTES - requetes simplifiees pour maximiser les resultats
+
 # ═══════════════════════════════════════════════════════════════════
+
 CARDS = [
-    {
-        "id": "charizard-v-ssv",
-        "query": "PSA 10 Charizard V 307/190 Shiny Star V Japanese",
-    },
-    {
-        "id": "mentali-v-eh",
-        "query": "PSA 10 Espeon V 081/069 Eevee Heroes Japanese",
-    },
-    {
-        "id": "dracaufeu-ex-151",
-        "query": "PSA 10 Charizard ex 201/165 SV2a 151 Japanese",
-    },
-    {
-        "id": "pikachu-ex-sv8",
-        "query": "PSA 10 Pikachu ex 132/106 SV8 Super Electric Breaker Japanese",
-    },
-    {
-        "id": "umbreon-ex-sv8a",
-        "query": "PSA 10 Umbreon ex 217/187 SV8a Terastal Festival Japanese",
-    },
+{
+“id”: “charizard-v-ssv”,
+“query”: “PSA 10 Charizard V 307 Shiny Star V Japanese”,
+},
+{
+“id”: “mentali-v-eh”,
+“query”: “PSA 10 Espeon V 081 Eevee Heroes Japanese”,
+},
+{
+“id”: “dracaufeu-ex-151”,
+“query”: “PSA 10 Charizard ex 201 Pokemon 151 Japanese”,
+},
+{
+“id”: “pikachu-ex-sv8”,
+“query”: “PSA 10 Pikachu ex 132 Super Electric Breaker”,
+},
+{
+“id”: “umbreon-ex-sv8a”,
+“query”: “PSA 10 Umbreon ex 217 Terastal Festival”,
+},
 ]
 
-# Bornes de sanité pour écarter les ventes aberrantes (lots, erreurs)
-PRICE_MIN = 50
-PRICE_MAX = 5000
-MAX_HISTORY = 11  # on garde 11 points dans l'historique
-MAX_RESULTS_PER_CARD = 30  # on scrape jusqu'à 30 ventes par carte
+# Bornes de sanité en USD (converties ensuite en EUR)
+
+PRICE_MIN_USD = 50
+PRICE_MAX_USD = 8000
+MAX_HISTORY = 11
+MAX_RESULTS_PER_CARD = 30
+
+DEFAULT_USD_TO_EUR = 0.92  # fallback si API taux indispo
 
 HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/120.0.0.0 Safari/537.36"
-    ),
-    "Accept-Language": "fr-FR,fr;q=0.9,en;q=0.8",
+“User-Agent”: (
+“Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) “
+“AppleWebKit/537.36 (KHTML, like Gecko) “
+“Chrome/120.0.0.0 Safari/537.36”
+),
+“Accept”: “text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8”,
+“Accept-Language”: “en-US,en;q=0.9”,
 }
 
+def get_usd_to_eur() -> float:
+“”“Recupere le taux USD->EUR en direct, fallback si l’API est down.”””
+try:
+r = requests.get(“https://api.exchangerate-api.com/v4/latest/USD”, timeout=10)
+rate = float(r.json()[“rates”][“EUR”])
+print(f”Taux USD->EUR: {rate:.4f}”)
+return rate
+except Exception as e:
+print(f”API taux indispo ({e}), fallback {DEFAULT_USD_TO_EUR}”)
+return DEFAULT_USD_TO_EUR
 
-def parse_price(text: str) -> float | None:
-    """Extrait un montant en € depuis un texte eBay. Renvoie None si invalide."""
-    if not text:
-        return None
-    # Ignorer les fourchettes ("12,00 € à 45,00 €")
-    if " à " in text or " to " in text.lower():
-        return None
-    # Nettoyer et chercher un nombre
-    cleaned = text.replace("\xa0", " ").replace(",", ".")
-    # Pattern : un nombre potentiellement séparé par des espaces (milliers)
-    matches = re.findall(r"(\d{1,3}(?:\s?\d{3})*(?:\.\d+)?)", cleaned)
-    if not matches:
-        return None
-    try:
-        num = float(matches[0].replace(" ", ""))
-        if PRICE_MIN <= num <= PRICE_MAX:
-            return num
-    except ValueError:
-        pass
-    return None
+def parse_price_usd(text: str) -> float | None:
+“”“Extrait un montant en USD depuis un texte eBay.”””
+if not text:
+return None
+# Ignorer les fourchettes (”$12.00 to $45.00”)
+if “ to “ in text.lower() or “ à “ in text:
+return None
+# Enlever separateurs de milliers et symbole
+cleaned = text.replace(”\xa0”, “ “).replace(”,”, “”).replace(”$”, “”)
+match = re.search(r”(\d+(?:.\d+)?)”, cleaned)
+if not match:
+return None
+try:
+num = float(match.group(1))
+if PRICE_MIN_USD <= num <= PRICE_MAX_USD:
+return num
+except ValueError:
+pass
+return None
 
+def fetch_sold_prices_usd(query: str) -> list[float]:
+“”“Scrape ebay.com sold listings, renvoie les prix en USD.”””
+url = (
+f”https://www.ebay.com/sch/i.html?”
+f”_from=R40&_nkw={quote(query)}”
+f”&LH_Sold=1&LH_Complete=1”
+f”&_sop=13”
+f”&_ipg=60”
+)
+print(f”  GET {url[:130]}…”)
 
-def fetch_sold_prices(query: str) -> list[float]:
-    """Scrape les ventes complétées eBay.fr, renvoie la liste des prix."""
-    url = (
-        f"https://www.ebay.fr/sch/i.html?"
-        f"_from=R40&_nkw={quote(query)}"
-        f"&LH_Sold=1&LH_Complete=1"
-        f"&_sop=13"  # trié par date de fin la plus récente
-        f"&_ipg=60"  # 60 résultats par page
+```
+try:
+    r = requests.get(url, headers=HEADERS, timeout=30)
+    r.raise_for_status()
+except requests.RequestException as e:
+    print(f"  ERREUR fetch: {e}")
+    return []
+
+print(f"  HTTP {r.status_code}, {len(r.content)} bytes reçus")
+
+soup = BeautifulSoup(r.text, "html.parser")
+
+# Plusieurs selecteurs - eBay change sa structure regulierement
+items = (
+    soup.select("li.s-item")
+    or soup.select("div.s-item")
+    or soup.select("[class*='s-item__wrapper']")
+)
+print(f"  {len(items)} items dans le HTML")
+
+prices = []
+for item in items:
+    price_el = (
+        item.select_one(".s-item__price")
+        or item.select_one("span.POSITIVE")
+        or item.select_one(".prc")
+        or item.select_one("[class*='price']")
     )
-    print(f"  GET {url[:120]}...")
-    try:
-        r = requests.get(url, headers=HEADERS, timeout=20)
-        r.raise_for_status()
-    except requests.RequestException as e:
-        print(f"  ERREUR fetch: {e}")
-        return []
+    if not price_el:
+        continue
 
-    soup = BeautifulSoup(r.text, "html.parser")
-    prices = []
+    price = parse_price_usd(price_el.get_text(strip=True))
+    if price is not None:
+        prices.append(price)
 
-    for item in soup.select("li.s-item"):
-        # eBay met souvent un 1er item "placeholder", on skip s'il n'a pas de lien valide
-        link = item.select_one(".s-item__link")
-        if not link or "itm/" not in link.get("href", ""):
-            continue
+    if len(prices) >= MAX_RESULTS_PER_CARD:
+        break
 
-        price_el = item.select_one(".s-item__price")
-        if not price_el:
-            continue
-
-        price = parse_price(price_el.get_text(strip=True))
-        if price is not None:
-            prices.append(price)
-
-        if len(prices) >= MAX_RESULTS_PER_CARD:
-            break
-
-    return prices
-
+return prices
+```
 
 def robust_median(prices: list[float]) -> float | None:
-    """
-    Médiane robuste : exclut les outliers au-delà de 2 écarts-types.
-    Renvoie None si aucun prix utilisable.
-    """
-    if not prices:
-        return None
-    if len(prices) <= 2:
-        return statistics.median(prices)
-
-    mean = statistics.mean(prices)
-    stdev = statistics.stdev(prices)
-    if stdev == 0:
-        return statistics.median(prices)
-
-    filtered = [p for p in prices if abs(p - mean) <= 2 * stdev]
-    return statistics.median(filtered) if filtered else statistics.median(prices)
-
+“”“Mediane robuste : exclut les outliers au-dela de 2 ecarts-types.”””
+if not prices:
+return None
+if len(prices) <= 2:
+return statistics.median(prices)
+mean = statistics.mean(prices)
+stdev = statistics.stdev(prices)
+if stdev == 0:
+return statistics.median(prices)
+filtered = [p for p in prices if abs(p - mean) <= 2 * stdev]
+return statistics.median(filtered) if filtered else statistics.median(prices)
 
 def load_prices(path: str) -> dict:
-    if os.path.exists(path):
-        try:
-            with open(path, encoding="utf-8") as f:
-                return json.load(f)
-        except (json.JSONDecodeError, OSError) as e:
-            print(f"ATTENTION: prices.json illisible ({e}), re-création")
-    return {"last_update": None, "cards": {}}
+if os.path.exists(path):
+try:
+with open(path, encoding=“utf-8”) as f:
+return json.load(f)
+except (json.JSONDecodeError, OSError) as e:
+print(f”prices.json illisible ({e}), re-creation”)
+return {“last_update”: None, “cards”: {}}
 
+def update_card(data: dict, card: dict, now_iso: str, usd_to_eur: float) -> None:
+prices_usd = fetch_sold_prices_usd(card[“query”])
+if not prices_usd:
+print(f”  ⚠ Aucune vente trouvee, prix inchange”)
+return
 
-def update_card(data: dict, card: dict, now_iso: str) -> None:
-    """Met à jour une carte dans le dict data."""
-    prices = fetch_sold_prices(card["query"])
-    if not prices:
-        print(f"  ⚠ Aucune vente trouvée pour {card['id']}, prix inchangé")
-        return
+```
+median_usd = robust_median(prices_usd)
+median_eur = round(median_usd * usd_to_eur)
+print(f"  ✓ Mediane: ${median_usd:.0f} -> {median_eur}€  (sur {len(prices_usd)} ventes)")
 
-    median = round(robust_median(prices))
-    print(f"  ✓ Médiane: {median}€  (sur {len(prices)} ventes)")
+entry = data["cards"].get(card["id"], {"history": [], "price": None})
+hist = entry.get("history", [])
+hist.append(median_eur)
+entry["history"] = hist[-MAX_HISTORY:]
 
-    entry = data["cards"].get(card["id"], {"history": [], "price": None})
-
-    # Ajout du nouveau point + rotation pour garder MAX_HISTORY valeurs
-    hist = entry.get("history", [])
-    hist.append(median)
-    entry["history"] = hist[-MAX_HISTORY:]
-
-    entry["price"] = median
-    entry["sales_count"] = len(prices)
-    entry["last_update"] = now_iso
-    data["cards"][card["id"]] = entry
-
+entry["price"] = median_eur
+entry["sales_count"] = len(prices_usd)
+entry["last_update"] = now_iso
+data["cards"][card["id"]] = entry
+```
 
 def main():
-    path = "prices.json"
-    data = load_prices(path)
-    now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+path = “prices.json”
+data = load_prices(path)
+now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+usd_to_eur = get_usd_to_eur()
 
-    print(f"=== PKMN VAULT update @ {now} ===\n")
+```
+print(f"=== PKMN VAULT update @ {now} (source: ebay.com) ===\n")
 
-    for card in CARDS:
-        print(f"[{card['id']}]")
-        try:
-            update_card(data, card, now)
-        except Exception as e:
-            print(f"  ERREUR: {e}")
-        time.sleep(3)  # on reste poli avec eBay
+for card in CARDS:
+    print(f"[{card['id']}]")
+    try:
+        update_card(data, card, now, usd_to_eur)
+    except Exception as e:
+        print(f"  ERREUR: {e}")
+    time.sleep(3)
 
-    data["last_update"] = now
+data["last_update"] = now
 
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
+with open(path, "w", encoding="utf-8") as f:
+    json.dump(data, f, indent=2, ensure_ascii=False)
 
-    print(f"\n✓ {path} mis à jour")
+print(f"\n✓ {path} mis a jour")
+```
 
-
-if __name__ == "__main__":
-    main()
+if **name** == “**main**”:
+main()
