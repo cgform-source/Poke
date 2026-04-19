@@ -35,5 +35,6 @@ jobs:
             echo "Aucun changement, rien à commiter."
           else
             git commit -m "chore: update prices $(date -u +%Y-%m-%d)"
+            git pull --rebase origin main
             git push
           fi
