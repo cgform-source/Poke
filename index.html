@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PKMN VAULT // Collection PSA 10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@400;600;800&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+--bg:#05060f; --bg-2:#0a0f1e;
+--panel:rgba(10,15,30,0.7);
+--cyan:#00ffe0; --magenta:#ff2ec4; --violet:#8a2bff;
+--yellow:#ffe436; --green:#00ff9d; --red:#ff3860;
+--grid:rgba(0,255,224,0.08); --border:rgba(0,255,224,0.25);
+--text:#e5f3ff; --muted:#6e7da6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden}
+body{
+background:radial-gradient(ellipse at 20% 0%,rgba(138,43,255,0.15),transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(0,255,224,0.12),transparent 50%),linear-gradient(180deg,#05060f 0%,#080b1a 50%,#05060f 100%);
+background-attachment:fixed;position:relative;
+}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:50px 50px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%)}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;background:repeating-linear-gradient(0deg,transparent 0,transparent 3px,rgba(0,0,0,0.12) 3px,rgba(0,0,0,0.12) 4px);mix-blend-mode:multiply}
+.wrap{max-width:1280px;margin:0 auto;padding:24px 20px 60px;position:relative;z-index:2}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border:1px solid var(--border);background:var(--panel);backdrop-filter:blur(10px);border-radius:6px;margin-bottom:28px;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{width:36px;height:36px;border:2px solid var(--cyan);transform:rotate(45deg);position:relative;flex-shrink:0}
+.logo::before{content:'';position:absolute;inset:4px;border:1px solid var(--magenta);transform:rotate(45deg)}
+.logo::after{content:'';position:absolute;inset:10px;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+.brand h1{font-family:'Orbitron',sans-serif;font-weight:900;font-size:20px;letter-spacing:3px;color:#fff;text-shadow:0 0 15px rgba(0,255,224,0.5)}
+.brand h1 span{color:var(--magenta);text-shadow:0 0 15px var(--magenta)}
+.topbar-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{background:transparent;border:1px solid var(--border);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:2px;padding:8px 14px;cursor:pointer;text-transform:uppercase;border-radius:3px;transition:all .2s ease}
+.btn-edit{border-color:var(--magenta);color:var(--magenta)}
+.btn-edit:hover{background:var(--magenta);color:#000;box-shadow:0 0 15px var(--magenta)}
+.btn-edit.active{background:var(--magenta);color:#000;animation:pulse-btn 1.5s infinite}
+@keyframes pulse-btn{0%,100%{box-shadow:0 0 0 0 rgba(255,46,196,0.6)}50%{box-shadow:0 0 0 8px rgba(255,46,196,0)}}
+.hero{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:14px;margin-bottom:32px}
+.stat{border:1px solid var(--border);background:var(--panel);backdrop-filter:blur(10px);padding:18px 20px;position:relative;overflow:hidden;border-radius:4px}
+.stat::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.stat.main::before{background:var(--magenta);box-shadow:0 0 10px var(--magenta)}
+.stat .label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+.stat .value{font-family:'Orbitron',sans-serif;font-weight:900;font-size:28px;color:#fff;letter-spacing:1px}
+.stat.main .value{font-size:40px;color:var(--cyan);text-shadow:0 0 20px rgba(0,255,224,0.4)}
+.stat .delta{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;margin-top:4px}
+.stat .delta.up{color:var(--green)}.stat .delta.down{color:var(--red)}
+.stat .sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-top:4px}
+.section-title{display:flex;align-items:center;gap:12px;margin:0 0 18px;font-family:'Orbitron',sans-serif;font-weight:700;letter-spacing:4px;font-size:14px;color:var(--cyan);text-transform:uppercase}
+.section-title::before{content:'▸';color:var(--magenta)}
+.section-title .line{flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(540px,1fr));gap:20px}
+.card{border:1px solid var(--border);background:linear-gradient(135deg,rgba(10,15,30,0.85),rgba(20,10,40,0.7));backdrop-filter:blur(12px);border-radius:6px;overflow:hidden;position:relative;transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s ease,border-color .4s ease}
+.card::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:3;background:linear-gradient(115deg,transparent 40%,rgba(255,46,196,0.08) 48%,rgba(0,255,224,0.08) 52%,transparent 60%);transition:transform .6s ease;transform:translateX(-30%)}
+.card:hover{transform:translateY(-4px);border-color:var(--cyan);box-shadow:0 20px 50px rgba(0,255,224,0.15),0 0 40px rgba(138,43,255,0.1)}
+.card:hover::before{transform:translateX(30%)}
+.card-inner{display:grid;grid-template-columns:200px 1fr;gap:0;min-height:300px}
+.slab{position:relative;overflow:hidden;background:#000;border-right:1px solid var(--border);cursor:pointer}
+.slab img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;position:absolute;inset:0}
+.slab-fallback{text-align:center;padding:16px;font-family:'Orbitron',sans-serif;font-weight:700;color:#fff;letter-spacing:2px;font-size:11px;line-height:1.4;text-shadow:0 0 10px rgba(255,255,255,0.4);z-index:1;background:repeating-linear-gradient(45deg,rgba(255,46,196,0.05) 0 10px,transparent 10px 20px);position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.slab-holo{position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,0.10) 50%,transparent 70%);pointer-events:none;animation:holo 4s ease-in-out infinite;z-index:2}
+@keyframes holo{0%,100%{opacity:0.3;transform:translateX(-100%)}50%{opacity:0.6;transform:translateX(100%)}}
+.rank{position:absolute;top:8px;right:8px;width:28px;height:28px;background:var(--cyan);color:#000;font-family:'Orbitron',sans-serif;font-weight:900;font-size:11px;display:flex;align-items:center;justify-content:center;z-index:4;box-shadow:0 0 10px rgba(0,255,224,0.6);border-radius:2px}
+body.editing .slab::after{content:'📷 MODIFIER IMAGE';position:absolute;bottom:8px;left:8px;right:8px;background:rgba(255,46,196,0.9);color:#000;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px;padding:4px;text-align:center;letter-spacing:1px;z-index:5;border-radius:2px;animation:edit-glow 2s infinite}
+.card-body{padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.card-name{font-family:'Orbitron',sans-serif;font-weight:700;font-size:16px;color:#fff;letter-spacing:1px;line-height:1.2}
+.card-set{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:1px}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--magenta);background:rgba(255,46,196,0.1);border:1px solid rgba(255,46,196,0.4);padding:3px 8px;letter-spacing:1px;white-space:nowrap}
+.cert-badge{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--yellow);margin-top:2px;letter-spacing:1px}
+.cert-badge a{color:var(--yellow);text-decoration:none;border-bottom:1px dotted var(--yellow)}
+.cert-badge a:hover{color:var(--cyan);border-color:var(--cyan)}
+.price-block{display:flex;align-items:flex-end;gap:18px;padding:10px 0;border-top:1px dashed var(--border);border-bottom:1px dashed var(--border);flex-wrap:wrap}
+.price-col{display:flex;flex-direction:column;gap:2px}
+.price-col .price-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:5px}
+.price-col .price-label::before{content:'';width:8px;height:8px;border-radius:50%;display:inline-block;box-shadow:0 0 8px currentColor}
+.price-col.eu .price-label{color:var(--cyan)}
+.price-col.ww .price-label{color:var(--magenta)}
+.price-main{font-family:'Orbitron',sans-serif;font-weight:900;font-size:24px;letter-spacing:1px;line-height:1;cursor:default;padding:3px 6px;border-radius:3px;transition:all .2s ease;margin:-3px -6px}
+.price-col.eu .price-main{color:var(--cyan);text-shadow:0 0 15px rgba(0,255,224,0.3)}
+.price-col.ww .price-main{color:var(--magenta);text-shadow:0 0 15px rgba(255,46,196,0.3)}
+.price-main .cur{font-size:14px;color:var(--muted);margin-right:2px}
+.price-main.empty{opacity:0.35;font-size:18px}
+body.editing .price-main:not(.empty){cursor:pointer;background:rgba(255,46,196,0.1);border:1px dashed var(--magenta);animation:edit-glow 2s infinite}
+body.editing .price-main:hover{background:rgba(255,46,196,0.2);transform:scale(1.02)}
+@keyframes edit-glow{0%,100%{border-color:var(--magenta);opacity:1}50%{border-color:var(--cyan);opacity:0.85}}
+.price-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-left:auto;text-align:right;line-height:1.4}
+.price-meta .delta-up{color:var(--green)}.price-meta .delta-down{color:var(--red)}
+.chart-wrap{position:relative;height:90px;margin:4px 0}
+.chart-wrap canvas{width:100%!important;height:100%!important}
+.links{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.link{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 10px;border:1px solid var(--border);background:rgba(0,255,224,0.04);color:var(--cyan);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:all .25s ease;border-radius:3px}
+.link.eu{color:var(--cyan);border-color:rgba(0,255,224,0.35);background:rgba(0,255,224,0.05)}
+.link.ww{color:var(--magenta);border-color:rgba(255,46,196,0.35);background:rgba(255,46,196,0.05)}
+.link.cm{color:var(--violet);border-color:rgba(138,43,255,0.35);background:rgba(138,43,255,0.05)}
+.link:hover{transform:translateY(-1px)}
+.link.eu:hover{background:var(--cyan);color:#000;box-shadow:0 0 15px var(--cyan);border-color:var(--cyan)}
+.link.ww:hover{background:var(--magenta);color:#000;box-shadow:0 0 15px var(--magenta);border-color:var(--magenta)}
+.link.cm:hover{background:var(--violet);color:#fff;box-shadow:0 0 15px var(--violet);border-color:var(--violet)}
+.modal{position:fixed;inset:0;background:rgba(5,6,15,0.92);backdrop-filter:blur(8px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+.modal.active{display:flex}
+.modal-content{background:linear-gradient(135deg,#0a0f1e,#1a0b33);border:1px solid var(--magenta);box-shadow:0 0 60px rgba(255,46,196,0.3);border-radius:8px;padding:28px;max-width:480px;width:100%}
+.modal-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:14px;letter-spacing:3px;color:var(--cyan);margin-bottom:6px;text-transform:uppercase}
+.modal-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:20px;letter-spacing:1px;line-height:1.5}
+.modal-input{width:100%;background:#05060f;border:1px solid var(--cyan);color:var(--cyan);font-family:'Orbitron',sans-serif;font-weight:900;font-size:28px;padding:14px 18px;border-radius:4px;outline:none;letter-spacing:1px}
+.modal-input.url{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0;font-weight:400}
+.modal-input:focus{box-shadow:0 0 15px rgba(0,255,224,0.3)}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.modal-btn{flex:1;background:transparent;border:1px solid var(--border);color:var(--text);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;letter-spacing:2px;padding:12px;cursor:pointer;text-transform:uppercase;border-radius:3px;transition:all .2s ease}
+.modal-btn.primary{border-color:var(--cyan);color:var(--cyan)}
+.modal-btn.primary:hover{background:var(--cyan);color:#000}
+.modal-btn:hover{border-color:var(--magenta);color:var(--magenta)}
+@media(max-width:900px){.hero{grid-template-columns:1fr 1fr;gap:10px}.stat.main{grid-column:span 2}.cards{grid-template-columns:1fr}}
+@media(max-width:600px){
+.wrap{padding:16px 12px 40px}
+.topbar{flex-direction:column;align-items:stretch}
+.brand h1{font-size:16px;letter-spacing:2px}
+.hero{grid-template-columns:1fr}.stat.main{grid-column:auto}
+.stat .value{font-size:22px}.stat.main .value{font-size:32px}
+.card-inner{grid-template-columns:130px 1fr}
+.card-body{padding:14px}
+.card-name{font-size:14px}
+.price-main{font-size:20px}
+.price-block{gap:12px}
+.links{grid-template-columns:1fr 1fr;gap:5px}
+.links .link.cm{grid-column:span 2}
+.link{font-size:9px;padding:7px 6px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="topbar">
+<div class="brand">
+<div class="logo"></div>
+<h1>PKMN<span>//</span>VAULT</h1>
+</div>
+<div class="topbar-actions">
+<button class="btn btn-edit" id="editBtn">✎ Mode édition</button>
+</div>
+</header>
+<section class="hero">
+<div class="stat main">
+<div class="label">▸ Valeur Totale PSA 10 (🇪🇺)</div>
+<div class="value" id="totalValue">€ 0</div>
+<div class="delta up" id="totalDelta">+0% (30j)</div>
+</div>
+<div class="stat">
+<div class="label">Cartes Gradées</div>
+<div class="value" id="cardCount">5</div>
+<div class="sub">100% PSA 10 gem mint</div>
+</div>
+<div class="stat">
+<div class="label">Top Performer (12M)</div>
+<div class="value" id="topMover" style="font-size:16px;line-height:1.2">—</div>
+<div class="delta up" id="topMoverDelta">—</div>
+</div>
+<div class="stat">
+<div class="label">Valeur Moyenne (🇪🇺)</div>
+<div class="value" id="avgValue">€ 0</div>
+<div class="sub">par carte</div>
+</div>
+</section>
+<h2 class="section-title">Collection <span class="line"></span></h2>
+<div class="cards" id="cardsGrid"></div>
+</div>
+<div class="modal" id="editModal">
+<div class="modal-content">
+<div class="modal-title" id="modalTitle">Modifier</div>
+<div class="modal-sub" id="modalSub">—</div>
+<input type="number" class="modal-input" id="modalInput" step="1" min="0" style="display:none">
+<input type="url" class="modal-input url" id="modalInputUrl" placeholder="https://..." style="display:none">
+<div class="modal-actions">
+<button class="modal-btn" id="modalCancel">Annuler</button>
+<button class="modal-btn primary" id="modalSave">Sauvegarder</button>
+</div>
+</div>
+</div>
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   5 CARTES — Liens eBay 🇪🇺 (Europe) + 🌎 (Monde) fournis par Luc
+   Les URLs sont stockées telles quelles, zéro modif de caractère.
+   ═══════════════════════════════════════════════════════════════════ */
+const CARDS = [
+  {
+    id: 'charizard-v-ssv', cert: '145866913',
+    name: 'Dracaufeu V', nameAlt: 'Charizard V',
+    set: 'Shiny Star V (S4a) • 2020 • JP',
+    num: '307/190 SSR',
+    image: 'https://www.psacard.com/cert/145866913/psa/image/57DoD5MGc0a45T7rZvOBbw',
+    price_eu: 250, price_ww: 250,
+    history_eu: [280, 270, 260, 255, 250, 245, 250, 255, 260, 255, 250],
+    history_ww: [280, 270, 260, 255, 250, 245, 250, 255, 260, 255, 250],
+    ebayEuUrl: 'https://www.ebay.fr/sch/i.html?_nkw=PSA+10+Charizard+V+307%2F190+Shiny+Star+V+Japanese&_sacat=0&_from=R40&_trksid=m570.l1313&_odkw=PSA+10+Umbreon+ex+217%2F187+SV8a+Terastal+Festival+Japanese&_osacat=0&_sop=13&LH_PrefLoc=3&LH_Sold=1',
+    ebayWwUrl: 'https://www.ebay.fr/sch/i.html?_nkw=PSA+10+Charizard+V+307%2F190+Shiny+Star+V+Japanese&_sacat=0&_from=R40&_sop=13&LH_Sold=1&rt=nc&LH_PrefLoc=2',
+    cardmarketUrl: 'https://www.cardmarket.com/fr/Pokemon/Products/Singles/Shiny-Star-V/Charizard-V-s4a307?language=7'
+  },
+  {
+    id: 'mentali-v-eh', cert: '95360955',
+    name: 'Mentali V', nameAlt: 'Espeon V',
+    set: 'Eevee Heroes (S6a) • 2021 • JP',
+    num: '081/069 SAR',
+    image: 'https://www.psacard.com/cert/95360955/psa/image/vWfFGLoOfkGbq605JlutgQ',
+    price_eu: 320, price_ww: 320,
+    history_eu: [280, 285, 290, 300, 305, 310, 315, 320, 325, 320, 320],
+    history_ww: [280, 285, 290, 300, 305, 310, 315, 320, 325, 320, 320],
+    ebayEuUrl: 'https://www.ebay.fr/sch/i.html?_from=R40&_nkw=PSA+10+Espeon+V+081%2F069+Eevee+Heroes+Japanese&LH_Sold=1&LH_Complete=1&_sop=13&rt=nc&LH_PrefLoc=3',
+    ebayWwUrl: 'https://www.ebay.fr/sch/i.html?_from=R40&_nkw=PSA+10+Espeon+V+081%2F069+Eevee+Heroes+Japanese&LH_Sold=1&LH_Complete=1&_sop=13&rt=nc&LH_PrefLoc=2',
+    cardmarketUrl: 'https://www.cardmarket.com/fr/Pokemon/Products/Singles/Eevee-Heroes/Espeon-V-V3-s6a081?language=7'
+  },
+  {
+    id: 'dracaufeu-ex-151', cert: '102215566',
+    name: 'Dracaufeu ex', nameAlt: 'Charizard ex',
+    set: 'Pokémon 151 (SV2a) • 2023 • JP',
+    num: '201/165 SAR',
+    image: 'https://www.psacard.com/cert/102215566/psa/image/VCCjBrZ3AES-hPUcUnHh2Q',
+    price_eu: 580, price_ww: 580,
+    history_eu: [420, 440, 460, 480, 490, 500, 520, 540, 560, 575, 580],
+    history_ww: [420, 440, 460, 480, 490, 500, 520, 540, 560, 575, 580],
+    ebayEuUrl: 'https://www.ebay.fr/sch/i.html?_from=R40&_nkw=PSA+10+Charizard+ex+201%2F165+SV2a+151+Japanese&LH_Sold=1&LH_PrefLoc=3&_sop=13&rt=nc',
+    ebayWwUrl: 'https://www.ebay.fr/sch/i.html?_from=R40&_nkw=PSA+10+Charizard+ex+201%2F165+SV2a+151+Japanese&LH_Sold=1&_sop=13&LH_PrefLoc=2&rt=nc',
+    cardmarketUrl: 'https://www.cardmarket.com/fr/Pokemon/Products/Singles/Pokemon-Card-151/Charizard-ex-V3-sv2a201?language=7'
+  },
+  {
+    id: 'pikachu-ex-sv8', cert: '102618365',
+    name: 'Pikachu ex', nameAlt: 'Pikachu ex',
+    set: 'Super Electric Breaker (SV8) • 2024 • JP',
+    num: '132/106 SAR',
+    image: 'https://www.psacard.com/cert/102618365/psa/image/sLvYjXjxt0yZrUKGPYGTDw',
+    price_eu: 380, price_ww: 380,
+    history_eu: [520, 490, 470, 450, 430, 410, 400, 390, 385, 380, 380],
+    history_ww: [520, 490, 470, 450, 430, 410, 400, 390, 385, 380, 380],
+    ebayEuUrl: 'https://www.ebay.fr/sch/i.html?_from=R40&_nkw=PSA+10+Pikachu+ex+132%2F106+SV8+Super+Electric+Breaker+Japanese&LH_Sold=1&_sop=13&rt=nc&LH_PrefLoc=3',
+    ebayWwUrl: 'https://www.ebay.fr/sch/i.html?_from=R40&_nkw=PSA+10+Pikachu+ex+132%2F106+SV8+Super+Electric+Breaker+Japanese&LH_Sold=1&_sop=13&rt=nc&LH_PrefLoc=2',
+    cardmarketUrl: 'https://www.cardmarket.com/fr/Pokemon/Products/Singles/Super-Electric-Breaker/Pikachu-ex-V3-sv8132?language=7'
+  },
+  {
+    id: 'umbreon-ex-sv8a', cert: '109838459',
+    name: 'Noctali ex', nameAlt: 'Umbreon ex',
+    set: 'Terastal Festival (SV8a) • 2024 • JP',
+    num: '217/187 SAR',
+    image: 'https://www.psacard.com/cert/109838459/psa/image/Ure9Ck43B0KUOT_Bfgneeg',
+    price_eu: 720, price_ww: 720,
+    history_eu: [450, 490, 530, 570, 600, 630, 660, 680, 700, 720, 720],
+    history_ww: [450, 490, 530, 570, 600, 630, 660, 680, 700, 720, 720],
+    ebayEuUrl: 'https://www.ebay.fr/sch/i.html?_from=R40&_nkw=PSA+10+Umbreon+ex+217%2F187+SV8a+Terastal+Festival+Japanese&LH_Sold=1&_sop=13&LH_PrefLoc=3&rt=nc&LH_Complete=1',
+    ebayWwUrl: 'https://www.ebay.fr/sch/i.html?_from=R40&_nkw=PSA+10+Umbreon+ex+217%2F187+SV8a+Terastal+Festival+Japanese&LH_Sold=1&_sop=13&rt=nc&LH_PrefLoc=2',
+    cardmarketUrl: 'https://www.cardmarket.com/fr/Pokemon/Products/Singles/Terastal-Festival-ex/Umbreon-ex-V2-sv8a217?language=7'
+  }
+];
+
+const STORAGE_KEY = 'pkmn-vault-v4';
+let editMode = false;
+let currentEdit = { card: null, field: null };
+
+/* Charge prices.json (donnees du GitHub Action) puis localStorage (overrides manuels). */
+async function loadData() {
+  try {
+    const r = await fetch('prices.json?t=' + Date.now(), { cache: 'no-store' });
+    if (r.ok) {
+      const remote = await r.json();
+      if (remote && remote.cards) {
+        CARDS.forEach(c => {
+          const rc = remote.cards[c.id];
+          if (!rc) return;
+          // Nouveau format multi-marche
+          if (typeof rc.price_eu === 'number') c.price_eu = rc.price_eu;
+          if (typeof rc.price_ww === 'number') c.price_ww = rc.price_ww;
+          if (Array.isArray(rc.history_eu) && rc.history_eu.length) {
+            c.history_eu = rc.history_eu.slice(-11);
+            while (c.history_eu.length < 11) c.history_eu.unshift(c.history_eu[0]);
+          }
+          if (Array.isArray(rc.history_ww) && rc.history_ww.length) {
+            c.history_ww = rc.history_ww.slice(-11);
+            while (c.history_ww.length < 11) c.history_ww.unshift(c.history_ww[0]);
+          }
+          // Retro-compat ancien format (price + history) → applique sur EU
+          if (typeof rc.price_eu !== 'number' && typeof rc.price === 'number') {
+            c.price_eu = rc.price;
+          }
+          if ((!Array.isArray(rc.history_eu) || !rc.history_eu.length) && Array.isArray(rc.history) && rc.history.length) {
+            c.history_eu = rc.history.slice(-11);
+            while (c.history_eu.length < 11) c.history_eu.unshift(c.history_eu[0]);
+          }
+          c._remoteUpdate = rc.last_update;
+          c._salesCountEu = rc.sales_count_eu;
+          c._salesCountWw = rc.sales_count_ww;
+        });
+        window._lastGlobalUpdate = remote.last_update;
+      }
+    }
+  } catch (e) {
+    console.log('prices.json non disponible, données locales conservées');
+  }
+
+  // Overrides manuels via localStorage
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    CARDS.forEach(c => {
+      const s = saved[c.id];
+      if (!s) return;
+      if (typeof s.image === 'string' && s.image) c.image = s.image;
+      if (typeof s.price_eu === 'number') {
+        c.price_eu = s.price_eu;
+        c.history_eu = [...c.history_eu.slice(0, -1), s.price_eu];
+      }
+      if (typeof s.price_ww === 'number') {
+        c.price_ww = s.price_ww;
+        c.history_ww = [...c.history_ww.slice(0, -1), s.price_ww];
+      }
+    });
+  } catch(e) { console.error(e); }
+}
+
+function save(cardId, field, value) {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    saved[cardId] = saved[cardId] || {};
+    saved[cardId][field] = value;
+    saved[cardId].updated = Date.now();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+  } catch(e) { console.error(e); }
+}
+
+const fmt = (n) => '€ ' + Math.round(n).toLocaleString('fr-FR').replace(/,/g,' ');
+const pct = (o, n) => ((n - o) / o * 100);
+
+function renderCards() {
+  const grid = document.getElementById('cardsGrid');
+  grid.innerHTML = CARDS.map((c, i) => {
+    const d30eu = pct(c.history_eu[c.history_eu.length - 2], c.price_eu);
+    const d12eu = pct(c.history_eu[0], c.price_eu);
+    const s30eu = (d30eu >= 0 ? '+' : '') + d30eu.toFixed(1) + '%';
+    const s12eu = (d12eu >= 0 ? '+' : '') + d12eu.toFixed(1) + '%';
+    const cls30 = d30eu >= 0 ? 'delta-up' : 'delta-down';
+    const cls12 = d12eu >= 0 ? 'delta-up' : 'delta-down';
+    const psaUrl = `https://www.psacard.com/cert/${c.cert}/psa`;
+    const rank = String(i + 1).padStart(2, '0');
+    const hasImg = c.image && c.image.trim();
+    const priceEuStr = (c.price_eu && c.price_eu > 0) ? c.price_eu.toLocaleString('fr-FR') : '—';
+    const priceWwStr = (c.price_ww && c.price_ww > 0) ? c.price_ww.toLocaleString('fr-FR') : '—';
+    const emptyEu = priceEuStr === '—' ? 'empty' : '';
+    const emptyWw = priceWwStr === '—' ? 'empty' : '';
+
+    return `
+<article class="card" data-id="${c.id}">
+<div class="card-inner">
+<div class="slab" data-card="${c.id}">
+<div class="rank">#${rank}</div>
+${hasImg ? `<img src="${c.image}" alt="${c.name}" referrerpolicy="no-referrer" onerror="this.style.display='none';const fb=this.nextElementSibling;if(fb)fb.style.display='flex';">` : ''}
+<div class="slab-fallback" style="${hasImg ? 'display:none' : ''}">${c.nameAlt}<br><span style="font-size:9px;opacity:0.6;margin-top:8px;letter-spacing:3px">PSA 10 • CERT ${c.cert}</span></div>
+<div class="slab-holo"></div>
+</div>
+<div class="card-body">
+<div class="card-head">
+<div>
+<div class="card-name">${c.name}</div>
+<div class="card-set">${c.set}</div>
+<div class="cert-badge">▸ <a href="${psaUrl}" target="_blank" rel="noopener">cert #${c.cert}</a></div>
+</div>
+<div class="card-num">${c.num}</div>
+</div>
+<div class="price-block">
+<div class="price-col eu">
+<div class="price-label">🇪🇺 Europe</div>
+<div class="price-main ${emptyEu}" data-card="${c.id}" data-market="eu" title="Mode édition : clique pour modifier"><span class="cur">€</span>${priceEuStr}</div>
+</div>
+<div class="price-col ww">
+<div class="price-label">🌎 Monde</div>
+<div class="price-main ${emptyWw}" data-card="${c.id}" data-market="ww" title="Mode édition : clique pour modifier"><span class="cur">€</span>${priceWwStr}</div>
+</div>
+<div class="price-meta">
+<div>30j 🇪🇺 <span class="${cls30}">${s30eu}</span></div>
+<div>12M 🇪🇺 <span class="${cls12}">${s12eu}</span></div>
+</div>
+</div>
+<div class="chart-wrap"><canvas id="chart-${c.id}"></canvas></div>
+<div class="links">
+<a class="link eu" href="${c.ebayEuUrl}" target="_blank" rel="noopener">🇪🇺 eBay</a>
+<a class="link ww" href="${c.ebayWwUrl}" target="_blank" rel="noopener">🌎 eBay</a>
+<a class="link cm" href="${c.cardmarketUrl}" target="_blank" rel="noopener">▸ Cardmarket</a>
+</div>
+</div>
+</div>
+</article>`;
+  }).join('');
+
+  CARDS.forEach(c => drawChart(c));
+
+  document.querySelectorAll('.price-main').forEach(el => {
+    el.addEventListener('click', () => {
+      if (!editMode) return;
+      openModal(el.dataset.card, 'price-' + el.dataset.market);
+    });
+  });
+  document.querySelectorAll('.slab').forEach(el => {
+    el.addEventListener('click', () => {
+      if (!editMode) return;
+      openModal(el.dataset.card, 'image');
+    });
+  });
+}
+
+function drawChart(card) {
+  const ctx = document.getElementById('chart-' + card.id);
+  if (!ctx) return;
+  const dataEu = [...card.history_eu.slice(0, -1), card.price_eu];
+  const dataWw = [...card.history_ww.slice(0, -1), card.price_ww];
+  const labels = ['M-11','M-10','M-9','M-8','M-7','M-6','M-5','M-4','M-3','M-2','M-1','Now'];
+
+  const grdEu = ctx.getContext('2d').createLinearGradient(0, 0, 0, 90);
+  grdEu.addColorStop(0, 'rgba(0,255,224,0.25)');
+  grdEu.addColorStop(1, 'rgba(0,255,224,0)');
+
+  const grdWw = ctx.getContext('2d').createLinearGradient(0, 0, 0, 90);
+  grdWw.addColorStop(0, 'rgba(255,46,196,0.20)');
+  grdWw.addColorStop(1, 'rgba(255,46,196,0)');
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: '🇪🇺 EU', data: dataEu,
+          borderColor: '#00ffe0', backgroundColor: grdEu,
+          fill: true, tension: 0.35, pointRadius: 0, pointHoverRadius: 5,
+          pointHoverBackgroundColor: '#fff', pointHoverBorderColor: '#00ffe0',
+          pointHoverBorderWidth: 2, borderWidth: 2
+        },
+        {
+          label: '🌎 WW', data: dataWw,
+          borderColor: '#ff2ec4', backgroundColor: grdWw,
+          fill: true, tension: 0.35, pointRadius: 0, pointHoverRadius: 5,
+          pointHoverBackgroundColor: '#fff', pointHoverBorderColor: '#ff2ec4',
+          pointHoverBorderWidth: 2, borderWidth: 2
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      animation: { duration: 1000, easing: 'easeOutQuart' },
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(5,6,15,0.95)', borderColor: '#00ffe0', borderWidth: 1,
+          titleFont: { family: 'JetBrains Mono', size: 10 },
+          bodyFont: { family: 'JetBrains Mono', size: 11, weight: 'bold' },
+          padding: 8,
+          callbacks: {
+            label: (ctx) => ctx.dataset.label + ' : € ' + ctx.raw
+          }
+        }
+      },
+      scales: { x: { display: false }, y: { display: false, grace: '5%' } }
+    }
+  });
+}
+
+function renderStats() {
+  const total = CARDS.reduce((s, c) => s + (c.price_eu || 0), 0);
+  const totalOld = CARDS.reduce((s, c) => s + c.history_eu[c.history_eu.length - 2], 0);
+  const totalDelta = pct(totalOld, total);
+  document.getElementById('totalValue').textContent = fmt(total);
+  const td = document.getElementById('totalDelta');
+  td.textContent = (totalDelta >= 0 ? '+' : '') + totalDelta.toFixed(1) + '% (30j)';
+  td.className = 'delta ' + (totalDelta >= 0 ? 'up' : 'down');
+  document.getElementById('avgValue').textContent = fmt(total / CARDS.length);
+  document.getElementById('cardCount').textContent = CARDS.length;
+  const movers = CARDS.map(c => ({ name: c.name, delta: pct(c.history_eu[0], c.price_eu) }));
+  movers.sort((a, b) => b.delta - a.delta);
+  document.getElementById('topMover').textContent = movers[0].name;
+  const tmd = document.getElementById('topMoverDelta');
+  tmd.textContent = (movers[0].delta >= 0 ? '+' : '') + movers[0].delta.toFixed(1) + '%';
+  tmd.className = 'delta ' + (movers[0].delta >= 0 ? 'up' : 'down');
+}
+
+function toggleEditMode() {
+  editMode = !editMode;
+  document.body.classList.toggle('editing', editMode);
+  const btn = document.getElementById('editBtn');
+  btn.classList.toggle('active', editMode);
+  btn.textContent = editMode ? '✓ Terminer' : '✎ Mode édition';
+}
+
+function openModal(cardId, field) {
+  const card = CARDS.find(c => c.id === cardId);
+  if (!card) return;
+  currentEdit = { card, field };
+  const priceInput = document.getElementById('modalInput');
+  const urlInput = document.getElementById('modalInputUrl');
+  priceInput.style.display = 'none';
+  urlInput.style.display = 'none';
+
+  if (field === 'price-eu') {
+    document.getElementById('modalTitle').textContent = '🇪🇺 ' + card.name + ' — ' + card.num;
+    document.getElementById('modalSub').textContent = 'Cote PSA 10 marché Europe (en €)';
+    priceInput.value = card.price_eu;
+    priceInput.style.display = 'block';
+    setTimeout(() => { priceInput.focus(); priceInput.select(); }, 50);
+  } else if (field === 'price-ww') {
+    document.getElementById('modalTitle').textContent = '🌎 ' + card.name + ' — ' + card.num;
+    document.getElementById('modalSub').textContent = 'Cote PSA 10 marché Monde (en €, conversion eBay)';
+    priceInput.value = card.price_ww;
+    priceInput.style.display = 'block';
+    setTimeout(() => { priceInput.focus(); priceInput.select(); }, 50);
+  } else if (field === 'image') {
+    document.getElementById('modalTitle').textContent = '📷 ' + card.name;
+    document.getElementById('modalSub').textContent = 'Colle l\'URL de la photo. Laisse vide pour retirer.';
+    urlInput.value = card.image || '';
+    urlInput.style.display = 'block';
+    setTimeout(() => { urlInput.focus(); urlInput.select(); }, 50);
+  }
+  document.getElementById('editModal').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('editModal').classList.remove('active');
+  currentEdit = { card: null, field: null };
+}
+
+function saveModal() {
+  if (!currentEdit.card) return closeModal();
+  const { card, field } = currentEdit;
+  if (field === 'price-eu') {
+    const val = parseFloat(document.getElementById('modalInput').value);
+    if (isNaN(val) || val < 0) return;
+    card.price_eu = Math.round(val);
+    card.history_eu = [...card.history_eu.slice(0, -1), card.price_eu];
+    save(card.id, 'price_eu', card.price_eu);
+  } else if (field === 'price-ww') {
+    const val = parseFloat(document.getElementById('modalInput').value);
+    if (isNaN(val) || val < 0) return;
+    card.price_ww = Math.round(val);
+    card.history_ww = [...card.history_ww.slice(0, -1), card.price_ww];
+    save(card.id, 'price_ww', card.price_ww);
+  } else if (field === 'image') {
+    const url = document.getElementById('modalInputUrl').value.trim();
+    card.image = url;
+    save(card.id, 'image', url);
+  }
+  renderStats();
+  renderCards();
+  closeModal();
+}
+
+document.getElementById('editBtn').addEventListener('click', toggleEditMode);
+document.getElementById('modalCancel').addEventListener('click', closeModal);
+document.getElementById('modalSave').addEventListener('click', saveModal);
+document.getElementById('editModal').addEventListener('click', (e) => { if (e.target.id === 'editModal') closeModal(); });
+document.getElementById('modalInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') saveModal(); if (e.key === 'Escape') closeModal(); });
+document.getElementById('modalInputUrl').addEventListener('keydown', (e) => { if (e.key === 'Enter') saveModal(); if (e.key === 'Escape') closeModal(); });
+
+(async () => {
+  await loadData();
+  renderStats();
+  renderCards();
+})();
+</script>
+</body>
+</html>
