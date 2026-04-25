@@ -1,19 +1,22 @@
 {
-  "last_update": "2026-04-25T09:49:54+00:00",
+  "last_update": "2026-04-25T09:53:54+00:00",
   "cards": {
     "charizard-v-ssv": {
       "price": 206,
       "history": [
+        206,
         206
       ],
       "sales_count": 0,
-      "last_update": "2026-04-25T09:49:54+00:00",
+      "last_update": "2026-04-25T09:53:54+00:00",
       "history_eu": [
+        206,
         206
       ],
       "price_eu": 206,
       "sales_count_eu": 10,
       "history_ww": [
+        218,
         218
       ],
       "price_ww": 218,
@@ -22,16 +25,19 @@
     "mentali-v-eh": {
       "price": 230,
       "history": [
+        230,
         230
       ],
       "sales_count": 0,
-      "last_update": "2026-04-25T09:49:54+00:00",
+      "last_update": "2026-04-25T09:53:54+00:00",
       "history_eu": [
+        230,
         230
       ],
       "price_eu": 230,
       "sales_count_eu": 10,
       "history_ww": [
+        230,
         230
       ],
       "price_ww": 230,
@@ -40,16 +46,19 @@
     "dracaufeu-ex-151": {
       "price": 746,
       "history": [
+        746,
         746
       ],
       "sales_count": 0,
-      "last_update": "2026-04-25T09:49:54+00:00",
+      "last_update": "2026-04-25T09:53:54+00:00",
       "history_eu": [
+        746,
         746
       ],
       "price_eu": 746,
       "sales_count_eu": 10,
       "history_ww": [
+        921,
         921
       ],
       "price_ww": 921,
@@ -58,16 +67,19 @@
     "pikachu-ex-sv8": {
       "price": 875,
       "history": [
+        875,
         875
       ],
       "sales_count": 0,
-      "last_update": "2026-04-25T09:49:54+00:00",
+      "last_update": "2026-04-25T09:53:54+00:00",
       "history_eu": [
+        875,
         875
       ],
       "price_eu": 875,
       "sales_count_eu": 10,
       "history_ww": [
+        921,
         921
       ],
       "price_ww": 921,
@@ -76,16 +88,19 @@
     "umbreon-ex-sv8a": {
       "price": 595,
       "history": [
+        595,
         595
       ],
       "sales_count": 0,
-      "last_update": "2026-04-25T09:49:54+00:00",
+      "last_update": "2026-04-25T09:53:54+00:00",
       "history_eu": [
+        595,
         595
       ],
       "price_eu": 595,
       "sales_count_eu": 10,
       "history_ww": [
+        724,
         724
       ],
       "price_ww": 724,
