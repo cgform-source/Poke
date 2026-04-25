@@ -1,0 +1,65 @@
+{
+  "last_update": null,
+  "cards": {
+    "charizard-v-ssv": {
+      "price": null,
+      "history": [],
+      "sales_count": 0,
+      "last_update": null,
+      "history_eu": [],
+      "price_eu": null,
+      "sales_count_eu": 0,
+      "history_ww": [],
+      "price_ww": null,
+      "sales_count_ww": 0
+    },
+    "mentali-v-eh": {
+      "price": null,
+      "history": [],
+      "sales_count": 0,
+      "last_update": null,
+      "history_eu": [],
+      "price_eu": null,
+      "sales_count_eu": 0,
+      "history_ww": [],
+      "price_ww": null,
+      "sales_count_ww": 0
+    },
+    "dracaufeu-ex-151": {
+      "price": null,
+      "history": [],
+      "sales_count": 0,
+      "last_update": null,
+      "history_eu": [],
+      "price_eu": null,
+      "sales_count_eu": 0,
+      "history_ww": [],
+      "price_ww": null,
+      "sales_count_ww": 0
+    },
+    "pikachu-ex-sv8": {
+      "price": null,
+      "history": [],
+      "sales_count": 0,
+      "last_update": null,
+      "history_eu": [],
+      "price_eu": null,
+      "sales_count_eu": 0,
+      "history_ww": [],
+      "price_ww": null,
+      "sales_count_ww": 0
+    },
+    "umbreon-ex-sv8a": {
+      "price": null,
+      "history": [],
+      "sales_count": 0,
+      "last_update": null,
+      "history_eu": [],
+      "price_eu": null,
+      "sales_count_eu": 0,
+      "history_ww": [],
+      "price_ww": null,
+      "sales_count_ww": 0
+    }
+  }
+}
