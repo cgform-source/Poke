@@ -1,15 +1,17 @@
 {
-  "last_update": "2026-04-27T13:08:17+00:00",
+  "last_update": "2026-05-04T13:13:18+00:00",
   "cards": {
     "charizard-v-ssv": {
       "price": 206,
       "history": [
         206,
+        206,
         206
       ],
       "sales_count": 0,
-      "last_update": "2026-04-27T13:08:17+00:00",
+      "last_update": "2026-05-04T13:13:18+00:00",
       "history_eu": [
+        206,
         206,
         206
       ],
@@ -17,41 +19,47 @@
       "sales_count_eu": 10,
       "history_ww": [
         218,
-        218
+        218,
+        233
       ],
-      "price_ww": 218,
+      "price_ww": 233,
       "sales_count_ww": 10
     },
     "mentali-v-eh": {
-      "price": 230,
+      "price": 237,
       "history": [
         230,
-        230
+        230,
+        237
       ],
       "sales_count": 0,
-      "last_update": "2026-04-27T13:08:17+00:00",
+      "last_update": "2026-05-04T13:13:18+00:00",
       "history_eu": [
         230,
-        230
+        230,
+        237
       ],
-      "price_eu": 230,
+      "price_eu": 237,
       "sales_count_eu": 10,
       "history_ww": [
         230,
-        230
+        230,
+        240
       ],
-      "price_ww": 230,
+      "price_ww": 240,
       "sales_count_ww": 10
     },
     "dracaufeu-ex-151": {
       "price": 746,
       "history": [
         746,
+        746,
         746
       ],
       "sales_count": 0,
-      "last_update": "2026-04-27T13:08:17+00:00",
+      "last_update": "2026-05-04T13:13:18+00:00",
       "history_eu": [
+        746,
         746,
         746
       ],
@@ -59,51 +67,58 @@
       "sales_count_eu": 10,
       "history_ww": [
         921,
-        921
+        921,
+        934
       ],
-      "price_ww": 921,
+      "price_ww": 934,
       "sales_count_ww": 10
     },
     "pikachu-ex-sv8": {
-      "price": 875,
+      "price": 870,
       "history": [
         875,
-        875
+        875,
+        870
       ],
       "sales_count": 0,
-      "last_update": "2026-04-27T13:08:17+00:00",
+      "last_update": "2026-05-04T13:13:18+00:00",
       "history_eu": [
         875,
-        875
+        875,
+        870
       ],
-      "price_eu": 875,
+      "price_eu": 870,
       "sales_count_eu": 10,
       "history_ww": [
         921,
-        921
+        921,
+        880
       ],
-      "price_ww": 921,
+      "price_ww": 880,
       "sales_count_ww": 10
     },
     "umbreon-ex-sv8a": {
-      "price": 595,
+      "price": 600,
       "history": [
         595,
-        595
+        595,
+        600
       ],
       "sales_count": 0,
-      "last_update": "2026-04-27T13:08:17+00:00",
+      "last_update": "2026-05-04T13:13:18+00:00",
       "history_eu": [
         595,
-        595
+        595,
+        600
       ],
-      "price_eu": 595,
+      "price_eu": 600,
       "sales_count_eu": 10,
       "history_ww": [
         724,
-        724
+        724,
+        725
       ],
-      "price_ww": 724,
+      "price_ww": 725,
       "sales_count_ww": 10
     }
   }
