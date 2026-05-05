@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RGDU 2026 — Auto-remplissage</title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+:root{
+  --bg:#0a0e14;
+  --bg2:#11161f;
+  --panel:#161c26;
+  --panel-border:#1f2733;
+  --text:#cdd6e1;
+  --text-dim:#7a8492;
+  --text-faint:#4a525e;
+  --accent:#00e5ff;
+  --accent-dim:#0093a6;
+  --magenta:#ff2a8d;
+  --green:#3ddc84;
+  --amber:#ffb547;
+  --red:#ff4d6d;
+  --mono:'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+  --sans:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0,229,255,.07), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(255,42,141,.05), transparent 60%);
+  background-attachment:fixed;
+  color:var(--text);
+  font-family:var(--sans);
+  min-height:100vh;
+  font-feature-settings:"ss01","cv11";
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.012) 1px, transparent 1px),
+                   linear-gradient(90deg, rgba(255,255,255,.012) 1px, transparent 1px);
+  background-size:32px 32px;
+  pointer-events:none;
+  z-index:0;
+}
+.shell{
+  max-width:880px;
+  margin:0 auto;
+  padding:48px 24px 80px;
+  position:relative;
+  z-index:1;
+}
+header{margin-bottom:40px}
+.eyebrow{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--accent);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:14px;
+}
+.eyebrow::before{
+  content:"";
+  width:24px;height:1px;background:var(--accent);
+}
+h1{
+  font-size:38px;
+  letter-spacing:-.02em;
+  line-height:1.1;
+  font-weight:600;
+  margin:0 0 12px;
+}
+h1 .accent{color:var(--accent)}
+.subtitle{
+  color:var(--text-dim);
+  font-size:15px;
+  max-width:640px;
+  line-height:1.5;
+}
+.steps{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+  margin-bottom:24px;
+}
+@media (min-width:720px){
+  .steps{grid-template-columns:1fr 1fr}
+}
+.step{
+  background:var(--panel);
+  border:1px solid var(--panel-border);
+  border-radius:10px;
+  padding:20px;
+  position:relative;
+  transition:border-color .2s, background .2s;
+}
+.step.dragover{
+  border-color:var(--accent);
+  background:linear-gradient(180deg, rgba(0,229,255,.04), transparent);
+}
+.step.loaded{
+  border-color:var(--green);
+}
+.step.loaded::after{
+  content:"✓";
+  position:absolute;
+  top:14px;right:18px;
+  color:var(--green);
+  font-weight:600;
+  font-size:18px;
+}
+.step-num{
+  font-family:var(--mono);
+  color:var(--accent);
+  font-size:11px;
+  letter-spacing:.18em;
+}
+.step-title{
+  font-size:15px;
+  font-weight:500;
+  margin:6px 0 4px;
+}
+.step-desc{
+  color:var(--text-dim);
+  font-size:13px;
+  margin-bottom:14px;
+  line-height:1.5;
+}
+.dropzone{
+  display:block;
+  border:1px dashed var(--panel-border);
+  border-radius:8px;
+  padding:18px 14px;
+  text-align:center;
+  cursor:pointer;
+  transition:border-color .15s, background .15s;
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--text-dim);
+}
+.dropzone:hover{
+  border-color:var(--accent-dim);
+  color:var(--text);
+}
+.dropzone.has-file{
+  border-color:var(--green);
+  border-style:solid;
+  background:rgba(61,220,132,.04);
+  color:var(--text);
+}
+.dropzone input{display:none}
+.fname{
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--text);
+  margin-top:8px;
+  word-break:break-all;
+}
+.fmeta{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text-faint);
+  margin-top:4px;
+}
+.actions{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  margin-top:8px;
+  margin-bottom:24px;
+  flex-wrap:wrap;
+}
+button{
+  font-family:var(--sans);
+  font-size:14px;
+  font-weight:500;
+  padding:11px 22px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+  transition:all .15s;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+.btn-primary{
+  background:var(--accent);
+  color:#001821;
+  box-shadow:0 0 0 1px rgba(0,229,255,.3), 0 0 24px -4px rgba(0,229,255,.4);
+}
+.btn-primary:hover:not(:disabled){
+  background:#33ebff;
+  box-shadow:0 0 0 1px rgba(0,229,255,.6), 0 0 32px -2px rgba(0,229,255,.6);
+}
+.btn-primary:disabled{
+  background:var(--panel);
+  color:var(--text-faint);
+  cursor:not-allowed;
+  box-shadow:none;
+}
+.btn-download{
+  background:transparent;
+  color:var(--green);
+  border:1px solid var(--green);
+}
+.btn-download:hover{
+  background:rgba(61,220,132,.08);
+}
+.btn-ghost{
+  background:transparent;
+  color:var(--text-dim);
+  border:1px solid var(--panel-border);
+}
+.btn-ghost:hover{
+  color:var(--text);
+  border-color:var(--text-dim);
+}
+.spinner{
+  width:14px;height:14px;
+  border:2px solid currentColor;
+  border-right-color:transparent;
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.console{
+  background:var(--bg2);
+  border:1px solid var(--panel-border);
+  border-radius:10px;
+  padding:18px 20px;
+  font-family:var(--mono);
+  font-size:12px;
+  line-height:1.7;
+  color:var(--text-dim);
+  min-height:120px;
+  max-height:340px;
+  overflow-y:auto;
+}
+.console:empty::before{
+  content:"En attente des fichiers…";
+  color:var(--text-faint);
+}
+.line{padding:1px 0}
+.line.ok{color:var(--green)}
+.line.warn{color:var(--amber)}
+.line.err{color:var(--red)}
+.line.info{color:var(--text)}
+.line.dim{color:var(--text-faint)}
+.line .ts{color:var(--text-faint);margin-right:8px}
+.synthese{
+  margin-top:24px;
+  background:var(--panel);
+  border:1px solid var(--panel-border);
+  border-radius:10px;
+  padding:20px;
+  display:none;
+}
+.synthese.visible{display:block}
+.synthese-title{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:14px;
+}
+.synthese-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:0;
+  border:1px solid var(--panel-border);
+  border-radius:6px;
+  overflow:hidden;
+}
+.synthese-row{
+  display:contents;
+}
+.synthese-cell{
+  padding:10px 14px;
+  font-family:var(--mono);
+  font-size:13px;
+  border-bottom:1px solid var(--panel-border);
+  background:var(--bg2);
+}
+.synthese-row:last-child .synthese-cell{border-bottom:none}
+.synthese-cell.label{color:var(--text-dim);font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+.synthese-cell.head{color:var(--accent);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+.synthese-cell.num{text-align:right;color:var(--text)}
+.synthese-cell.num.diff-pos{color:var(--green)}
+.synthese-cell.num.diff-neg{color:var(--red)}
+footer{
+  margin-top:48px;
+  padding-top:24px;
+  border-top:1px solid var(--panel-border);
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text-faint);
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:8px;
+}
+footer a{color:var(--text-dim);text-decoration:none}
+footer a:hover{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<header>
+  <div class="eyebrow">RGDU · Réduction Générale Dégressive Unique · 2026</div>
+  <h1>Auto-remplissage <span class="accent">RGDU</span></h1>
+  <div class="subtitle">
+    Charge le modèle RGDU vide et le fichier d'extraction salariés. L'outil colle l'extraction dans l'onglet correspondant et injecte les formules <code style="font-family:var(--mono);font-size:13px;color:var(--accent)">SUMIFS</code> dans tous les blocs RGDU. Tout se passe dans ton navigateur — aucune donnée n'est envoyée nulle part.
+  </div>
+</header>
+
+<div class="steps">
+  <label class="step" id="step-rgdu">
+    <div class="step-num">01 — TEMPLATE</div>
+    <div class="step-title">Modèle RGDU 2026</div>
+    <div class="step-desc">Fichier vide avec les onglets <em>RGDU</em>, <em>Valeurs</em>, <em>Extraction</em>. Format <code>.xls</code> ou <code>.xlsx</code>.</div>
+    <div class="dropzone" id="dz-rgdu">
+      Glisser le fichier ici ou cliquer pour parcourir
+      <input type="file" id="file-rgdu" accept=".xls,.xlsx">
+    </div>
+    <div class="fname" id="fname-rgdu"></div>
+  </label>
+
+  <label class="step" id="step-ext">
+    <div class="step-num">02 — DONNÉES</div>
+    <div class="step-title">Extraction salariés</div>
+    <div class="step-desc">Fichier avec onglet <em>CONVERT</em> contenant les codes 21, Z33, Z34, Z08 par salarié et par mois.</div>
+    <div class="dropzone" id="dz-ext">
+      Glisser le fichier ici ou cliquer pour parcourir
+      <input type="file" id="file-ext" accept=".xlsx,.xls">
+    </div>
+    <div class="fname" id="fname-ext"></div>
+  </label>
+</div>
+
+<div class="actions">
+  <button class="btn-primary" id="btn-process" disabled>Lancer le traitement</button>
+  <button class="btn-download" id="btn-download" style="display:none">↓ Télécharger le fichier</button>
+  <button class="btn-ghost" id="btn-reset" style="display:none">Recommencer</button>
+</div>
+
+<div class="console" id="console"></div>
+
+<div class="synthese" id="synthese">
+  <div class="synthese-title">Synthèse globale</div>
+  <div class="synthese-grid" id="synthese-grid"></div>
+</div>
+
+<footer>
+  <div>RGDU AUTO · Traitement local · Aucune donnée transmise</div>
+  <div>Codes utilisés : 21 · Z33 · Z34 · Z08 — signe E/F inversé</div>
+</footer>
+</div>
+
+<script>
+"use strict";
+
+// ----------------------------------------------------------------------------
+// Constants — exact strings used in the extraction file
+// ----------------------------------------------------------------------------
+const CODE_HEURES = "21  Heures payées";
+const CODE_BRUT   = "Z33  Brut RGPP";
+const CODE_BULL_U = "Z34  Montant RGPP mensuelle";
+const CODE_BULL_A = "Z08  Réduction retraite mensuelle";
+
+// Map RGDU column letter → (extraction code, sign multiplier)
+const CODE_MAPPINGS = [
+  { col: "C", code: CODE_HEURES, neg: false },
+  { col: "D", code: CODE_BRUT,   neg: false },
+  { col: "E", code: CODE_BULL_U, neg: true  }, // sign inverted
+  { col: "F", code: CODE_BULL_A, neg: true  }, // sign inverted
+];
+
+// Extraction column for each month: Jan=B, Feb=C, ..., Dec=M
+function monthCol(i) { return String.fromCharCode("B".charCodeAt(0) + i - 1); }
+
+const NUM_EXISTING_BLOCKS = 28;
+const BLOCK_SIZE = 16;        // rows per block
+const FIRST_BLOCK_ROW = 10;   // header row of first block
+
+// ----------------------------------------------------------------------------
+// State
+// ----------------------------------------------------------------------------
+let rgduFile = null;
+let extFile  = null;
+let rgduWb   = null;
+let extWb    = null;
+let outputBlob = null;
+let outputName = "RGDU_2026_AUTO.xlsx";
+
+// ----------------------------------------------------------------------------
+// Console / log helpers
+// ----------------------------------------------------------------------------
+const consoleEl = document.getElementById("console");
+function log(msg, cls) {
+  const t = new Date().toLocaleTimeString("fr-FR", {hour12:false});
+  const div = document.createElement("div");
+  div.className = "line " + (cls || "dim");
+  div.innerHTML = `<span class="ts">${t}</span>${msg}`;
+  consoleEl.appendChild(div);
+  consoleEl.scrollTop = consoleEl.scrollHeight;
+}
+function clearConsole(){ consoleEl.innerHTML = ""; }
+
+// ----------------------------------------------------------------------------
+// Drag-and-drop wiring
+// ----------------------------------------------------------------------------
+function wireDropzone(stepEl, dzEl, inputEl, fnameEl, kind) {
+  const setFile = (f) => {
+    if (!f) return;
+    if (kind === "rgdu") rgduFile = f;
+    else                 extFile  = f;
+    fnameEl.textContent = f.name;
+    fnameEl.innerHTML += ` <span class="fmeta">${(f.size/1024).toFixed(1)} ko</span>`;
+    stepEl.classList.add("loaded");
+    dzEl.classList.add("has-file");
+    updateButton();
+  };
+  inputEl.addEventListener("change", e => setFile(e.target.files[0]));
+  ["dragenter","dragover"].forEach(ev =>
+    stepEl.addEventListener(ev, e => { e.preventDefault(); stepEl.classList.add("dragover"); })
+  );
+  ["dragleave","drop"].forEach(ev =>
+    stepEl.addEventListener(ev, e => { e.preventDefault(); stepEl.classList.remove("dragover"); })
+  );
+  stepEl.addEventListener("drop", e => {
+    e.preventDefault();
+    const f = e.dataTransfer.files[0];
+    setFile(f);
+  });
+}
+wireDropzone(
+  document.getElementById("step-rgdu"),
+  document.getElementById("dz-rgdu"),
+  document.getElementById("file-rgdu"),
+  document.getElementById("fname-rgdu"),
+  "rgdu"
+);
+wireDropzone(
+  document.getElementById("step-ext"),
+  document.getElementById("dz-ext"),
+  document.getElementById("file-ext"),
+  document.getElementById("fname-ext"),
+  "ext"
+);
+
+const btnProcess = document.getElementById("btn-process");
+const btnDownload = document.getElementById("btn-download");
+const btnReset = document.getElementById("btn-reset");
+
+function updateButton(){
+  btnProcess.disabled = !(rgduFile && extFile);
+}
+
+btnProcess.addEventListener("click", run);
+btnDownload.addEventListener("click", () => {
+  if (!outputBlob) return;
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(outputBlob);
+  a.download = outputName;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+});
+btnReset.addEventListener("click", () => location.reload());
+
+// ----------------------------------------------------------------------------
+// Workbook I/O
+// ----------------------------------------------------------------------------
+function readWorkbook(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const wb = XLSX.read(e.target.result, {
+          type: "array",
+          cellFormula: true,
+          cellStyles: true,
+          cellNF: true
+        });
+        resolve(wb);
+      } catch (err) { reject(err); }
+    };
+    reader.onerror = () => reject(reader.error);
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+// ----------------------------------------------------------------------------
+// Cell helpers
+// ----------------------------------------------------------------------------
+function getCell(sheet, addr){ return sheet[addr]; }
+function setCell(sheet, addr, cell) {
+  sheet[addr] = cell;
+  // expand range if needed
+  const range = XLSX.utils.decode_range(sheet["!ref"] || "A1:A1");
+  const pos = XLSX.utils.decode_cell(addr);
+  if (pos.r > range.e.r) range.e.r = pos.r;
+  if (pos.c > range.e.c) range.e.c = pos.c;
+  if (pos.r < range.s.r) range.s.r = pos.r;
+  if (pos.c < range.s.c) range.s.c = pos.c;
+  sheet["!ref"] = XLSX.utils.encode_range(range);
+}
+function setFormula(sheet, addr, formula, type){
+  // remove any cached value so Excel recalculates on open
+  setCell(sheet, addr, { t: type || "n", f: formula });
+}
+function setValue(sheet, addr, value, type){
+  setCell(sheet, addr, { t: type || (typeof value === "number" ? "n" : "s"), v: value });
+}
+
+// ----------------------------------------------------------------------------
+// Adjust row references in a formula by an offset (only for local + RGDU! refs)
+// ----------------------------------------------------------------------------
+function adjustFormulaRows(formula, srcH, dstH, srcTop, srcBottom) {
+  const offset = dstH - srcH;
+  // Match optional "Sheet!" prefix, optional $col, col letters, optional $row, digits
+  const pattern = /((?:[A-Za-z_][A-Za-z0-9_]*!)?)\$?([A-Z]+)\$?(\d+)/g;
+  return formula.replace(pattern, (full, sheetPrefix, col, rowStr) => {
+    const rowNum = parseInt(rowStr, 10);
+    const isLocalOrSelf = sheetPrefix === "" || sheetPrefix === "RGDU!";
+    if (!isLocalOrSelf || rowNum < srcTop || rowNum > srcBottom) return full;
+    const newRow = rowNum + offset;
+    // Detect $ markers
+    const afterPrefix = full.substring(sheetPrefix.length);
+    const hasDollarCol = afterPrefix.startsWith("$");
+    const hasDollarRow = full.indexOf("$" + rowStr) !== -1;
+    return sheetPrefix
+      + (hasDollarCol ? "$" : "")
+      + col
+      + (hasDollarRow ? "$" : "")
+      + newRow;
+  });
+}
+
+// ----------------------------------------------------------------------------
+// Build SUMIFS formula for a (col, month, matricule) combination
+// ----------------------------------------------------------------------------
+function buildSumifsFormula(extColLetter, code, headerRow, neg){
+  const sign = neg ? "-" : "";
+  return `IF($A$${headerRow}="",0,${sign}SUMIFS(Extraction!$${extColLetter}:$${extColLetter},Extraction!$A:$A,"${code}",Extraction!$Q:$Q,$A$${headerRow}))`;
+}
+
+// ----------------------------------------------------------------------------
+// Write block formulas at row H (header row of the block)
+// ----------------------------------------------------------------------------
+function writeBlockFormulas(sheet, H, matricule){
+  // A{H} = matricule input
+  setValue(sheet, `A${H}`, matricule || "", "s");
+  // B{H} = name lookup
+  setFormula(sheet, `B${H}`,
+    `IFERROR(VLOOKUP($A$${H},Extraction!$Q:$R,2,0),"Nom Prénom")`,
+    "s"
+  );
+  // For each month i (1..12), row R = H+i, write C/D/E/F formulas
+  for (let i = 1; i <= 12; i++){
+    const R = H + i;
+    const extC = monthCol(i);
+    for (const m of CODE_MAPPINGS){
+      setFormula(sheet, `${m.col}${R}`,
+        buildSumifsFormula(extC, m.code, H, m.neg),
+        "n"
+      );
+    }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Replicate a block (16 rows starting at srcH) to dstH, adjusting formulas
+// ----------------------------------------------------------------------------
+function replicateBlock(sheet, srcH, dstH){
+  const range = XLSX.utils.decode_range(sheet["!ref"]);
+  const maxCol = range.e.c;
+  for (let rOff = 0; rOff < BLOCK_SIZE; rOff++){
+    const srcR = srcH + rOff;
+    const dstR = dstH + rOff;
+    const isMonthRow = rOff >= 1 && rOff <= 12;
+    const isHeaderRow = rOff === 0;
+    for (let c = 0; c <= maxCol; c++){
+      const colIdx = c;
+      // Skip A column (matricule, set separately)
+      if (colIdx === 0) continue;
+      // On header row, skip B (name lookup, set separately)
+      if (isHeaderRow && colIdx === 1) continue;
+      // On month rows, skip C,D,E,F (SUMIFS formulas, set separately)
+      if (isMonthRow && colIdx >= 2 && colIdx <= 5) continue;
+      const colLetter = XLSX.utils.encode_col(colIdx);
+      const srcAddr = `${colLetter}${srcR}`;
+      const srcCell = sheet[srcAddr];
+      if (!srcCell) continue;
+      const newCell = {};
+      // Copy type
+      if (srcCell.t) newCell.t = srcCell.t;
+      // Adjust formula if present, otherwise copy value
+      if (srcCell.f){
+        newCell.f = adjustFormulaRows(srcCell.f, srcH, dstH, srcH, srcH + 15);
+      } else if (srcCell.v !== undefined){
+        newCell.v = srcCell.v;
+      }
+      // Copy number format
+      if (srcCell.z) newCell.z = srcCell.z;
+      // Copy style if available
+      if (srcCell.s) newCell.s = srcCell.s;
+      const dstAddr = `${colLetter}${dstR}`;
+      setCell(sheet, dstAddr, newCell);
+    }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Update SYNTHESE formulas to include all blocks
+// ----------------------------------------------------------------------------
+function updateSynthese(sheet, totalBlocks){
+  const totalRows = [];
+  for (let b = 1; b <= totalBlocks; b++){
+    totalRows.push(FIRST_BLOCK_ROW + (b - 1) * BLOCK_SIZE + 13);
+  }
+  const diffRows = totalRows.map(r => r + 1);
+  const sumExpr = (col, rows) => rows.map(r => `${col}${r}`).join("+");
+  setFormula(sheet, "T6", sumExpr("E", totalRows), "n");
+  setFormula(sheet, "U6", sumExpr("G", totalRows), "n");
+  setFormula(sheet, "V6", sumExpr("E", diffRows),  "n");
+  setFormula(sheet, "W6", sumExpr("F", totalRows), "n");
+  setFormula(sheet, "X6", sumExpr("H", totalRows), "n");
+  setFormula(sheet, "Y6", sumExpr("F", diffRows),  "n");
+}
+
+// ----------------------------------------------------------------------------
+// Get unique employees from extraction CONVERT sheet
+// ----------------------------------------------------------------------------
+function extractEmployees(extSheet){
+  const range = XLSX.utils.decode_range(extSheet["!ref"]);
+  const seen = new Set();
+  const employees = [];
+  for (let r = range.s.r; r <= range.e.r; r++){
+    const matAddr = XLSX.utils.encode_cell({r, c: 16}); // col Q
+    const nameAddr = XLSX.utils.encode_cell({r, c: 17}); // col R
+    const matCell = extSheet[matAddr];
+    const nameCell = extSheet[nameAddr];
+    const mat = matCell ? matCell.v : null;
+    const nm  = nameCell ? nameCell.v : null;
+    if (mat && mat !== "Salarié" && !seen.has(mat)){
+      seen.add(mat);
+      employees.push({ matricule: String(mat), name: nm ? String(nm) : "" });
+    }
+  }
+  return employees;
+}
+
+// ----------------------------------------------------------------------------
+// Copy extraction sheet content into RGDU's "Extraction" tab
+// ----------------------------------------------------------------------------
+function pasteExtractionData(rgduWb, extSheet){
+  // Locate or create the Extraction sheet
+  let extName = null;
+  for (const n of rgduWb.SheetNames){
+    if (n.toLowerCase().includes("extract")) { extName = n; break; }
+  }
+  if (!extName){
+    extName = "Extraction";
+    rgduWb.SheetNames.push(extName);
+    rgduWb.Sheets[extName] = { "!ref": "A1:A1" };
+  }
+  const dstSheet = rgduWb.Sheets[extName];
+  // Wipe existing content
+  for (const k of Object.keys(dstSheet)) {
+    if (!k.startsWith("!")) delete dstSheet[k];
+  }
+  // Copy cell-by-cell
+  const srcRange = XLSX.utils.decode_range(extSheet["!ref"]);
+  for (let r = srcRange.s.r; r <= srcRange.e.r; r++){
+    for (let c = srcRange.s.c; c <= srcRange.e.c; c++){
+      const addr = XLSX.utils.encode_cell({r, c});
+      if (extSheet[addr]) {
+        const src = extSheet[addr];
+        const copy = {};
+        if (src.t) copy.t = src.t;
+        if (src.v !== undefined) copy.v = src.v;
+        if (src.f) copy.f = src.f;
+        if (src.z) copy.z = src.z;
+        dstSheet[addr] = copy;
+      }
+    }
+  }
+  dstSheet["!ref"] = extSheet["!ref"];
+  return extName;
+}
+
+// ----------------------------------------------------------------------------
+// Locally compute SYNTHESE preview values (for display, not for the file)
+// We sum the bulletin values directly from extraction.
+// ----------------------------------------------------------------------------
+function computeSynthesePreview(extSheet, employees){
+  // Sum Z34 (col E inverted in our sheet) and Z08 (col F inverted) across all employees
+  // We negate per our sign rule.
+  const range = XLSX.utils.decode_range(extSheet["!ref"]);
+  let bullURSS = 0, bullAA = 0;
+  for (let r = range.s.r; r <= range.e.r; r++){
+    const codeCell = extSheet[XLSX.utils.encode_cell({r, c: 0})];
+    const code = codeCell ? String(codeCell.v || "") : "";
+    if (code !== CODE_BULL_U && code !== CODE_BULL_A) continue;
+    // Sum cols B..M (months 1..12)
+    for (let c = 1; c <= 12; c++){
+      const v = extSheet[XLSX.utils.encode_cell({r, c})];
+      if (v && typeof v.v === "number"){
+        if (code === CODE_BULL_U) bullURSS += v.v;
+        else                       bullAA  += v.v;
+      }
+    }
+  }
+  return { bullURSS: -bullURSS, bullAA: -bullAA };
+}
+
+// ----------------------------------------------------------------------------
+// Main run
+// ----------------------------------------------------------------------------
+async function run(){
+  clearConsole();
+  outputBlob = null;
+  btnDownload.style.display = "none";
+  btnReset.style.display = "none";
+  document.getElementById("synthese").classList.remove("visible");
+
+  const origLabel = btnProcess.innerHTML;
+  btnProcess.innerHTML = '<span class="spinner"></span> Traitement…';
+  btnProcess.disabled = true;
+
+  try {
+    log("Lecture du fichier RGDU…", "info");
+    rgduWb = await readWorkbook(rgduFile);
+    if (!rgduWb.Sheets["RGDU"]) throw new Error("Onglet 'RGDU' introuvable dans le fichier modèle.");
+    log(`  ✓ ${rgduFile.name} — ${rgduWb.SheetNames.length} onglet(s) : ${rgduWb.SheetNames.join(", ")}`, "ok");
+
+    log("Lecture du fichier d'extraction…", "info");
+    extWb = await readWorkbook(extFile);
+    let extSheetName = null;
+    for (const n of extWb.SheetNames){
+      if (n.toUpperCase().includes("CONVERT") || n.toUpperCase().includes("CUMUL")){
+        extSheetName = n; break;
+      }
+    }
+    if (!extSheetName) extSheetName = extWb.SheetNames[0];
+    const extSheet = extWb.Sheets[extSheetName];
+    log(`  ✓ ${extFile.name} — onglet utilisé : '${extSheetName}'`, "ok");
+
+    log("Identification des salariés…", "info");
+    const employees = extractEmployees(extSheet);
+    log(`  ✓ ${employees.length} salariés trouvés`, "ok");
+    if (employees.length === 0){
+      throw new Error("Aucun salarié détecté. Vérifie que la colonne Q contient les matricules et la colonne R les noms.");
+    }
+    employees.slice(0, 3).forEach(e =>
+      log(`    · ${e.matricule} — ${e.name}`, "dim")
+    );
+    if (employees.length > 3) log(`    · … +${employees.length - 3} autres`, "dim");
+
+    log("Copie de l'extraction dans l'onglet 'Extraction'…", "info");
+    const extName = pasteExtractionData(rgduWb, extSheet);
+    log(`  ✓ Données collées dans '${extName}'`, "ok");
+
+    log("Mise à jour des 28 blocs existants…", "info");
+    const rgduSheet = rgduWb.Sheets["RGDU"];
+    const limitExisting = Math.min(NUM_EXISTING_BLOCKS, employees.length);
+    for (let b = 1; b <= NUM_EXISTING_BLOCKS; b++){
+      const H = FIRST_BLOCK_ROW + (b - 1) * BLOCK_SIZE;
+      const matricule = b <= limitExisting ? employees[b - 1].matricule : "";
+      writeBlockFormulas(rgduSheet, H, matricule);
+    }
+    log(`  ✓ ${NUM_EXISTING_BLOCKS} blocs mis à jour`, "ok");
+
+    const newBlocksNeeded = Math.max(0, employees.length - NUM_EXISTING_BLOCKS);
+    if (newBlocksNeeded > 0){
+      log(`Ajout de ${newBlocksNeeded} bloc(s) supplémentaire(s)…`, "info");
+      for (let nb = NUM_EXISTING_BLOCKS + 1; nb <= NUM_EXISTING_BLOCKS + newBlocksNeeded; nb++){
+        const newH = FIRST_BLOCK_ROW + (nb - 1) * BLOCK_SIZE;
+        replicateBlock(rgduSheet, FIRST_BLOCK_ROW, newH);
+        writeBlockFormulas(rgduSheet, newH, employees[nb - 1].matricule);
+      }
+      log(`  ✓ ${newBlocksNeeded} nouveaux blocs créés`, "ok");
+    } else if (employees.length < NUM_EXISTING_BLOCKS){
+      log(`  ⚠ ${NUM_EXISTING_BLOCKS - employees.length} bloc(s) restent vides (matricule non assigné)`, "warn");
+    }
+
+    log("Mise à jour de la SYNTHESE…", "info");
+    const totalBlocks = NUM_EXISTING_BLOCKS + newBlocksNeeded;
+    updateSynthese(rgduSheet, totalBlocks);
+    log(`  ✓ Synthèse étendue à ${totalBlocks} blocs`, "ok");
+
+    // Force Excel to recalculate on open
+    rgduWb.Workbook = rgduWb.Workbook || {};
+    rgduWb.Workbook.CalcPr = { fullCalcOnLoad: true };
+
+    log("Génération du fichier de sortie…", "info");
+    const out = XLSX.write(rgduWb, {
+      bookType: "xlsx",
+      type: "array",
+      cellStyles: true,
+    });
+    outputBlob = new Blob([out], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    });
+    const baseName = rgduFile.name.replace(/\.(xls|xlsx)$/i, "");
+    outputName = `${baseName}_AUTO.xlsx`;
+    log(`  ✓ Fichier prêt : ${outputName} (${(outputBlob.size/1024).toFixed(1)} ko)`, "ok");
+    log("", "dim");
+    log("Terminé ✓ — Ouvre le fichier dans Excel, il recalculera automatiquement.", "ok");
+
+    // Synthèse preview
+    const preview = computeSynthesePreview(extSheet, employees);
+    showSynthesePreview(preview, employees.length);
+
+    btnDownload.style.display = "inline-flex";
+    btnReset.style.display = "inline-flex";
+  } catch (err){
+    log(`Erreur : ${err.message}`, "err");
+    console.error(err);
+  } finally {
+    btnProcess.innerHTML = origLabel;
+    btnProcess.disabled = !(rgduFile && extFile);
+  }
+}
+
+function showSynthesePreview(p, nbEmp){
+  const grid = document.getElementById("synthese-grid");
+  grid.innerHTML = "";
+  const rows = [
+    [["", "head"], ["URSSAF — Bulletin", "head"], ["RETRAITE — Bulletin", "head"]],
+    [
+      [`${nbEmp} salariés`, "label"],
+      [fmt(p.bullURSS), "num"],
+      [fmt(p.bullAA), "num"]
+    ],
+  ];
+  for (const r of rows){
+    const row = document.createElement("div");
+    row.className = "synthese-row";
+    for (const [val, cls] of r){
+      const cell = document.createElement("div");
+      cell.className = "synthese-cell " + cls;
+      cell.textContent = val;
+      grid.appendChild(cell);
+    }
+  }
+  document.getElementById("synthese").classList.add("visible");
+}
+
+function fmt(n){
+  return new Intl.NumberFormat("fr-FR", {minimumFractionDigits:2, maximumFractionDigits:2}).format(n) + " €";
+}
+</script>
+</body>
+</html>
