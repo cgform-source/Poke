@@ -1,5 +1,5 @@
 {
-  "last_update": "2026-05-18T17:34:14+00:00",
+  "last_update": "2026-05-25T11:40:44+00:00",
   "cards": {
     "charizard-v-ssv": {
       "price": 240,
@@ -8,15 +8,17 @@
         206,
         206,
         222,
+        240,
         240
       ],
       "sales_count": 0,
-      "last_update": "2026-05-18T17:34:14+00:00",
+      "last_update": "2026-05-25T11:40:44+00:00",
       "history_eu": [
         206,
         206,
         206,
         222,
+        240,
         240
       ],
       "price_eu": 240,
@@ -26,35 +28,39 @@
         218,
         233,
         255,
-        253
+        253,
+        243
       ],
-      "price_ww": 253,
+      "price_ww": 243,
       "sales_count_ww": 10
     },
     "mentali-v-eh": {
-      "price": 258,
+      "price": 270,
       "history": [
         230,
         230,
         237,
         258,
-        258
+        258,
+        270
       ],
       "sales_count": 0,
-      "last_update": "2026-05-18T17:34:14+00:00",
+      "last_update": "2026-05-25T11:40:44+00:00",
       "history_eu": [
         230,
         230,
         237,
         258,
-        258
+        258,
+        270
       ],
-      "price_eu": 258,
+      "price_eu": 270,
       "sales_count_eu": 10,
       "history_ww": [
         230,
         230,
         240,
+        330,
         330,
         330
       ],
@@ -62,63 +68,69 @@
       "sales_count_ww": 10
     },
     "dracaufeu-ex-151": {
-      "price": 780,
+      "price": 753,
       "history": [
         746,
         746,
         746,
         746,
-        780
+        780,
+        753
       ],
       "sales_count": 0,
-      "last_update": "2026-05-18T17:34:14+00:00",
+      "last_update": "2026-05-25T11:40:44+00:00",
       "history_eu": [
         746,
         746,
         746,
         746,
-        780
+        780,
+        753
       ],
-      "price_eu": 780,
+      "price_eu": 753,
       "sales_count_eu": 10,
       "history_ww": [
         921,
         921,
         934,
         848,
-        858
+        858,
+        862
       ],
-      "price_ww": 858,
+      "price_ww": 862,
       "sales_count_ww": 10
     },
     "pikachu-ex-sv8": {
-      "price": 648,
+      "price": 784,
       "history": [
         875,
         875,
         870,
         824,
-        648
+        648,
+        784
       ],
       "sales_count": 0,
-      "last_update": "2026-05-18T17:34:14+00:00",
+      "last_update": "2026-05-25T11:40:44+00:00",
       "history_eu": [
         875,
         875,
         870,
         824,
-        648
+        648,
+        784
       ],
-      "price_eu": 648,
-      "sales_count_eu": 5,
+      "price_eu": 784,
+      "sales_count_eu": 10,
       "history_ww": [
         921,
         921,
         880,
         865,
-        864
+        864,
+        821
       ],
-      "price_ww": 864,
+      "price_ww": 821,
       "sales_count_ww": 10
     },
     "umbreon-ex-sv8a": {
@@ -128,13 +140,15 @@
         595,
         600,
         600,
+        600,
         600
       ],
       "sales_count": 0,
-      "last_update": "2026-05-18T17:34:14+00:00",
+      "last_update": "2026-05-25T11:40:44+00:00",
       "history_eu": [
         595,
         595,
+        600,
         600,
         600,
         600
@@ -146,9 +160,10 @@
         724,
         725,
         809,
-        836
+        836,
+        848
       ],
-      "price_ww": 836,
+      "price_ww": 848,
       "sales_count_ww": 10
     }
   }
