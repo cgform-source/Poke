@@ -4,6 +4,17 @@
     "charizard-v-ssv": {
       "price": 265,
       "history": [
+        250,
+        250,
+        236,
+        200,
+        206,
+        206,
+        206,
+        222,
+        240,
+        240,
+        255,
         255,
         255,
         255,
@@ -11,14 +22,23 @@
         270,
         270,
         270,
-        270,
-        265,
         265,
         265
       ],
       "sales_count": 0,
       "last_update": "2026-10-17T00:30:21+00:00",
       "history_eu": [
+        250,
+        250,
+        236,
+        200,
+        206,
+        206,
+        206,
+        222,
+        240,
+        240,
+        255,
         255,
         255,
         255,
@@ -26,24 +46,28 @@
         270,
         270,
         270,
-        270,
-        265,
         265,
         265
       ],
       "price_eu": 265,
       "sales_count_eu": 10,
       "history_ww": [
+        202,
+        218,
+        218,
+        233,
+        255,
+        253,
+        243,
+        246,
         242,
         243,
         245,
         244,
         248,
-        248,
         264,
         251,
         221,
-        219,
         219
       ],
       "price_ww": 219,
@@ -128,54 +152,6 @@
         {
           "d": "2026-07-20",
           "p": 265
-        },
-        {
-          "d": "2026-07-27",
-          "p": 265
-        },
-        {
-          "d": "2026-08-03",
-          "p": 265
-        },
-        {
-          "d": "2026-08-10",
-          "p": 265
-        },
-        {
-          "d": "2026-08-17",
-          "p": 265
-        },
-        {
-          "d": "2026-08-24",
-          "p": 265
-        },
-        {
-          "d": "2026-08-31",
-          "p": 265
-        },
-        {
-          "d": "2026-09-07",
-          "p": 265
-        },
-        {
-          "d": "2026-09-14",
-          "p": 265
-        },
-        {
-          "d": "2026-09-21",
-          "p": 265
-        },
-        {
-          "d": "2026-09-28",
-          "p": 265
-        },
-        {
-          "d": "2026-10-05",
-          "p": 265
-        },
-        {
-          "d": "2026-10-12",
-          "p": 265
         }
       ],
       "history_ww_dated": [
@@ -246,54 +222,6 @@
         {
           "d": "2026-07-20",
           "p": 219
-        },
-        {
-          "d": "2026-07-27",
-          "p": 219
-        },
-        {
-          "d": "2026-08-03",
-          "p": 219
-        },
-        {
-          "d": "2026-08-10",
-          "p": 219
-        },
-        {
-          "d": "2026-08-17",
-          "p": 219
-        },
-        {
-          "d": "2026-08-24",
-          "p": 219
-        },
-        {
-          "d": "2026-08-31",
-          "p": 219
-        },
-        {
-          "d": "2026-09-07",
-          "p": 219
-        },
-        {
-          "d": "2026-09-14",
-          "p": 219
-        },
-        {
-          "d": "2026-09-21",
-          "p": 219
-        },
-        {
-          "d": "2026-09-28",
-          "p": 219
-        },
-        {
-          "d": "2026-10-05",
-          "p": 219
-        },
-        {
-          "d": "2026-10-12",
-          "p": 219
         }
       ],
       "sales_eu": [],
@@ -301,13 +229,17 @@
       "source_eu": {
         "ok": false,
         "kept_previous": true,
-        "detail": "HTTP 403, prix conservé",
+        "basis": null,
+        "failed_since": "2026-07-20",
+        "detail": "Relevé eBay en échec depuis le 20 juil. 2026. Les recherches de ventes (LH_Sold) renvoient la page « Se connecter ou s'inscrire ». Les prix affichés sont le dernier relevé réel, pas une cote confirmée depuis.",
         "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "source_ww": {
         "ok": false,
         "kept_previous": true,
-        "detail": "CAPTCHA détecté",
+        "basis": null,
+        "failed_since": "2026-07-20",
+        "detail": "Relevé eBay en échec depuis le 20 juil. 2026. Les recherches de ventes (LH_Sold) renvoient la page « Se connecter ou s'inscrire ». Les prix affichés sont le dernier relevé réel, pas une cote confirmée depuis.",
         "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "population": null,
@@ -320,46 +252,70 @@
     "mentali-v-eh": {
       "price": 318,
       "history": [
+        235,
+        235,
+        256,
+        225,
+        230,
+        230,
+        237,
+        258,
+        258,
+        270,
+        270,
         270,
         270,
         247,
         288,
-        288,
         296,
         296,
         296,
-        318,
         318,
         318
       ],
       "sales_count": 0,
       "last_update": "2026-10-17T00:30:21+00:00",
       "history_eu": [
+        235,
+        235,
+        256,
+        225,
+        230,
+        230,
+        237,
+        258,
+        258,
+        270,
+        270,
         270,
         270,
         247,
         288,
-        288,
         296,
         296,
         296,
-        318,
         318,
         318
       ],
       "price_eu": 318,
       "sales_count_eu": 10,
       "history_ww": [
+        236,
+        230,
+        230,
+        240,
+        330,
+        330,
+        330,
+        330,
         330,
         346,
         347,
         380,
         381,
-        381,
         389,
         389,
         390,
-        356,
         356
       ],
       "price_ww": 356,
@@ -444,54 +400,6 @@
         {
           "d": "2026-07-20",
           "p": 318
-        },
-        {
-          "d": "2026-07-27",
-          "p": 318
-        },
-        {
-          "d": "2026-08-03",
-          "p": 318
-        },
-        {
-          "d": "2026-08-10",
-          "p": 318
-        },
-        {
-          "d": "2026-08-17",
-          "p": 318
-        },
-        {
-          "d": "2026-08-24",
-          "p": 318
-        },
-        {
-          "d": "2026-08-31",
-          "p": 318
-        },
-        {
-          "d": "2026-09-07",
-          "p": 318
-        },
-        {
-          "d": "2026-09-14",
-          "p": 318
-        },
-        {
-          "d": "2026-09-21",
-          "p": 318
-        },
-        {
-          "d": "2026-09-28",
-          "p": 318
-        },
-        {
-          "d": "2026-10-05",
-          "p": 318
-        },
-        {
-          "d": "2026-10-12",
-          "p": 318
         }
       ],
       "history_ww_dated": [
@@ -562,54 +470,6 @@
         {
           "d": "2026-07-20",
           "p": 356
-        },
-        {
-          "d": "2026-07-27",
-          "p": 356
-        },
-        {
-          "d": "2026-08-03",
-          "p": 356
-        },
-        {
-          "d": "2026-08-10",
-          "p": 356
-        },
-        {
-          "d": "2026-08-17",
-          "p": 356
-        },
-        {
-          "d": "2026-08-24",
-          "p": 356
-        },
-        {
-          "d": "2026-08-31",
-          "p": 356
-        },
-        {
-          "d": "2026-09-07",
-          "p": 356
-        },
-        {
-          "d": "2026-09-14",
-          "p": 356
-        },
-        {
-          "d": "2026-09-21",
-          "p": 356
-        },
-        {
-          "d": "2026-09-28",
-          "p": 356
-        },
-        {
-          "d": "2026-10-05",
-          "p": 356
-        },
-        {
-          "d": "2026-10-12",
-          "p": 356
         }
       ],
       "sales_eu": [],
@@ -617,13 +477,17 @@
       "source_eu": {
         "ok": false,
         "kept_previous": true,
-        "detail": "CAPTCHA détecté",
+        "basis": null,
+        "failed_since": "2026-07-20",
+        "detail": "Relevé eBay en échec depuis le 20 juil. 2026. Les recherches de ventes (LH_Sold) renvoient la page « Se connecter ou s'inscrire ». Les prix affichés sont le dernier relevé réel, pas une cote confirmée depuis.",
         "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "source_ww": {
         "ok": false,
         "kept_previous": true,
-        "detail": "HTTP 403, prix conservé",
+        "basis": null,
+        "failed_since": "2026-07-20",
+        "detail": "Relevé eBay en échec depuis le 20 juil. 2026. Les recherches de ventes (LH_Sold) renvoient la page « Se connecter ou s'inscrire ». Les prix affichés sont le dernier relevé réel, pas une cote confirmée depuis.",
         "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "population": null,
@@ -636,46 +500,70 @@
     "dracaufeu-ex-151": {
       "price": 815,
       "history": [
+        917,
+        917,
+        922,
+        750,
+        746,
+        746,
+        746,
+        746,
+        780,
+        753,
+        753,
         753,
         748,
         760,
         757,
         782,
-        782,
         808,
         765,
         743,
-        782,
         815
       ],
       "sales_count": 0,
       "last_update": "2026-10-17T00:30:21+00:00",
       "history_eu": [
+        917,
+        917,
+        922,
+        750,
+        746,
+        746,
+        746,
+        746,
+        780,
+        753,
+        753,
         753,
         748,
         760,
         757,
         782,
-        782,
         808,
         765,
         743,
-        782,
         815
       ],
       "price_eu": 815,
       "sales_count_eu": 10,
       "history_ww": [
+        871,
+        921,
+        921,
+        934,
+        848,
+        858,
+        862,
+        839,
         834,
         838,
         822,
         821,
         798,
-        798,
         746,
         699,
         744,
-        740,
         740
       ],
       "price_ww": 740,
@@ -760,54 +648,6 @@
         {
           "d": "2026-07-20",
           "p": 815
-        },
-        {
-          "d": "2026-07-27",
-          "p": 815
-        },
-        {
-          "d": "2026-08-03",
-          "p": 815
-        },
-        {
-          "d": "2026-08-10",
-          "p": 815
-        },
-        {
-          "d": "2026-08-17",
-          "p": 815
-        },
-        {
-          "d": "2026-08-24",
-          "p": 815
-        },
-        {
-          "d": "2026-08-31",
-          "p": 815
-        },
-        {
-          "d": "2026-09-07",
-          "p": 815
-        },
-        {
-          "d": "2026-09-14",
-          "p": 815
-        },
-        {
-          "d": "2026-09-21",
-          "p": 815
-        },
-        {
-          "d": "2026-09-28",
-          "p": 815
-        },
-        {
-          "d": "2026-10-05",
-          "p": 815
-        },
-        {
-          "d": "2026-10-12",
-          "p": 815
         }
       ],
       "history_ww_dated": [
@@ -878,54 +718,6 @@
         {
           "d": "2026-07-20",
           "p": 740
-        },
-        {
-          "d": "2026-07-27",
-          "p": 740
-        },
-        {
-          "d": "2026-08-03",
-          "p": 740
-        },
-        {
-          "d": "2026-08-10",
-          "p": 740
-        },
-        {
-          "d": "2026-08-17",
-          "p": 740
-        },
-        {
-          "d": "2026-08-24",
-          "p": 740
-        },
-        {
-          "d": "2026-08-31",
-          "p": 740
-        },
-        {
-          "d": "2026-09-07",
-          "p": 740
-        },
-        {
-          "d": "2026-09-14",
-          "p": 740
-        },
-        {
-          "d": "2026-09-21",
-          "p": 740
-        },
-        {
-          "d": "2026-09-28",
-          "p": 740
-        },
-        {
-          "d": "2026-10-05",
-          "p": 740
-        },
-        {
-          "d": "2026-10-12",
-          "p": 740
         }
       ],
       "sales_eu": [],
@@ -933,13 +725,17 @@
       "source_eu": {
         "ok": false,
         "kept_previous": true,
-        "detail": "HTTP 403, prix conservé",
+        "basis": null,
+        "failed_since": "2026-07-20",
+        "detail": "Relevé eBay en échec depuis le 20 juil. 2026. Les recherches de ventes (LH_Sold) renvoient la page « Se connecter ou s'inscrire ». Les prix affichés sont le dernier relevé réel, pas une cote confirmée depuis.",
         "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "source_ww": {
         "ok": false,
         "kept_previous": true,
-        "detail": "CAPTCHA détecté",
+        "basis": null,
+        "failed_since": "2026-07-20",
+        "detail": "Relevé eBay en échec depuis le 20 juil. 2026. Les recherches de ventes (LH_Sold) renvoient la page « Se connecter ou s'inscrire ». Les prix affichés sont le dernier relevé réel, pas une cote confirmée depuis.",
         "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "population": null,
@@ -952,45 +748,69 @@
     "pikachu-ex-sv8": {
       "price": 725,
       "history": [
+        600,
+        765,
+        841,
+        593,
+        875,
+        875,
+        870,
+        824,
+        648,
+        784,
+        781,
         726,
         736,
         790,
         732,
         682,
-        682,
         726,
         741,
-        725,
         725,
         725
       ],
       "sales_count": 0,
       "last_update": "2026-10-17T00:30:21+00:00",
       "history_eu": [
+        600,
+        765,
+        841,
+        593,
+        875,
+        875,
+        870,
+        824,
+        648,
+        784,
+        781,
         726,
         736,
         790,
         732,
         682,
-        682,
         726,
         741,
-        725,
         725,
         725
       ],
       "price_eu": 725,
       "sales_count_eu": 10,
       "history_ww": [
+        598,
+        921,
+        921,
+        880,
+        865,
+        864,
+        821,
+        819,
         781,
         796,
         802,
         787,
         740,
-        740,
         743,
         741,
-        725,
         725,
         725
       ],
@@ -1076,54 +896,6 @@
         {
           "d": "2026-07-20",
           "p": 725
-        },
-        {
-          "d": "2026-07-27",
-          "p": 725
-        },
-        {
-          "d": "2026-08-03",
-          "p": 725
-        },
-        {
-          "d": "2026-08-10",
-          "p": 725
-        },
-        {
-          "d": "2026-08-17",
-          "p": 725
-        },
-        {
-          "d": "2026-08-24",
-          "p": 725
-        },
-        {
-          "d": "2026-08-31",
-          "p": 725
-        },
-        {
-          "d": "2026-09-07",
-          "p": 725
-        },
-        {
-          "d": "2026-09-14",
-          "p": 725
-        },
-        {
-          "d": "2026-09-21",
-          "p": 725
-        },
-        {
-          "d": "2026-09-28",
-          "p": 725
-        },
-        {
-          "d": "2026-10-05",
-          "p": 725
-        },
-        {
-          "d": "2026-10-12",
-          "p": 725
         }
       ],
       "history_ww_dated": [
@@ -1194,54 +966,6 @@
         {
           "d": "2026-07-20",
           "p": 725
-        },
-        {
-          "d": "2026-07-27",
-          "p": 725
-        },
-        {
-          "d": "2026-08-03",
-          "p": 725
-        },
-        {
-          "d": "2026-08-10",
-          "p": 725
-        },
-        {
-          "d": "2026-08-17",
-          "p": 725
-        },
-        {
-          "d": "2026-08-24",
-          "p": 725
-        },
-        {
-          "d": "2026-08-31",
-          "p": 725
-        },
-        {
-          "d": "2026-09-07",
-          "p": 725
-        },
-        {
-          "d": "2026-09-14",
-          "p": 725
-        },
-        {
-          "d": "2026-09-21",
-          "p": 725
-        },
-        {
-          "d": "2026-09-28",
-          "p": 725
-        },
-        {
-          "d": "2026-10-05",
-          "p": 725
-        },
-        {
-          "d": "2026-10-12",
-          "p": 725
         }
       ],
       "sales_eu": [],
@@ -1249,13 +973,17 @@
       "source_eu": {
         "ok": false,
         "kept_previous": true,
-        "detail": "CAPTCHA détecté",
+        "basis": null,
+        "failed_since": "2026-07-20",
+        "detail": "Relevé eBay en échec depuis le 20 juil. 2026. Les recherches de ventes (LH_Sold) renvoient la page « Se connecter ou s'inscrire ». Les prix affichés sont le dernier relevé réel, pas une cote confirmée depuis.",
         "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "source_ww": {
         "ok": false,
         "kept_previous": true,
-        "detail": "CAPTCHA détecté",
+        "basis": null,
+        "failed_since": "2026-07-20",
+        "detail": "Relevé eBay en échec depuis le 20 juil. 2026. Les recherches de ventes (LH_Sold) renvoient la page « Se connecter ou s'inscrire ». Les prix affichés sont le dernier relevé réel, pas une cote confirmée depuis.",
         "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "population": null,
@@ -1268,14 +996,23 @@
     "umbreon-ex-sv8a": {
       "price": 735,
       "history": [
+        713,
+        698,
+        600,
+        567,
+        595,
+        595,
         600,
         600,
         600,
         600,
-        619,
+        600,
+        600,
+        600,
+        600,
+        600,
         619,
         644,
-        735,
         735,
         735,
         735
@@ -1283,14 +1020,23 @@
       "sales_count": 0,
       "last_update": "2026-10-17T00:30:21+00:00",
       "history_eu": [
+        713,
+        698,
+        600,
+        567,
+        595,
+        595,
         600,
         600,
         600,
         600,
-        619,
+        600,
+        600,
+        600,
+        600,
+        600,
         619,
         644,
-        735,
         735,
         735,
         735
@@ -1298,16 +1044,22 @@
       "price_eu": 735,
       "sales_count_eu": 10,
       "history_ww": [
+        719,
+        724,
+        724,
+        725,
+        809,
+        836,
+        848,
+        823,
         822,
         826,
         833,
         809,
         711,
-        711,
         738,
         749,
         751,
-        703,
         703
       ],
       "price_ww": 703,
@@ -1392,54 +1144,6 @@
         {
           "d": "2026-07-20",
           "p": 735
-        },
-        {
-          "d": "2026-07-27",
-          "p": 735
-        },
-        {
-          "d": "2026-08-03",
-          "p": 735
-        },
-        {
-          "d": "2026-08-10",
-          "p": 735
-        },
-        {
-          "d": "2026-08-17",
-          "p": 735
-        },
-        {
-          "d": "2026-08-24",
-          "p": 735
-        },
-        {
-          "d": "2026-08-31",
-          "p": 735
-        },
-        {
-          "d": "2026-09-07",
-          "p": 735
-        },
-        {
-          "d": "2026-09-14",
-          "p": 735
-        },
-        {
-          "d": "2026-09-21",
-          "p": 735
-        },
-        {
-          "d": "2026-09-28",
-          "p": 735
-        },
-        {
-          "d": "2026-10-05",
-          "p": 735
-        },
-        {
-          "d": "2026-10-12",
-          "p": 735
         }
       ],
       "history_ww_dated": [
@@ -1510,54 +1214,6 @@
         {
           "d": "2026-07-20",
           "p": 703
-        },
-        {
-          "d": "2026-07-27",
-          "p": 703
-        },
-        {
-          "d": "2026-08-03",
-          "p": 703
-        },
-        {
-          "d": "2026-08-10",
-          "p": 703
-        },
-        {
-          "d": "2026-08-17",
-          "p": 703
-        },
-        {
-          "d": "2026-08-24",
-          "p": 703
-        },
-        {
-          "d": "2026-08-31",
-          "p": 703
-        },
-        {
-          "d": "2026-09-07",
-          "p": 703
-        },
-        {
-          "d": "2026-09-14",
-          "p": 703
-        },
-        {
-          "d": "2026-09-21",
-          "p": 703
-        },
-        {
-          "d": "2026-09-28",
-          "p": 703
-        },
-        {
-          "d": "2026-10-05",
-          "p": 703
-        },
-        {
-          "d": "2026-10-12",
-          "p": 703
         }
       ],
       "sales_eu": [],
@@ -1565,13 +1221,17 @@
       "source_eu": {
         "ok": false,
         "kept_previous": true,
-        "detail": "HTTP 403, prix conservé",
+        "basis": null,
+        "failed_since": "2026-07-20",
+        "detail": "Relevé eBay en échec depuis le 20 juil. 2026. Les recherches de ventes (LH_Sold) renvoient la page « Se connecter ou s'inscrire ». Les prix affichés sont le dernier relevé réel, pas une cote confirmée depuis.",
         "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "source_ww": {
         "ok": false,
         "kept_previous": true,
-        "detail": "CAPTCHA détecté",
+        "basis": null,
+        "failed_since": "2026-07-20",
+        "detail": "Relevé eBay en échec depuis le 20 juil. 2026. Les recherches de ventes (LH_Sold) renvoient la page « Se connecter ou s'inscrire ». Les prix affichés sont le dernier relevé réel, pas une cote confirmée depuis.",
         "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "population": null,
@@ -1582,12 +1242,13 @@
       "price_cm_error": "Cardmarket indisponible"
     }
   },
-  "last_success": "2026-10-12T17:04:45+00:00",
+  "last_success": "2026-07-20T14:49:55+00:00",
   "sources": {
     "ebay": {
       "ok": false,
       "checked_at": "2026-10-17T00:30:21+00:00",
-      "detail": "eBay illisible sur ce run : tous les derniers prix sont conservés."
+      "failed_since": "2026-07-20",
+      "detail": "Relevé eBay en échec depuis le 20 juil. 2026. Les recherches de ventes (LH_Sold) renvoient la page « Se connecter ou s'inscrire ». Les prix affichés sont le dernier relevé réel, pas une cote confirmée depuis."
     },
     "cardmarket": {
       "ok": false,

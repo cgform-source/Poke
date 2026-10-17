@@ -22,6 +22,13 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_REPOSITORY: ${{ github.repository }}
+      # Compte développeur eBay gratuit : App ID (Client ID) et Cert ID (Client Secret).
+      # Marketplace Insights (ventes) est souvent refusé aux nouveaux comptes ;
+      # les mêmes clés servent alors à la Browse API (annonces actives, étiquetées comme telles).
+      EBAY_CLIENT_ID: ${{ secrets.EBAY_CLIENT_ID }}
+      EBAY_CLIENT_SECRET: ${{ secrets.EBAY_CLIENT_SECRET }}
+      # Clé gratuite https://www.pokemonpricetracker.com/ — repli Monde, ventes PSA 10.
+      POKEMON_PRICE_TRACKER_API_KEY: ${{ secrets.POKEMON_PRICE_TRACKER_API_KEY }}
 
     steps:
       - name: Checkout repo
