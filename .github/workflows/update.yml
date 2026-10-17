@@ -2,18 +2,32 @@ name: Update prices
 
 on:
   schedule:
-    - cron: '0 8 * * 1'
+    # Chaque jour à 06:15 UTC (08:15 heure de Paris en été, 07:15 en hiver).
+    # L'ancien cron « 0 8 * * 1 » ne tournait que le lundi. Le run du
+    # 2026-10-12 a réussi : ce n'était pas une panne, seulement l'attente
+    # du lundi suivant.
+    - cron: '15 6 * * *'
   workflow_dispatch:
+
+concurrency:
+  group: vault-price-update
+  cancel-in-progress: false
 
 jobs:
   update:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      issues: write
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -21,7 +35,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install --quiet requests beautifulsoup4
+        run: pip install --quiet requests beautifulsoup4 pillow
 
       - name: Run price updater
         run: python update_prices.py
@@ -31,10 +45,27 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add prices.json
+          if [ -d images ]; then git add images; fi
           if git diff --cached --quiet; then
             echo "Aucun changement, rien à commiter."
-          else
-            git commit -m "chore: update prices $(date -u +%Y-%m-%d)"
-            git pull --rebase origin main
-            git push
+            exit 0
           fi
+          git commit -m "chore: update prices $(date -u +%Y-%m-%d)"
+          if ! git pull --rebase origin main; then
+            echo "Conflit au rebase : les prix déjà sur main sont laissés intacts."
+            git rebase --abort || true
+            exit 1
+          fi
+          n=0
+          until git push; do
+            n=$((n+1))
+            if [ "$n" -ge 3 ]; then
+              echo "Push impossible après 3 essais."
+              exit 1
+            fi
+            sleep $((n * 5))
+            if ! git pull --rebase origin main; then
+              git rebase --abort || true
+              exit 1
+            fi
+          done

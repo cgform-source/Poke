@@ -2,612 +2,988 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#05060f">
 <title>PAPOU VAULT // Collection</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@400;600;800&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@700;900&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="https://www.psacard.com/cert/145866913/psa/image/57DoD5MGc0a45T7rZvOBbw">
+<link rel="preload" as="image" href="https://www.psacard.com/cert/95360955/psa/image/vWfFGLoOfkGbq605JlutgQ">
+<link rel="preload" as="image" href="https://www.psacard.com/cert/102215566/psa/image/VCCjBrZ3AES-hPUcUnHh2Q">
+<link rel="preload" as="image" href="https://www.psacard.com/cert/102618365/psa/image/sLvYjXjxt0yZrUKGPYGTDw">
+<link rel="preload" as="image" href="https://www.psacard.com/cert/109838459/psa/image/Ure9Ck43B0KUOT_Bfgneeg">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 :root{
---bg:#05060f; --bg-2:#0a0f1e;
---panel:rgba(10,15,30,0.7);
---cyan:#00ffe0; --magenta:#ff2ec4; --violet:#8a2bff;
---yellow:#ffe436; --green:#00ff9d; --red:#ff3860;
---grid:rgba(0,255,224,0.08); --border:rgba(0,255,224,0.25);
---text:#e5f3ff; --muted:#6e7da6;
+  --bg:#05060f; --bg-2:#0a0f1e;
+  --panel:rgba(10,15,30,0.7);
+  --cyan:#00ffe0; --magenta:#ff2ec4; --violet:#8a2bff;
+  --yellow:#ffe436; --green:#00ff9d; --red:#ff3860;
+  --grid:rgba(0,255,224,0.08); --border:rgba(0,255,224,0.25);
+  --text:#e5f3ff; --muted:#6e7da6;
+  --sans:'Outfit',sans-serif;
+  --display:'Orbitron',sans-serif;
+  --mono:'JetBrains Mono',monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden}
-body{
-background:radial-gradient(ellipse at 20% 0%,rgba(138,43,255,0.15),transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(0,255,224,0.12),transparent 50%),linear-gradient(180deg,#05060f 0%,#080b1a 50%,#05060f 100%);
-background-attachment:fixed;position:relative;
-}
-body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:50px 50px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%)}
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;background:repeating-linear-gradient(0deg,transparent 0,transparent 3px,rgba(0,0,0,0.12) 3px,rgba(0,0,0,0.12) 4px);mix-blend-mode:multiply}
-.wrap{max-width:1280px;margin:0 auto;padding:24px 20px 60px;position:relative;z-index:2}
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border:1px solid var(--border);background:var(--panel);backdrop-filter:blur(10px);border-radius:6px;margin-bottom:28px;gap:12px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:14px}
-.logo{width:36px;height:36px;border:2px solid var(--cyan);transform:rotate(45deg);position:relative;flex-shrink:0}
-.logo::before{content:'';position:absolute;inset:4px;border:1px solid var(--magenta);transform:rotate(45deg)}
+html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100%;overflow-x:hidden}
+body{color-scheme:dark;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+button,input,a{font:inherit;color:inherit}
+button{cursor:pointer}
+img{max-width:100%}
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.orb{position:absolute;width:52vw;height:52vw;border-radius:50%;will-change:transform}
+.orb-a{top:-18%;left:-12%;background:radial-gradient(circle,rgba(0,255,224,.20),transparent 68%);animation:drift 34s ease-in-out infinite}
+.orb-b{bottom:-20%;right:-14%;background:radial-gradient(circle,rgba(255,46,196,.18),transparent 68%);animation:drift 40s ease-in-out infinite reverse}
+.orb-c{top:38%;left:40%;width:36vw;height:36vw;background:radial-gradient(circle,rgba(138,43,255,.20),transparent 70%);animation:drift 46s ease-in-out infinite}
+@keyframes drift{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(3.5vw,2.2vh,0)}}
+.gridlines{position:absolute;inset:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:64px 64px;-webkit-mask-image:radial-gradient(ellipse at center,black 15%,transparent 78%);mask-image:radial-gradient(ellipse at center,black 15%,transparent 78%)}
+.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:22px 20px calc(48px + env(safe-area-inset-bottom))}
+.topbar{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 16px;margin:0 0 16px;border:1px solid var(--border);border-radius:16px;background:rgba(5,6,15,.78);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.logo{width:34px;height:34px;border:2px solid var(--cyan);transform:rotate(45deg);position:relative;flex-shrink:0}
+.logo::before{content:'';position:absolute;inset:4px;border:1px solid var(--magenta)}
 .logo::after{content:'';position:absolute;inset:10px;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
-.brand h1{font-family:'Orbitron',sans-serif;font-weight:900;font-size:20px;letter-spacing:3px;color:#fff;text-shadow:0 0 15px rgba(0,255,224,0.5)}
-.brand h1 span{color:var(--magenta);text-shadow:0 0 15px var(--magenta)}
-.topbar-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.btn{background:transparent;border:1px solid var(--border);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:2px;padding:8px 14px;cursor:pointer;text-transform:uppercase;border-radius:3px;transition:all .2s ease}
+.brand h1{font-family:var(--display);font-weight:900;font-size:18px;letter-spacing:2px;line-height:1}
+.brand h1 span{color:var(--magenta)}
+.tag{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.btn{min-height:44px;border:1px solid var(--border);background:transparent;border-radius:999px;padding:0 16px;font-size:13px;font-weight:600;letter-spacing:.04em;transition:transform .2s ease,background .2s ease,border-color .2s ease,color .2s ease}
+.btn:active{transform:scale(.98)}
 .btn-edit{border-color:var(--magenta);color:var(--magenta)}
-.btn-edit:hover{background:var(--magenta);color:#000;box-shadow:0 0 15px var(--magenta)}
-.btn-edit.active{background:var(--magenta);color:#000;animation:pulse-btn 1.5s infinite}
-@keyframes pulse-btn{0%,100%{box-shadow:0 0 0 0 rgba(255,46,196,0.6)}50%{box-shadow:0 0 0 8px rgba(255,46,196,0)}}
-.hero{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:14px;margin-bottom:32px}
-.stat{border:1px solid var(--border);background:var(--panel);backdrop-filter:blur(10px);padding:18px 20px;position:relative;overflow:hidden;border-radius:4px}
-.stat::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
-.stat.main::before{background:var(--magenta);box-shadow:0 0 10px var(--magenta)}
-.stat .label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
-.stat .value{font-family:'Orbitron',sans-serif;font-weight:900;font-size:28px;color:#fff;letter-spacing:1px}
-.stat.main .value{font-size:40px;color:var(--cyan);text-shadow:0 0 20px rgba(0,255,224,0.4)}
-.stat .delta{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;margin-top:4px}
-.stat .delta.up{color:var(--green)}.stat .delta.down{color:var(--red)}
-.stat .sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-top:4px}
-.stat-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}
-.stat-header .label{margin-bottom:0;flex:1;min-width:0}
-.market-toggle{display:flex;gap:4px;flex-shrink:0}
-.mt-btn{background:transparent;border:1px solid rgba(110,125,166,0.4);font-size:14px;width:32px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:4px;cursor:pointer;opacity:0.4;transition:all .2s ease;padding:0;color:var(--text);font-family:'JetBrains Mono',monospace}
-.mt-btn:hover{opacity:0.75;border-color:var(--text)}
-.mt-btn.active{opacity:1}
-.mt-btn.active[data-market="eu"]{border-color:var(--cyan);box-shadow:0 0 10px rgba(0,255,224,0.5);background:rgba(0,255,224,0.08)}
-.mt-btn.active[data-market="ww"]{border-color:var(--magenta);box-shadow:0 0 10px rgba(255,46,196,0.5);background:rgba(255,46,196,0.08)}
-.stat.main .value.market-ww{color:var(--magenta);text-shadow:0 0 20px rgba(255,46,196,0.4)}
-.stat .value.market-ww{color:var(--magenta)}
-.section-title{display:flex;align-items:center;gap:12px;margin:0 0 18px;font-family:'Orbitron',sans-serif;font-weight:700;letter-spacing:4px;font-size:14px;color:var(--cyan);text-transform:uppercase}
+@media (hover:hover) and (pointer:fine){
+  .btn-edit:hover{background:var(--magenta);color:#05060f}
+}
+.btn-edit.active{background:var(--magenta);color:#05060f}
+.status{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 18px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:999px;padding:6px 10px;background:rgba(0,255,224,.04)}
+.chip i{width:7px;height:7px;border-radius:50%;background:var(--muted);box-shadow:0 0 8px currentColor}
+.chip.ok{color:var(--green);border-color:rgba(0,255,157,.35)}
+.chip.ok i{background:var(--green)}
+.chip.wait{color:var(--yellow);border-color:rgba(255,228,54,.35)}
+.chip.wait i{background:var(--yellow)}
+.chip.bad{color:var(--red);border-color:rgba(255,56,96,.4)}
+.chip.bad i{background:var(--red)}
+.banner{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border:1px solid var(--magenta);background:rgba(255,46,196,.08);border-radius:14px;padding:12px 14px;margin-bottom:16px}
+.banner p{font-size:14px;line-height:1.45}
+.banner button{border:0;background:transparent;color:var(--magenta);min-height:44px;font-weight:600}
+.hero{display:grid;grid-template-columns:1.35fr .9fr;gap:14px;margin-bottom:28px}
+.stat-side{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.stat{position:relative;overflow:hidden;border:1px solid var(--border);border-radius:16px;background:var(--panel);padding:16px 18px;animation:rise .6s cubic-bezier(.16,.84,.32,1) backwards}
+.stat:nth-child(2){animation-delay:.05s}
+.stat::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--cyan)}
+.stat.main{animation-delay:0s}
+.stat.main::before{background:var(--magenta)}
+.stat .label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.stat .value{font-family:var(--display);font-weight:900;font-size:26px;letter-spacing:.5px;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat.main .value{font-size:clamp(34px,5vw,52px);color:var(--cyan);text-shadow:0 0 24px rgba(0,255,224,.35)}
+.stat .value.market-ww,.stat.main .value.market-ww{color:var(--magenta);text-shadow:0 0 24px rgba(255,46,196,.35)}
+.delta{font-family:var(--mono);font-size:12px;margin-top:8px;color:var(--muted)}
+.delta.up,.gain.up{color:var(--green)}
+.delta.down,.gain.down{color:var(--red)}
+.sub{margin-top:6px;color:var(--muted);font-size:12px}
+.stat-header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.seg{position:relative;display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);border-radius:999px;padding:3px;min-width:168px;background:rgba(5,6,15,.45)}
+.seg-glider{position:absolute;top:3px;bottom:3px;left:3px;width:calc(50% - 3px);border-radius:999px;background:rgba(0,255,224,.16);border:1px solid var(--cyan);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.seg.is-ww .seg-glider{transform:translateX(100%);background:rgba(255,46,196,.16);border-color:var(--magenta)}
+.mt-btn{position:relative;z-index:1;min-height:36px;border:0;background:transparent;border-radius:999px;font-size:13px;font-weight:600;color:var(--muted)}
+.mt-btn.active{color:var(--text)}
+.section-title{display:flex;align-items:center;gap:12px;margin:8px 0 14px;font-family:var(--display);font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan)}
 .section-title::before{content:'▸';color:var(--magenta)}
 .section-title .line{flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(540px,1fr));gap:20px}
-.card{border:1px solid var(--border);background:linear-gradient(135deg,rgba(10,15,30,0.85),rgba(20,10,40,0.7));backdrop-filter:blur(12px);border-radius:6px;overflow:hidden;position:relative;transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s ease,border-color .4s ease}
-.card::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:3;background:linear-gradient(115deg,transparent 40%,rgba(255,46,196,0.08) 48%,rgba(0,255,224,0.08) 52%,transparent 60%);transition:transform .6s ease;transform:translateX(-30%)}
-.card:hover{transform:translateY(-4px);border-color:var(--cyan);box-shadow:0 20px 50px rgba(0,255,224,0.15),0 0 40px rgba(138,43,255,0.1)}
-.card:hover::before{transform:translateX(30%)}
-.card-inner{display:grid;grid-template-columns:200px 1fr;gap:0;min-height:300px}
-.slab{position:relative;overflow:hidden;background:#000;border-right:1px solid var(--border);cursor:pointer}
-.slab img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;position:absolute;inset:0}
-.slab-fallback{text-align:center;padding:16px;font-family:'Orbitron',sans-serif;font-weight:700;color:#fff;letter-spacing:2px;font-size:11px;line-height:1.4;text-shadow:0 0 10px rgba(255,255,255,0.4);z-index:1;background:repeating-linear-gradient(45deg,rgba(255,46,196,0.05) 0 10px,transparent 10px 20px);position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.slab-holo{position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,0.10) 50%,transparent 70%);pointer-events:none;animation:holo 4s ease-in-out infinite;z-index:2}
-@keyframes holo{0%,100%{opacity:0.3;transform:translateX(-100%)}50%{opacity:0.6;transform:translateX(100%)}}
-.rank{position:absolute;top:8px;right:8px;width:28px;height:28px;background:var(--cyan);color:#000;font-family:'Orbitron',sans-serif;font-weight:900;font-size:11px;display:flex;align-items:center;justify-content:center;z-index:4;box-shadow:0 0 10px rgba(0,255,224,0.6);border-radius:2px}
-body.editing .slab::after{content:'📷 MODIFIER IMAGE';position:absolute;bottom:8px;left:8px;right:8px;background:rgba(255,46,196,0.9);color:#000;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:9px;padding:4px;text-align:center;letter-spacing:1px;z-index:5;border-radius:2px;animation:edit-glow 2s infinite}
-.card-body{padding:18px 20px;display:flex;flex-direction:column;gap:12px}
-.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-.card-name{font-family:'Orbitron',sans-serif;font-weight:700;font-size:16px;color:#fff;letter-spacing:1px;line-height:1.2}
-.card-set{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:1px}
-.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--magenta);background:rgba(255,46,196,0.1);border:1px solid rgba(255,46,196,0.4);padding:3px 8px;letter-spacing:1px;white-space:nowrap}
-.cert-badge{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--yellow);margin-top:2px;letter-spacing:1px}
-.cert-badge a{color:var(--yellow);text-decoration:none;border-bottom:1px dotted var(--yellow)}
-.cert-badge a:hover{color:var(--cyan);border-color:var(--cyan)}
-.price-block{display:flex;align-items:flex-end;gap:18px;padding:10px 0;border-top:1px dashed var(--border);border-bottom:1px dashed var(--border);flex-wrap:wrap}
-.price-col{display:flex;flex-direction:column;gap:2px}
-.price-col .price-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:5px}
-.price-col .price-label::before{content:'';width:8px;height:8px;border-radius:50%;display:inline-block;box-shadow:0 0 8px currentColor}
+.boot{color:var(--muted);padding:28px 0 10px;letter-spacing:.08em}
+.cards,.wishes{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{--accent:var(--cyan);border:1px solid var(--border);border-radius:18px;background:linear-gradient(160deg,rgba(10,15,30,.94),rgba(16,10,32,.9));box-shadow:inset 3px 0 0 var(--accent);animation:rise .7s cubic-bezier(.16,.84,.32,1) backwards;animation-delay:calc(var(--i,0) * 80ms)}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+body.rerender .card,body.rerender .stat{animation:none}
+.stage{perspective:1100px}
+.tilt{transform-style:preserve-3d;will-change:transform}
+@media (hover:hover) and (pointer:fine){
+  .card:hover{transform:translateY(-6px);border-color:var(--cyan)}
+}
+.card-inner{display:grid;grid-template-columns:minmax(190px,230px) 1fr;min-height:100%}
+.slab{position:relative;background:#000;border-right:1px solid var(--border);min-height:280px;touch-action:pan-y}
+.psa-label{position:relative;z-index:4;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;background:#05060f;border-bottom:1px solid var(--border);font-family:var(--display);font-size:10px;letter-spacing:.16em}
+.psa-label b{color:#fff;font-size:14px;text-shadow:0 0 10px var(--cyan)}
+.psa-label .rank{color:var(--accent)}
+.photo{position:absolute;inset:36px 0 0;overflow:hidden}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.02);transition:opacity .45s ease,transform .6s ease}
+.photo img.is-in{opacity:1;transform:none}
+.shimmer{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,255,224,.05),rgba(138,43,255,.08));overflow:hidden}
+.shimmer::after{content:'';position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(0,255,224,.22),rgba(255,46,196,.16),transparent 70%);transform:translateX(-100%);animation:sheen 1.35s ease-in-out infinite}
+@keyframes sheen{to{transform:translateX(100%)}}
+.shimmer.is-hidden{opacity:0;transition:opacity .3s ease;pointer-events:none}
+.holo{position:absolute;top:-10%;bottom:-10%;width:55%;left:0;background:linear-gradient(115deg,transparent,rgba(0,255,224,.28),rgba(255,255,255,.22),rgba(255,46,196,.22),transparent);mix-blend-mode:screen;pointer-events:none;transform:translate3d(-40%,0,0);opacity:.8;will-change:transform}
+.slab:not(.is-hot) .holo{animation:sweep 7.5s ease-in-out infinite}
+.slab.is-hot .holo{animation:none}
+@keyframes sweep{0%,100%{transform:translate3d(-45%,0,0)}50%{transform:translate3d(120%,0,0)}}
+.slab-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;gap:6px;background:repeating-linear-gradient(135deg,rgba(255,46,196,.06) 0 12px,transparent 12px 24px),#070814}
+.slab-fallback strong{font-family:var(--display);font-size:13px;letter-spacing:.08em}
+.slab-fallback span{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.08em}
+.edit-photo{display:none}
+body.editing .edit-photo{display:flex;position:absolute;left:8px;right:8px;bottom:8px;z-index:5;justify-content:center;background:var(--magenta);color:#05060f;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.08em;padding:6px;border-radius:8px}
+.card-body{padding:16px 16px 14px;display:flex;flex-direction:column;gap:12px}
+.card-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.card-name{font-weight:700;font-size:18px;letter-spacing:.01em;line-height:1.2}
+.card-set{color:var(--muted);font-size:12px;margin-top:4px}
+.cert a{color:var(--yellow);font-family:var(--mono);font-size:11px;text-decoration:none;border-bottom:1px dotted var(--yellow)}
+.card-num{font-family:var(--mono);font-size:10px;color:var(--magenta);border:1px solid rgba(255,46,196,.4);background:rgba(255,46,196,.08);padding:4px 8px;border-radius:999px;white-space:nowrap}
+.price-block{display:flex;flex-wrap:wrap;gap:14px 18px;align-items:flex-end;padding:10px 0;border-top:1px dashed var(--border);border-bottom:1px dashed var(--border)}
+.price-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;gap:6px}
 .price-col.eu .price-label{color:var(--cyan)}
 .price-col.ww .price-label{color:var(--magenta)}
-.price-main{font-family:'Orbitron',sans-serif;font-weight:900;font-size:24px;letter-spacing:1px;line-height:1;cursor:default;padding:3px 6px;border-radius:3px;transition:all .2s ease;margin:-3px -6px}
-.price-col.eu .price-main{color:var(--cyan);text-shadow:0 0 15px rgba(0,255,224,0.3)}
-.price-col.ww .price-main{color:var(--magenta);text-shadow:0 0 15px rgba(255,46,196,0.3)}
-.price-main .cur{font-size:14px;color:var(--muted);margin-right:2px}
-.price-main.empty{opacity:0.35;font-size:18px}
-body.editing .price-main:not(.empty){cursor:pointer;background:rgba(255,46,196,0.1);border:1px dashed var(--magenta);animation:edit-glow 2s infinite}
-body.editing .price-main:hover{background:rgba(255,46,196,0.2);transform:scale(1.02)}
-@keyframes edit-glow{0%,100%{border-color:var(--magenta);opacity:1}50%{border-color:var(--cyan);opacity:0.85}}
-.price-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-left:auto;text-align:right;line-height:1.4}
-.price-meta .delta-up{color:var(--green)}.price-meta .delta-down{color:var(--red)}
-.chart-wrap{position:relative;height:90px;margin:4px 0}
+.price-main{font-family:var(--display);font-weight:900;font-size:22px;line-height:1.1;margin-top:4px;border-radius:8px}
+.price-col.eu .price-main{color:var(--cyan)}
+.price-col.ww .price-main{color:var(--magenta)}
+.price-main .cur{font-size:12px;color:var(--muted);margin-right:2px}
+.kept{font-family:var(--mono);font-size:10px;color:var(--yellow);margin-top:4px}
+.gap{display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:600;color:#05060f;background:var(--yellow)}
+.meta-row,.buy-row,.pop-row,.cm-row{display:flex;justify-content:space-between;gap:10px;align-items:baseline;font-size:13px}
+.k{color:var(--muted);font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.gain{font-family:var(--mono);font-size:12px}
+.chart-wrap{position:relative;height:92px}
 .chart-wrap canvas{width:100%!important;height:100%!important}
+.chart-empty{height:100%;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);font-family:var(--mono);font-size:10px;letter-spacing:.04em;padding:0 8px}
+.sales{display:flex;flex-direction:column;gap:4px}
+.sale{display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.sale b{color:var(--text);font-weight:600}
 .links{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-.link{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 10px;border:1px solid var(--border);background:rgba(0,255,224,0.04);color:var(--cyan);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:all .25s ease;border-radius:3px}
-.link.eu{color:var(--cyan);border-color:rgba(0,255,224,0.35);background:rgba(0,255,224,0.05)}
-.link.ww{color:var(--magenta);border-color:rgba(255,46,196,0.35);background:rgba(255,46,196,0.05)}
-.link.cm{color:var(--violet);border-color:rgba(138,43,255,0.35);background:rgba(138,43,255,0.05)}
-.link:hover{transform:translateY(-1px)}
-.link.eu:hover{background:var(--cyan);color:#000;box-shadow:0 0 15px var(--cyan);border-color:var(--cyan)}
-.link.ww:hover{background:var(--magenta);color:#000;box-shadow:0 0 15px var(--magenta);border-color:var(--magenta)}
-.link.cm:hover{background:var(--violet);color:#fff;box-shadow:0 0 15px var(--violet);border-color:var(--violet)}
-.modal{position:fixed;inset:0;background:rgba(5,6,15,0.92);backdrop-filter:blur(8px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
-.modal.active{display:flex}
-.modal-content{background:linear-gradient(135deg,#0a0f1e,#1a0b33);border:1px solid var(--magenta);box-shadow:0 0 60px rgba(255,46,196,0.3);border-radius:8px;padding:28px;max-width:480px;width:100%}
-.modal-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:14px;letter-spacing:3px;color:var(--cyan);margin-bottom:6px;text-transform:uppercase}
-.modal-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:20px;letter-spacing:1px;line-height:1.5}
-.modal-input{width:100%;background:#05060f;border:1px solid var(--cyan);color:var(--cyan);font-family:'Orbitron',sans-serif;font-weight:900;font-size:28px;padding:14px 18px;border-radius:4px;outline:none;letter-spacing:1px}
-.modal-input.url{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0;font-weight:400}
-.modal-input:focus{box-shadow:0 0 15px rgba(0,255,224,0.3)}
-.modal-actions{display:flex;gap:10px;margin-top:20px}
-.modal-btn{flex:1;background:transparent;border:1px solid var(--border);color:var(--text);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;letter-spacing:2px;padding:12px;cursor:pointer;text-transform:uppercase;border-radius:3px;transition:all .2s ease}
+.link{display:flex;align-items:center;justify-content:center;min-height:44px;border-radius:10px;text-decoration:none;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--border);transition:transform .2s ease,background .2s ease,color .2s ease}
+.link.eu{color:var(--cyan);background:rgba(0,255,224,.05)}
+.link.ww{color:var(--magenta);background:rgba(255,46,196,.05)}
+.link.cm{color:var(--violet);background:rgba(138,43,255,.08)}
+.link:active{transform:scale(.98)}
+@media (hover:hover) and (pointer:fine){
+  .link.eu:hover{background:var(--cyan);color:#05060f}
+  .link.ww:hover{background:var(--magenta);color:#05060f}
+  .link.cm:hover{background:var(--violet);color:#fff}
+}
+body.editing .edit-field{cursor:pointer;outline:1px dashed var(--magenta);outline-offset:3px;border-radius:8px}
+.wish-actions{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.wish-card{border:1px solid var(--border);border-radius:16px;padding:16px;background:var(--panel);display:flex;flex-direction:column;gap:8px}
+.wish-card.deal{border-color:var(--green);box-shadow:inset 3px 0 0 var(--green)}
+.deal-flag{align-self:flex-start;background:var(--green);color:#05060f;font-weight:700;font-size:12px;border-radius:999px;padding:4px 10px}
+.empty{color:var(--muted);line-height:1.5;padding:8px 0 18px}
+footer{margin-top:28px;padding-top:16px;border-top:1px solid var(--border);color:var(--muted);font-size:13px;line-height:1.55;display:flex;flex-direction:column;gap:8px}
+footer a{color:var(--cyan)}
+.modal{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(5,6,15,.72);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .28s ease,visibility .28s ease}
+.modal.active{opacity:1;visibility:visible;pointer-events:auto}
+.modal-content{width:min(480px,100%);background:linear-gradient(160deg,#0a0f1e,#140a22);border:1px solid var(--magenta);border-radius:18px;padding:22px;transform:translateY(12px) scale(.98);transition:transform .32s cubic-bezier(.16,.84,.32,1)}
+.modal.active .modal-content{transform:none}
+.modal-title{font-family:var(--display);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px}
+.modal-sub{color:var(--muted);font-size:13px;line-height:1.45;margin-bottom:14px}
+.modal-input{width:100%;min-height:52px;background:#05060f;border:1px solid var(--cyan);color:var(--cyan);border-radius:12px;padding:12px 14px;font-size:16px;outline:none}
+.modal-input.price{font-family:var(--display);font-size:28px;font-weight:900}
+.modal-actions{display:flex;gap:10px;margin-top:16px}
+.modal-btn{flex:1;min-height:48px;border-radius:12px;border:1px solid var(--border);background:transparent;font-weight:650;letter-spacing:.04em}
 .modal-btn.primary{border-color:var(--cyan);color:var(--cyan)}
-.modal-btn.primary:hover{background:var(--cyan);color:#000}
-.modal-btn:hover{border-color:var(--magenta);color:var(--magenta)}
-@media(max-width:900px){.hero{grid-template-columns:1fr 1fr;gap:10px}.stat.main{grid-column:span 2}.cards{grid-template-columns:1fr}}
-@media(max-width:600px){
-.wrap{padding:16px 12px 40px}
-.topbar{flex-direction:column;align-items:stretch}
-.brand h1{font-size:16px;letter-spacing:2px}
-.hero{grid-template-columns:1fr}.stat.main{grid-column:auto}
-.stat .value{font-size:22px}.stat.main .value{font-size:32px}
-.card-inner{grid-template-columns:130px 1fr}
-.card-body{padding:14px}
-.card-name{font-size:14px}
-.price-main{font-size:20px}
-.price-block{gap:12px}
-.links{grid-template-columns:1fr 1fr;gap:5px}
-.links .link.cm{grid-column:span 2}
-.link{font-size:9px;padding:7px 6px}
+@media (hover:hover) and (pointer:fine){
+  .modal-btn.primary:hover{background:var(--cyan);color:#05060f}
+}
+.skel{display:block;height:1.05em;width:9ch;border-radius:8px;background:linear-gradient(90deg,rgba(0,255,224,.08),rgba(255,46,196,.16),rgba(0,255,224,.08));background-size:200% 100%;animation:sheen 1.2s linear infinite}
+body.market-ww .d-eu,body:not(.market-ww) .d-ww{display:none}
+@media (max-width:980px){
+  .hero{grid-template-columns:1fr}
+}
+@media (max-width:1100px){
+  .cards,.wishes{grid-template-columns:1fr}
+}
+@media (max-width:900px){
+  .card-inner{grid-template-columns:1fr}
+  .slab{border-right:0;border-bottom:1px solid var(--border);min-height:0}
+  .photo{position:relative;inset:auto;aspect-ratio:3/4;max-height:520px}
+}
+@media (max-width:720px){
+  .wrap{padding:14px 12px calc(36px + env(safe-area-inset-bottom))}
+  .topbar{flex-wrap:wrap}
+  .stat-side{grid-template-columns:1fr 1fr}
+  .links{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .orb{display:none}
+  .photo img{opacity:1;transform:none}
 }
 </style>
 </head>
-<body>
+<body class="is-booting">
+<div class="bg" aria-hidden="true">
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+  <div class="orb orb-c"></div>
+  <div class="gridlines"></div>
+</div>
 <div class="wrap">
 <header class="topbar">
-<div class="brand">
-<div class="logo"></div>
-<h1>PAPOU<span>//</span>VAULT</h1>
-</div>
-<div class="topbar-actions">
-<button class="btn btn-edit" id="editBtn">✎ Mode édition</button>
-</div>
+  <div class="brand">
+    <div class="logo" aria-hidden="true"></div>
+    <div>
+      <h1>PAPOU<span>//</span>VAULT</h1>
+      <p class="tag">Collection PSA 10</p>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn btn-edit" id="editBtn" type="button">Mode édition</button>
+  </div>
 </header>
+<div class="status" id="statusBar"><span class="chip wait"><i></i> Chargement des cotes…</span></div>
+<div class="banner" id="alertBanner" hidden>
+  <p id="alertText"></p>
+  <button type="button" id="alertDismiss">Fermer</button>
+</div>
 <section class="hero">
-<div class="stat main">
-<div class="stat-header">
-<div class="label">▸ Valeur Totale</div>
-<div class="market-toggle">
-<button class="mt-btn active" data-market="eu" type="button" aria-label="Europe">🇪🇺</button>
-<button class="mt-btn" data-market="ww" type="button" aria-label="Monde">🌎</button>
-</div>
-</div>
-<div class="value" id="totalValue">€ 0</div>
-<div class="delta up" id="totalDelta">+0% (30j)</div>
-</div>
-<div class="stat">
-<div class="label">Cartes Gradées</div>
-<div class="value" id="cardCount">5</div>
-<div class="sub"></div>
-</div>
-<div class="stat">
-<div class="label">Top Performer (12M)</div>
-<div class="value" id="topMover" style="font-size:16px;line-height:1.2">—</div>
-<div class="delta up" id="topMoverDelta">—</div>
-</div>
-<div class="stat">
-<div class="label">Valeur Moyenne</div>
-<div class="value" id="avgValue">€ 0</div>
-<div class="sub">par carte</div>
-</div>
+  <article class="stat main">
+    <div class="stat-header">
+      <div class="label">Valeur totale</div>
+      <div class="seg" id="marketSeg" role="group" aria-label="Marché">
+        <span class="seg-glider" aria-hidden="true"></span>
+        <button class="mt-btn active" data-market="eu" type="button">Europe</button>
+        <button class="mt-btn" data-market="ww" type="button">Monde</button>
+      </div>
+    </div>
+    <div class="value" id="totalValue" aria-live="polite"><span class="skel"></span></div>
+    <div class="delta" id="totalDelta">relevé en cours</div>
+    <div class="sub" id="totalSince"></div>
+  </article>
+  <div class="stat-side">
+    <article class="stat">
+      <div class="label">Cartes gradées</div>
+      <div class="value" id="cardCount">—</div>
+      <div class="sub">PSA 10</div>
+    </article>
+    <article class="stat">
+      <div class="label">Plus forte hausse</div>
+      <div class="value" id="topMover" style="font-size:16px">—</div>
+      <div class="delta" id="topMoverDelta">—</div>
+    </article>
+    <article class="stat">
+      <div class="label">Valeur moyenne</div>
+      <div class="value" id="avgValue"><span class="skel"></span></div>
+      <div class="sub">par carte</div>
+    </article>
+    <article class="stat">
+      <div class="label">Plus-value</div>
+      <div class="value" id="gainValue">—</div>
+      <div class="sub" id="gainSub">prix d'achat non saisi</div>
+    </article>
+  </div>
 </section>
 <h2 class="section-title">Collection <span class="line"></span></h2>
+<p class="boot" id="bootMsg">Ouverture du coffre…</p>
 <div class="cards" id="cardsGrid"></div>
+<h2 class="section-title">Liste de souhaits <span class="line"></span></h2>
+<div class="wish-actions">
+  <button class="btn btn-edit" id="addWish" type="button">Ajouter un souhait</button>
 </div>
-<div class="modal" id="editModal">
-<div class="modal-content">
-<div class="modal-title" id="modalTitle">Modifier</div>
-<div class="modal-sub" id="modalSub">—</div>
-<input type="number" class="modal-input" id="modalInput" step="1" min="0" style="display:none">
-<input type="url" class="modal-input url" id="modalInputUrl" placeholder="https://..." style="display:none">
-<div class="modal-actions">
-<button class="modal-btn" id="modalCancel">Annuler</button>
-<button class="modal-btn primary" id="modalSave">Sauvegarder</button>
+<div class="wishes" id="wishGrid"></div>
+<p class="empty" id="wishEmpty" hidden></p>
+<footer>
+  <div id="footNote"></div>
+  <div>Les alertes e-mail partent en issue GitHub quand un seuil de <a href="https://github.com/cgform-source/Poke/edit/main/vault.json">vault.json</a> est franchi, qu'une nouvelle vente apparaît, ou qu'un souhait passe sous son plafond. Pour les recevoir : Watch → Issues, notifications e-mail, ou l'appli GitHub. Les seuils saisis ici restent sur cet appareil et affichent une bannière.</div>
+  <div><a href="https://github.com/cgform-source/Poke/issues">Issues du dépôt</a></div>
+</footer>
 </div>
+<div class="modal" id="editModal" aria-hidden="true">
+  <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-title" id="modalTitle">Modifier</div>
+    <div class="modal-sub" id="modalSub"></div>
+    <input class="modal-input price" id="modalInput" inputmode="decimal" style="display:none">
+    <input class="modal-input" id="modalInputUrl" type="url" placeholder="https://…" style="display:none">
+    <div class="modal-actions">
+      <button class="modal-btn" id="modalCancel" type="button">Annuler</button>
+      <button class="modal-btn primary" id="modalSave" type="button">Enregistrer</button>
+    </div>
+  </div>
 </div>
+<div class="modal" id="wishModal" aria-hidden="true">
+  <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="wishTitle">
+    <div class="modal-title" id="wishTitle">Nouveau souhait</div>
+    <div class="modal-sub">La carte est gardée sur cet appareil. Pour que le relevé quotidien aille chercher sa cote, copie le JSON dans <code>vault.json</code>.</div>
+    <input class="modal-input" id="wishName" placeholder="Nom de la carte" style="margin-bottom:8px">
+    <input class="modal-input" id="wishSet" placeholder="Série" style="margin-bottom:8px">
+    <input class="modal-input" id="wishNum" placeholder="Numéro" style="margin-bottom:8px">
+    <input class="modal-input" id="wishTarget" inputmode="decimal" placeholder="Plafond € (bonne affaire en dessous)" style="margin-bottom:8px">
+    <input class="modal-input" id="wishEu" type="url" placeholder="Lien eBay Europe (vendus)" style="margin-bottom:8px">
+    <input class="modal-input" id="wishWw" type="url" placeholder="Lien eBay Monde (vendus)" style="margin-bottom:8px">
+    <input class="modal-input" id="wishCm" type="url" placeholder="Lien Cardmarket">
+    <div class="modal-actions">
+      <button class="modal-btn" id="wishCancel" type="button">Annuler</button>
+      <button class="modal-btn primary" id="wishSave" type="button">Ajouter</button>
+    </div>
+  </div>
 </div>
 <script>
-/* ═══════════════════════════════════════════════════════════════════
-   5 CARTES — Liens eBay 🇪🇺 (Europe) + 🌎 (Monde) fournis par Luc
-   Les URLs sont stockées telles quelles, zéro modif de caractère.
-   ═══════════════════════════════════════════════════════════════════ */
+try {
+  if (localStorage.getItem('pkmn-market-pref') === 'ww') {
+    document.getElementById('marketSeg').classList.add('is-ww');
+    document.querySelector('[data-market="eu"]').classList.remove('active');
+    document.querySelector('[data-market="ww"]').classList.add('active');
+    document.body.classList.add('market-ww');
+  }
+} catch (e) {}
+</script>
+<script>
 const CARDS = [
   {
-    id: 'charizard-v-ssv', cert: '145866913',
+    id: 'charizard-v-ssv', cert: '145866913', accent: 'var(--magenta)',
     name: 'Dracaufeu V', nameAlt: 'Charizard V',
-    set: 'Shiny Star V (S4a) • 2020 • JP',
-    num: '307/190 SSR',
+    set: 'Shiny Star V (S4a) • 2020 • JP', num: '307/190 SSR',
     image: 'https://www.psacard.com/cert/145866913/psa/image/57DoD5MGc0a45T7rZvOBbw',
-    price_eu: null, price_ww: null,
-    history_eu: [],
-    history_ww: [],
+    price_eu: null, price_ww: null, history_eu: [], history_ww: [],
     ebayEuUrl: 'https://www.ebay.fr/sch/i.html?_nkw=PSA+10+Charizard+V+307%2F190+Shiny+Star+V+Japanese&_sacat=0&_from=R40&_trksid=m570.l1313&_odkw=PSA+10+Umbreon+ex+217%2F187+SV8a+Terastal+Festival+Japanese&_osacat=0&_sop=13&LH_PrefLoc=3&LH_Sold=1',
     ebayWwUrl: 'https://www.ebay.fr/sch/i.html?_nkw=PSA+10+Charizard+V+307%2F190+Shiny+Star+V+Japanese&_sacat=0&_from=R40&_sop=13&LH_Sold=1&rt=nc&LH_PrefLoc=2',
     cardmarketUrl: 'https://www.cardmarket.com/fr/Pokemon/Products/Singles/Shiny-Star-V/Charizard-V-s4a307?language=7'
   },
   {
-    id: 'mentali-v-eh', cert: '95360955',
+    id: 'mentali-v-eh', cert: '95360955', accent: 'var(--violet)',
     name: 'Mentali V', nameAlt: 'Espeon V',
-    set: 'Eevee Heroes (S6a) • 2021 • JP',
-    num: '081/069 SAR',
+    set: 'Eevee Heroes (S6a) • 2021 • JP', num: '081/069 SAR',
     image: 'https://www.psacard.com/cert/95360955/psa/image/vWfFGLoOfkGbq605JlutgQ',
-    price_eu: null, price_ww: null,
-    history_eu: [],
-    history_ww: [],
+    price_eu: null, price_ww: null, history_eu: [], history_ww: [],
     ebayEuUrl: 'https://www.ebay.fr/sch/i.html?_from=R40&_nkw=PSA+10+Espeon+V+081%2F069+Eevee+Heroes+Japanese&LH_Sold=1&LH_Complete=1&_sop=13&rt=nc&LH_PrefLoc=3',
     ebayWwUrl: 'https://www.ebay.fr/sch/i.html?_from=R40&_nkw=PSA+10+Espeon+V+081%2F069+Eevee+Heroes+Japanese&LH_Sold=1&LH_Complete=1&_sop=13&rt=nc&LH_PrefLoc=2',
     cardmarketUrl: 'https://www.cardmarket.com/fr/Pokemon/Products/Singles/Eevee-Heroes/Espeon-V-V3-s6a081?language=7'
   },
   {
-    id: 'dracaufeu-ex-151', cert: '102215566',
+    id: 'dracaufeu-ex-151', cert: '102215566', accent: 'var(--red)',
     name: 'Dracaufeu ex', nameAlt: 'Charizard ex',
-    set: 'Pokémon 151 (SV2a) • 2023 • JP',
-    num: '201/165 SAR',
+    set: 'Pokémon 151 (SV2a) • 2023 • JP', num: '201/165 SAR',
     image: 'https://www.psacard.com/cert/102215566/psa/image/VCCjBrZ3AES-hPUcUnHh2Q',
-    price_eu: null, price_ww: null,
-    history_eu: [],
-    history_ww: [],
+    price_eu: null, price_ww: null, history_eu: [], history_ww: [],
     ebayEuUrl: 'https://www.ebay.fr/sch/i.html?_from=R40&_nkw=PSA+10+Charizard+ex+201%2F165+SV2a+151+Japanese&LH_Sold=1&LH_PrefLoc=3&_sop=13&rt=nc',
     ebayWwUrl: 'https://www.ebay.fr/sch/i.html?_from=R40&_nkw=PSA+10+Charizard+ex+201%2F165+SV2a+151+Japanese&LH_Sold=1&_sop=13&LH_PrefLoc=2&rt=nc',
     cardmarketUrl: 'https://www.cardmarket.com/fr/Pokemon/Products/Singles/Pokemon-Card-151/Charizard-ex-V3-sv2a201?language=7'
   },
   {
-    id: 'pikachu-ex-sv8', cert: '102618365',
+    id: 'pikachu-ex-sv8', cert: '102618365', accent: 'var(--yellow)',
     name: 'Pikachu ex', nameAlt: 'Pikachu ex',
-    set: 'Super Electric Breaker (SV8) • 2024 • JP',
-    num: '132/106 SAR',
+    set: 'Super Electric Breaker (SV8) • 2024 • JP', num: '132/106 SAR',
     image: 'https://www.psacard.com/cert/102618365/psa/image/sLvYjXjxt0yZrUKGPYGTDw',
-    price_eu: null, price_ww: null,
-    history_eu: [],
-    history_ww: [],
+    price_eu: null, price_ww: null, history_eu: [], history_ww: [],
     ebayEuUrl: 'https://www.ebay.fr/sch/i.html?_from=R40&_nkw=PSA+10+Pikachu+ex+132%2F106+SV8+Super+Electric+Breaker+Japanese&LH_Sold=1&_sop=13&rt=nc&LH_PrefLoc=3',
     ebayWwUrl: 'https://www.ebay.fr/sch/i.html?_from=R40&_nkw=PSA+10+Pikachu+ex+132%2F106+SV8+Super+Electric+Breaker+Japanese&LH_Sold=1&_sop=13&rt=nc&LH_PrefLoc=2',
     cardmarketUrl: 'https://www.cardmarket.com/fr/Pokemon/Products/Singles/Super-Electric-Breaker/Pikachu-ex-V3-sv8132?language=7'
   },
   {
-    id: 'umbreon-ex-sv8a', cert: '109838459',
+    id: 'umbreon-ex-sv8a', cert: '109838459', accent: 'var(--cyan)',
     name: 'Noctali ex', nameAlt: 'Umbreon ex',
-    set: 'Terastal Festival (SV8a) • 2024 • JP',
-    num: '217/187 SAR',
+    set: 'Terastal Festival (SV8a) • 2024 • JP', num: '217/187 SAR',
     image: 'https://www.psacard.com/cert/109838459/psa/image/Ure9Ck43B0KUOT_Bfgneeg',
-    price_eu: null, price_ww: null,
-    history_eu: [],
-    history_ww: [],
+    price_eu: null, price_ww: null, history_eu: [], history_ww: [],
     ebayEuUrl: 'https://www.ebay.fr/sch/i.html?_from=R40&_nkw=PSA+10+Umbreon+ex+217%2F187+SV8a+Terastal+Festival+Japanese&LH_Sold=1&_sop=13&LH_PrefLoc=3&rt=nc&LH_Complete=1',
     ebayWwUrl: 'https://www.ebay.fr/sch/i.html?_from=R40&_nkw=PSA+10+Umbreon+ex+217%2F187+SV8a+Terastal+Festival+Japanese&LH_Sold=1&_sop=13&rt=nc&LH_PrefLoc=2',
     cardmarketUrl: 'https://www.cardmarket.com/fr/Pokemon/Products/Singles/Terastal-Festival-ex/Umbreon-ex-V2-sv8a217?language=7'
   }
 ];
-
+const DEFAULT_IMAGES = Object.fromEntries(CARDS.map(c => [c.id, c.image]));
 const STORAGE_KEY = 'pkmn-vault-v4';
+const MARKET_KEY = 'pkmn-market-pref';
+const WISH_KEY = 'pkmn-vault-wishlist';
+const REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MONTHS = ['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+let vault = { cards: {}, wishlist: [] };
+let remoteWish = {};
+let sources = {};
 let editMode = false;
 let currentEdit = { card: null, field: null };
+let renderedOnce = false;
+const chartObs = ('IntersectionObserver' in window) ? new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const id = entry.target.id.replace('chart-', '');
+    const card = CARDS.find(c => c.id === id);
+    if (card) drawChart(card);
+    chartObs.unobserve(entry.target);
+  });
+}, { threshold: 0.25 }) : null;
 
-/* Charge prices.json (donnees du GitHub Action) puis localStorage (overrides manuels). */
+let currentMarket = 'eu';
+try { if (localStorage.getItem(MARKET_KEY) === 'ww') currentMarket = 'ww'; } catch (e) {}
+
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const fmt = (n) => '€ ' + Math.round(n).toLocaleString('fr-FR').replace(/[\u202f\u00a0]/g, ' ').replace(/,/g, ' ');
+const fmtEur = (n) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(n);
+const pct = (o, n) => (o ? ((n - o) / o * 100) : null);
+const fmtPct = (v) => (v >= 0 ? '+' : '') + v.toFixed(1).replace('.', ',') + ' %';
+const numOrNull = (v) => (typeof v === 'number' && v > 0 ? v : null);
+
+function fmtDay(iso) {
+  if (!iso || !/^\d{4}-\d{2}-\d{2}/.test(iso)) return iso || 'date inconnue';
+  const [y, m, d] = iso.slice(0, 10).split('-').map(Number);
+  return d + ' ' + MONTHS[m - 1] + ' ' + y;
+}
+function shiftIso(iso, days) {
+  const d = new Date(iso.slice(0, 10) + 'T00:00:00Z');
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+function points(card, market) {
+  const dated = card['history_' + market + '_dated'];
+  if (Array.isArray(dated) && dated.length) return dated.filter(p => p && typeof p.p === 'number');
+  const hist = card['history_' + market];
+  if (!Array.isArray(hist)) return [];
+  return hist.filter(p => typeof p === 'number').map((p, i) => ({ d: String(i), p }));
+}
+function pastPoint(pts, days) {
+  if (!pts.length) return null;
+  const last = pts[pts.length - 1].d;
+  if (!/^\d{4}-\d{2}-\d{2}/.test(last)) return pts.length > 1 ? pts[pts.length - 2] : null;
+  const target = shiftIso(last, -days);
+  let past = null;
+  pts.forEach(pt => { if (pt.d <= target) past = pt; });
+  return past;
+}
+function portfolio(market, days) {
+  let now = 0, old = 0, n = 0, from = null;
+  CARDS.forEach(c => {
+    const pts = points(c, market);
+    const cur = numOrNull(c['price_' + market]);
+    if (!cur || pts.length < 2) return;
+    const past = days == null ? pts[0] : pastPoint(pts, days);
+    if (!past || !past.p) return;
+    now += cur; old += past.p; n += 1;
+    if (!from || String(past.d) < from) from = String(past.d);
+  });
+  if (!n || !old) return null;
+  return { value: pct(old, now), from, now };
+}
+
 async function loadData() {
+  window._pricesOk = false;
   try {
     const r = await fetch('prices.json?t=' + Date.now(), { cache: 'no-store' });
     if (r.ok) {
       const remote = await r.json();
-      if (remote && remote.cards) {
+      sources = remote.sources || {};
+      remoteWish = remote.wishlist || {};
+      window._lastGlobalUpdate = remote.last_success || remote.last_update;
+      window._lastAttempt = remote.last_update;
+      if (remote.cards) {
         CARDS.forEach(c => {
           const rc = remote.cards[c.id];
           if (!rc) return;
-          // Nouveau format multi-marche - on garde juste les vrais points (pas de pad)
           if (typeof rc.price_eu === 'number') c.price_eu = rc.price_eu;
           if (typeof rc.price_ww === 'number') c.price_ww = rc.price_ww;
-          if (Array.isArray(rc.history_eu)) {
-            c.history_eu = rc.history_eu.slice(-11);
-          }
-          if (Array.isArray(rc.history_ww)) {
-            c.history_ww = rc.history_ww.slice(-11);
-          }
-          // Retro-compat ancien format (price + history) → applique sur EU
-          if (typeof rc.price_eu !== 'number' && typeof rc.price === 'number') {
-            c.price_eu = rc.price;
-          }
-          if ((!Array.isArray(rc.history_eu) || !rc.history_eu.length) && Array.isArray(rc.history) && rc.history.length) {
-            c.history_eu = rc.history.slice(-11);
-          }
-          c._remoteUpdate = rc.last_update;
+          if (Array.isArray(rc.history_eu)) c.history_eu = rc.history_eu.slice();
+          if (Array.isArray(rc.history_ww)) c.history_ww = rc.history_ww.slice();
+          if (Array.isArray(rc.history_eu_dated)) c.history_eu_dated = rc.history_eu_dated.slice();
+          if (Array.isArray(rc.history_ww_dated)) c.history_ww_dated = rc.history_ww_dated.slice();
+          if (typeof rc.price_eu !== 'number' && typeof rc.price === 'number') c.price_eu = rc.price;
+          if ((!c.history_eu || !c.history_eu.length) && Array.isArray(rc.history)) c.history_eu = rc.history.slice();
+          c.sales_eu = Array.isArray(rc.sales_eu) ? rc.sales_eu : [];
+          c.sales_ww = Array.isArray(rc.sales_ww) ? rc.sales_ww : [];
+          c.source_eu = rc.source_eu || null;
+          c.source_ww = rc.source_ww || null;
           c._salesCountEu = rc.sales_count_eu;
           c._salesCountWw = rc.sales_count_ww;
+          if (typeof rc.population === 'number' && rc.population > 0) {
+            c.population = rc.population;
+            c.population_source = rc.population_source || null;
+          }
+          c.population_error = rc.population_error || null;
+          if (typeof rc.price_cm === 'number' && rc.price_cm > 0) {
+            c.price_cm = rc.price_cm;
+            c.price_cm_source = rc.price_cm_source || null;
+            c.price_cm_note = rc.price_cm_note || null;
+          }
+          c.price_cm_error = rc.price_cm_error || null;
         });
-        window._lastGlobalUpdate = remote.last_update;
+        window._pricesOk = CARDS.some(c => numOrNull(c.price_eu) || numOrNull(c.price_ww));
       }
     }
   } catch (e) {
     console.log('prices.json non disponible, données locales conservées');
   }
-
-  // Overrides manuels via localStorage
+  try {
+    const r = await fetch('vault.json?t=' + Date.now(), { cache: 'no-store' });
+    if (r.ok) vault = await r.json();
+  } catch (e) {}
+  const manual = ['buy_price', 'population', 'alert_below', 'alert_above', 'price_cm'];
+  CARDS.forEach(c => {
+    const v = (vault.cards || {})[c.id] || {};
+    manual.forEach(k => {
+      if (!(typeof c[k] === 'number' && c[k] > 0) && typeof v[k] === 'number' && v[k] > 0) c[k] = v[k];
+    });
+  });
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
     CARDS.forEach(c => {
       const s = saved[c.id];
       if (!s) return;
       if (typeof s.image === 'string' && s.image) c.image = s.image;
-      if (typeof s.price_eu === 'number') {
-        c.price_eu = s.price_eu;
-        c.history_eu = (Array.isArray(c.history_eu) && c.history_eu.length > 0)
-          ? [...c.history_eu.slice(0, -1), s.price_eu]
-          : [s.price_eu];
-      }
-      if (typeof s.price_ww === 'number') {
-        c.price_ww = s.price_ww;
-        c.history_ww = (Array.isArray(c.history_ww) && c.history_ww.length > 0)
-          ? [...c.history_ww.slice(0, -1), s.price_ww]
-          : [s.price_ww];
-      }
+      ['price_eu', 'price_ww'].forEach(key => {
+        if (typeof s[key] !== 'number') return;
+        const market = key.slice(6);
+        c[key] = s[key];
+        const dated = c['history_' + market + '_dated'];
+        if (Array.isArray(dated) && dated.length) {
+          const last = dated[dated.length - 1];
+          c['history_' + market + '_dated'] = dated.slice(0, -1).concat([{ ...last, p: s[key] }]);
+        }
+        const hist = c['history_' + market];
+        c['history_' + market] = (Array.isArray(hist) && hist.length) ? hist.slice(0, -1).concat([s[key]]) : [s[key]];
+      });
+      manual.forEach(k => { if (typeof s[k] === 'number' && s[k] > 0) c[k] = s[k]; });
+      if (typeof s.price_cm === 'number' && s.price_cm > 0) c.price_cm_source = 'manuel';
     });
-  } catch(e) { console.error(e); }
+  } catch (e) { console.error(e); }
 }
 
 function save(cardId, field, value) {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
     saved[cardId] = saved[cardId] || {};
-    saved[cardId][field] = value;
+    if (value === null || value === '') delete saved[cardId][field];
+    else saved[cardId][field] = value;
     saved[cardId].updated = Date.now();
     localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
-  } catch(e) { console.error(e); }
+  } catch (e) { console.error(e); }
+}
+function localWishes() {
+  try { return JSON.parse(localStorage.getItem(WISH_KEY) || '[]'); }
+  catch (e) { return []; }
+}
+function storeWishes(list) {
+  localStorage.setItem(WISH_KEY, JSON.stringify(list));
 }
 
-const fmt = (n) => '€ ' + Math.round(n).toLocaleString('fr-FR').replace(/,/g,' ');
-const pct = (o, n) => ((n - o) / o * 100);
-function safeDelta(history, currentPrice) {
-  // Renvoie {value, str, cls} ou null si pas assez de donnees
-  if (!Array.isArray(history) || history.length < 2 || !currentPrice) return null;
-  const old = history[history.length - 2];
-  if (!old) return null;
-  const v = pct(old, currentPrice);
-  return {
-    value: v,
-    str: (v >= 0 ? '+' : '') + v.toFixed(1) + '%',
-    cls: v >= 0 ? 'delta-up' : 'delta-down'
+function animateMoney(el, to) {
+  if (!Number.isFinite(to) || to <= 0) {
+    el.textContent = '—';
+    delete el.dataset.n;
+    return;
+  }
+  if (REDUCE) { el.textContent = fmt(to); el.dataset.n = String(to); return; }
+  const from = Number(el.dataset.n || Math.round(to * 0.2));
+  const start = performance.now();
+  const dur = el.dataset.n ? 480 : 900;
+  const frame = (now) => {
+    const t = Math.min(1, (now - start) / dur);
+    const e = 1 - Math.pow(1 - t, 3);
+    el.textContent = fmt(from + (to - from) * e);
+    if (t < 1) requestAnimationFrame(frame);
+    else { el.textContent = fmt(to); el.dataset.n = String(to); }
   };
+  requestAnimationFrame(frame);
+}
+
+function chip(kind, text) {
+  return `<span class="chip ${kind}"><i></i>${esc(text)}</span>`;
+}
+function renderStatus() {
+  const bar = document.getElementById('statusBar');
+  const when = window._lastGlobalUpdate ? fmtDay(String(window._lastGlobalUpdate).slice(0, 10)) : null;
+  const attempt = window._lastAttempt ? fmtDay(String(window._lastAttempt).slice(0, 10)) : null;
+  const ebay = sources.ebay || {};
+  const cm = sources.cardmarket || {};
+  const psa = sources.psa || {};
+  const ebayKind = ebay.ok ? 'ok' : (ebay.checked_at ? 'bad' : 'wait');
+  const cmKind = cm.ok ? 'ok' : 'bad';
+  const psaKind = psa.ok ? 'ok' : (psa.checked_at ? 'bad' : 'wait');
+  bar.innerHTML = [
+    chip(when ? 'ok' : 'wait', when ? 'Dernier relevé réussi : ' + when : 'Aucun relevé'),
+    chip(ebayKind, ebay.ok ? 'eBay à jour' : (ebay.checked_at ? 'eBay en échec, prix conservés' : 'eBay en attente')),
+    chip(cmKind, cm.ok ? 'Cardmarket loose' : 'Cardmarket indisponible'),
+    chip(psaKind, psa.ok ? 'Population PSA lue' : 'Population PSA à saisir')
+  ].join('');
+  const bits = [];
+  if (ebay.detail) bits.push(ebay.detail);
+  if (!cm.ok) bits.push(cm.detail || 'Cardmarket : saisie manuelle.');
+  if (!psa.ok) bits.push(psa.detail || 'Population PSA : saisie manuelle.');
+  if (attempt && when && attempt !== when) bits.unshift('Dernière tentative : ' + attempt + '.');
+  document.getElementById('footNote').textContent = 'Relevé eBay automatique chaque matin. S\'il n\'y a pas de nouvelle vente, le dernier prix reste affiché. ' + bits.join(' ');
+}
+
+function renderStats() {
+  document.body.classList.toggle('market-ww', currentMarket === 'ww');
+  document.getElementById('marketSeg').classList.toggle('is-ww', currentMarket === 'ww');
+  document.querySelectorAll('.mt-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.market === currentMarket));
+  const totalEl = document.getElementById('totalValue');
+  const avgEl = document.getElementById('avgValue');
+  totalEl.classList.toggle('market-ww', currentMarket === 'ww');
+  avgEl.classList.toggle('market-ww', currentMarket === 'ww');
+  if (!window._pricesOk) {
+    totalEl.textContent = '—';
+    avgEl.textContent = '—';
+    document.getElementById('totalDelta').textContent = 'cotes indisponibles';
+    document.getElementById('totalDelta').className = 'delta';
+    document.getElementById('cardCount').textContent = String(CARDS.length);
+    return;
+  }
+  const total = CARDS.reduce((s, c) => s + (numOrNull(c['price_' + currentMarket]) || 0), 0);
+  animateMoney(totalEl, total);
+  animateMoney(avgEl, total / CARDS.length);
+  document.getElementById('cardCount').textContent = String(CARDS.length);
+  const d30 = portfolio(currentMarket, 30);
+  const dLong = portfolio(currentMarket, null);
+  const td = document.getElementById('totalDelta');
+  if (d30 && d30.value != null) {
+    td.textContent = fmtPct(d30.value) + ' sur 30 jours';
+    td.className = 'delta ' + (d30.value >= 0 ? 'up' : 'down');
+  } else {
+    td.textContent = '30 jours : pas encore assez d\'historique';
+    td.className = 'delta';
+  }
+  const since = document.getElementById('totalSince');
+  since.textContent = (dLong && dLong.from) ? (fmtPct(dLong.value) + ' depuis le ' + fmtDay(dLong.from)) : '';
+  let best = null;
+  CARDS.forEach(c => {
+    const pts = points(c, currentMarket);
+    const cur = numOrNull(c['price_' + currentMarket]);
+    if (!cur || pts.length < 2 || !pts[0].p) return;
+    const delta = pct(pts[0].p, cur);
+    if (delta == null) return;
+    if (!best || delta > best.delta) best = { name: c.name, delta, from: pts[0].d };
+  });
+  const tm = document.getElementById('topMover');
+  const tmd = document.getElementById('topMoverDelta');
+  if (best) {
+    tm.textContent = best.name;
+    tmd.textContent = fmtPct(best.delta) + (best.from && /^\d{4}/.test(best.from) ? ' depuis ' + fmtDay(best.from) : '');
+    tmd.className = 'delta ' + (best.delta >= 0 ? 'up' : 'down');
+  } else {
+    tm.textContent = '—';
+    tmd.textContent = 'en attente';
+    tmd.className = 'delta';
+  }
+  let cost = 0, valued = 0, known = 0;
+  CARDS.forEach(c => {
+    const px = numOrNull(c['price_' + currentMarket]);
+    if (numOrNull(c.buy_price) && px) { cost += c.buy_price; valued += px; known += 1; }
+  });
+  const gainEl = document.getElementById('gainValue');
+  const gainSub = document.getElementById('gainSub');
+  if (!known) {
+    gainEl.textContent = '—';
+    gainEl.className = 'value';
+    gainEl.style.color = '';
+    gainSub.textContent = 'prix d\'achat non saisi';
+  } else {
+    const g = valued - cost;
+    gainEl.textContent = (g >= 0 ? '+ ' : '− ') + fmt(Math.abs(g));
+    gainEl.className = 'value ' + (g >= 0 ? '' : 'market-ww');
+    gainEl.style.color = g >= 0 ? 'var(--green)' : 'var(--red)';
+    gainEl.style.textShadow = 'none';
+    gainEl.style.fontSize = '22px';
+    gainSub.textContent = fmtPct(pct(cost, valued)) + ' · ' + known + ' carte' + (known > 1 ? 's' : '') + (known < CARDS.length ? ' sur ' + CARDS.length : '');
+  }
+}
+
+function deltaHtml(card, market) {
+  const pts = points(card, market);
+  const cur = numOrNull(card['price_' + market]);
+  const d30 = cur ? pastPoint(pts, 30) : null;
+  const v30 = d30 ? pct(d30.p, cur) : null;
+  const vLong = (pts[0] && cur) ? pct(pts[0].p, cur) : null;
+  const cls = (v) => v == null ? '' : (v >= 0 ? 'up' : 'down');
+  const longLabel = pts[0] && /^\d{4}/.test(pts[0].d) ? 'depuis ' + fmtDay(pts[0].d) : 'depuis le début';
+  return `<div class="meta-row d-${market}"><span class="k">30 jours</span><span class="delta ${cls(v30)}">${v30 == null ? '—' : fmtPct(v30)}</span></div>
+    <div class="meta-row d-${market}"><span class="k">${esc(longLabel)}</span><span class="delta ${cls(vLong)}">${vLong == null ? '—' : fmtPct(vLong)}</span></div>`;
+}
+function gainHtml(card, market) {
+  const px = numOrNull(card['price_' + market]);
+  const buy = numOrNull(card.buy_price);
+  if (!buy) return `<div class="buy-row d-${market}"><span class="k">Prix d'achat</span><span class="edit-field" data-card="${card.id}" data-field="buy">à renseigner</span></div>`;
+  if (!px) return `<div class="buy-row d-${market}"><span class="k">Prix d'achat</span><span class="edit-field" data-card="${card.id}" data-field="buy">${esc(fmt(buy))}</span></div>`;
+  const g = px - buy;
+  const cls = g >= 0 ? 'up' : 'down';
+  return `<div class="buy-row d-${market}"><span class="k">Achat ${esc(fmt(buy))}</span><span class="gain ${cls} edit-field" data-card="${card.id}" data-field="buy">${g >= 0 ? '+' : '−'} ${esc(fmt(Math.abs(g)))} · ${esc(fmtPct(pct(buy, px)))}</span></div>`;
+}
+function gapHtml(card) {
+  const eu = numOrNull(card.price_eu), ww = numOrNull(card.price_ww);
+  if (!eu || !ww) return '';
+  const rel = Math.abs(eu - ww) / Math.min(eu, ww);
+  if (rel < 0.08) return '';
+  const cheaper = eu < ww ? 'Europe' : 'Monde';
+  return `<div class="gap">${esc(cheaper)} moins cher · −${Math.round(rel * 100)} %</div>`;
+}
+function salesHtml(card, market) {
+  const list = (card['sales_' + market] || []).filter(s => s && typeof s.price === 'number' && s.price > 0).slice(0, 5);
+  if (!list.length) {
+    return `<div class="sales d-${market}"><div class="sale"><span>Dernières ventes</span><b>au prochain relevé</b></div></div>`;
+  }
+  const dated = list.some(s => s.date);
+  const rows = (dated ? list.slice().sort((a, b) => String(b.date || '').localeCompare(String(a.date || ''))) : list).slice(0, 5);
+  return `<div class="sales d-${market}">${rows.map(s => `<div class="sale"><span>${esc(s.date ? fmtDay(s.date) : 'date inconnue')}</span><b>${esc(fmt(s.price))}</b></div>`).join('')}</div>`;
+}
+function priceCell(card, market) {
+  const value = numOrNull(card['price_' + market]);
+  const source = card['source_' + market];
+  const kept = source && source.ok === false;
+  const count = market === 'eu' ? card._salesCountEu : card._salesCountWw;
+  return `<div class="price-col ${market}">
+    <div class="price-label">${market === 'eu' ? 'Europe' : 'Monde'}</div>
+    <div class="price-main edit-field" data-card="${card.id}" data-market="${market}" data-field="price-${market}">${value ? `<span class="cur">€</span>${esc(Math.round(value).toLocaleString('fr-FR').replace(/[\u202f\u00a0]/g,' '))}` : '—'}</div>
+    ${count ? `<div class="kept" style="color:var(--muted)">médiane · ${esc(count)} ventes</div>` : ''}
+    ${kept ? `<div class="kept">dernier prix conservé</div>` : ''}
+  </div>`;
 }
 
 function renderCards() {
   const grid = document.getElementById('cardsGrid');
+  document.getElementById('bootMsg').hidden = true;
   grid.innerHTML = CARDS.map((c, i) => {
-    const d30 = safeDelta(c.history_eu, c.price_eu);
-    const d12raw = (Array.isArray(c.history_eu) && c.history_eu.length >= 2 && c.price_eu) ? pct(c.history_eu[0], c.price_eu) : null;
-    const s30eu = d30 ? d30.str : '—';
-    const s12eu = d12raw !== null ? ((d12raw >= 0 ? '+' : '') + d12raw.toFixed(1) + '%') : '—';
-    const cls30 = d30 ? d30.cls : '';
-    const cls12 = d12raw !== null ? (d12raw >= 0 ? 'delta-up' : 'delta-down') : '';
-    const psaUrl = `https://www.psacard.com/cert/${c.cert}/psa`;
-    const rank = String(i + 1).padStart(2, '0');
-    const hasImg = c.image && c.image.trim();
-    const priceEuStr = (c.price_eu && c.price_eu > 0) ? c.price_eu.toLocaleString('fr-FR') : '—';
-    const priceWwStr = (c.price_ww && c.price_ww > 0) ? c.price_ww.toLocaleString('fr-FR') : '—';
-    const emptyEu = priceEuStr === '—' ? 'empty' : '';
-    const emptyWw = priceWwStr === '—' ? 'empty' : '';
-
-    return `
-<article class="card" data-id="${c.id}">
-<div class="card-inner">
-<div class="slab" data-card="${c.id}">
-<div class="rank">#${rank}</div>
-${hasImg ? `<img src="${c.image}" alt="${c.name}" referrerpolicy="no-referrer" onerror="this.style.display='none';const fb=this.nextElementSibling;if(fb)fb.style.display='flex';">` : ''}
-<div class="slab-fallback" style="${hasImg ? 'display:none' : ''}">${c.nameAlt}<br><span style="font-size:9px;opacity:0.6;margin-top:8px;letter-spacing:3px">PSA 10 • CERT ${c.cert}</span></div>
-<div class="slab-holo"></div>
-</div>
-<div class="card-body">
-<div class="card-head">
-<div>
-<div class="card-name">${c.name}</div>
-<div class="card-set">${c.set}</div>
-<div class="cert-badge">▸ <a href="${psaUrl}" target="_blank" rel="noopener">cert #${c.cert}</a></div>
-</div>
-<div class="card-num">${c.num}</div>
-</div>
-<div class="price-block">
-<div class="price-col eu">
-<div class="price-label">🇪🇺 Europe</div>
-<div class="price-main ${emptyEu}" data-card="${c.id}" data-market="eu" title="Mode édition : clique pour modifier"><span class="cur">€</span>${priceEuStr}</div>
-</div>
-<div class="price-col ww">
-<div class="price-label">🌎 Monde</div>
-<div class="price-main ${emptyWw}" data-card="${c.id}" data-market="ww" title="Mode édition : clique pour modifier"><span class="cur">€</span>${priceWwStr}</div>
-</div>
-<div class="price-meta">
-<div>30j 🇪🇺 <span class="${cls30}">${s30eu}</span></div>
-<div>12M 🇪🇺 <span class="${cls12}">${s12eu}</span></div>
-</div>
-</div>
-<div class="chart-wrap"><canvas id="chart-${c.id}"></canvas></div>
-<div class="links">
-<a class="link eu" href="${c.ebayEuUrl}" target="_blank" rel="noopener">🇪🇺 eBay</a>
-<a class="link ww" href="${c.ebayWwUrl}" target="_blank" rel="noopener">🌎 eBay</a>
-<a class="link cm" href="${c.cardmarketUrl}" target="_blank" rel="noopener">▸ Cardmarket</a>
-</div>
-</div>
-</div>
-</article>`;
+    const pop = numOrNull(c.population);
+    const cm = numOrNull(c.price_cm);
+    const cmAuto = c.price_cm_source === 'loose' && !c.price_cm_error;
+    const cmManual = c.price_cm_source === 'manuel' || (cm && c.price_cm_source !== 'loose');
+    return `<article class="card" data-id="${c.id}" style="--i:${i};--accent:${c.accent}">
+      <div class="stage"><div class="tilt"><div class="card-inner">
+        <div class="slab" data-card="${c.id}">
+          <div class="psa-label"><span>PSA</span><b>GEM MT 10</b><span class="rank">#${String(i + 1).padStart(2, '0')}</span></div>
+          <div class="photo">
+            <div class="shimmer"></div>
+            <img alt="${esc(c.name)}" referrerpolicy="no-referrer">
+            <div class="holo"></div>
+            <div class="slab-fallback" hidden><strong>${esc(c.nameAlt)}</strong><span>PSA 10 · CERT ${esc(c.cert)}</span></div>
+          </div>
+          <div class="edit-photo">Modifier la photo</div>
+        </div>
+        <div class="card-body">
+          <div class="card-head">
+            <div>
+              <div class="card-name">${esc(c.name)}</div>
+              <div class="card-set">${esc(c.set)}</div>
+              <div class="cert">▸ <a href="https://www.psacard.com/cert/${esc(c.cert)}/psa" target="_blank" rel="noopener">cert #${esc(c.cert)}</a></div>
+            </div>
+            <div class="card-num">${esc(c.num)}</div>
+          </div>
+          <div class="price-block">${priceCell(c, 'eu')}${priceCell(c, 'ww')}</div>
+          ${gapHtml(c)}
+          ${deltaHtml(c, 'eu')}${deltaHtml(c, 'ww')}
+          ${gainHtml(c, 'eu')}${gainHtml(c, 'ww')}
+          <div class="pop-row"><span class="k">Population PSA 10</span><span class="edit-field" data-card="${c.id}" data-field="population">${pop ? esc(pop.toLocaleString('fr-FR')) : 'à renseigner'}</span></div>
+          <div class="cm-row"><span class="k">Cardmarket · loose</span><span class="edit-field" data-card="${c.id}" data-field="price-cm">${cm ? esc(fmtEur(cm)) : 'Cardmarket indisponible'}</span></div>
+          <div class="kept">${cmAuto ? 'moins cher · carte non gradée · vendeur européen' : (cmManual ? 'prix loose saisi à la main' : 'carte non gradée, vendeur européen — à saisir en mode édition')}</div>
+          <div class="chart-wrap"><canvas id="chart-${c.id}"></canvas></div>
+          ${salesHtml(c, 'eu')}${salesHtml(c, 'ww')}
+          <div class="links">
+            <a class="link eu" href="${esc(c.ebayEuUrl)}" target="_blank" rel="noopener">eBay Europe</a>
+            <a class="link ww" href="${esc(c.ebayWwUrl)}" target="_blank" rel="noopener">eBay Monde</a>
+            <a class="link cm" href="${esc(c.cardmarketUrl)}" target="_blank" rel="noopener">Cardmarket</a>
+          </div>
+          <div class="meta-row"><span class="k">Alerte basse</span><span class="edit-field" data-card="${c.id}" data-field="alert-below">${numOrNull(c.alert_below) ? esc(fmt(c.alert_below)) : '—'}</span></div>
+          <div class="meta-row"><span class="k">Alerte haute</span><span class="edit-field" data-card="${c.id}" data-field="alert-above">${numOrNull(c.alert_above) ? esc(fmt(c.alert_above)) : '—'}</span></div>
+        </div>
+      </div></div></div>
+    </article>`;
   }).join('');
-
-  CARDS.forEach(c => drawChart(c));
-
-  document.querySelectorAll('.price-main').forEach(el => {
-    el.addEventListener('click', () => {
-      if (!editMode) return;
-      openModal(el.dataset.card, 'price-' + el.dataset.market);
-    });
+  grid.querySelectorAll('.card').forEach(card => {
+    mountPhoto(card);
+    bindTilt(card);
+    const canvas = card.querySelector('canvas');
+    if (!canvas) return;
+    if (chartObs) chartObs.observe(canvas);
+    else drawChart(CARDS.find(c => c.id === card.dataset.id));
   });
-  document.querySelectorAll('.slab').forEach(el => {
-    el.addEventListener('click', () => {
-      if (!editMode) return;
-      openModal(el.dataset.card, 'image');
-    });
+  grid.querySelectorAll('.edit-field').forEach(el => {
+    el.addEventListener('click', () => { if (editMode) openModal(el.dataset.card, el.dataset.field); });
   });
+  grid.querySelectorAll('.slab').forEach(el => {
+    el.addEventListener('click', () => { if (editMode) openModal(el.dataset.card, 'image'); });
+  });
+  if (renderedOnce) document.body.classList.add('rerender');
+  renderedOnce = true;
+}
+
+function mountPhoto(cardEl) {
+  const card = CARDS.find(c => c.id === cardEl.dataset.id);
+  const img = cardEl.querySelector('.photo img');
+  const shimmer = cardEl.querySelector('.shimmer');
+  const fallback = cardEl.querySelector('.slab-fallback');
+  const remote = card.image;
+  const local = card.image === DEFAULT_IMAGES[card.id] ? [`images/${card.id}.webp`, `images/${card.id}.jpg`] : [];
+  const sources = local.concat([remote, remote, remote]).filter(Boolean);
+  const delays = [0, 0, 600, 1400, 2400];
+  let attempt = 0;
+  const fail = () => { shimmer.classList.add('is-hidden'); fallback.hidden = false; img.removeAttribute('src'); };
+  const run = () => {
+    if (attempt >= sources.length) return fail();
+    const src = sources[attempt];
+    const wait = delays[attempt] || 2000;
+    attempt += 1;
+    window.setTimeout(() => {
+      const probe = new Image();
+      probe.referrerPolicy = 'no-referrer';
+      probe.decoding = 'async';
+      probe.onload = () => { img.src = src; img.classList.add('is-in'); shimmer.classList.add('is-hidden'); fallback.hidden = true; };
+      probe.onerror = () => run();
+      probe.src = src;
+    }, wait);
+  };
+  run();
+}
+
+function bindTilt(cardEl) {
+  if (REDUCE) return;
+  const tilt = cardEl.querySelector('.tilt');
+  const slab = cardEl.querySelector('.slab');
+  const holo = cardEl.querySelector('.holo');
+  let raf = 0;
+  const move = (clientX, clientY) => {
+    const rect = tilt.getBoundingClientRect();
+    const px = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+    const py = Math.min(1, Math.max(0, (clientY - rect.top) / rect.height));
+    tilt.style.transition = 'none';
+    tilt.style.transform = `rotateX(${((0.5 - py) * 7).toFixed(2)}deg) rotateY(${((px - 0.5) * 9).toFixed(2)}deg)`;
+    slab.classList.add('is-hot');
+    if (holo) holo.style.transform = `translate3d(${(px * 130 - 40).toFixed(1)}%,0,0)`;
+  };
+  const reset = () => {
+    tilt.style.transition = 'transform .45s ease';
+    tilt.style.transform = '';
+    slab.classList.remove('is-hot');
+    if (holo) holo.style.transform = '';
+  };
+  slab.addEventListener('pointermove', (e) => {
+    if (e.pointerType === 'touch' && e.buttons === 0) return;
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => move(e.clientX, e.clientY));
+  });
+  slab.addEventListener('pointerdown', (e) => { if (e.pointerType === 'touch') move(e.clientX, e.clientY); });
+  ['pointerleave', 'pointerup', 'pointercancel'].forEach(ev => slab.addEventListener(ev, reset));
 }
 
 function drawChart(card) {
-  const ctx = document.getElementById('chart-' + card.id);
-  if (!ctx) return;
-  // Construit les series : tout l'historique sauf le dernier (qui sera remplace par price)
-  // Si pas de price actuel, on prend juste l'historique tel quel.
-  const buildSeries = (history, price) => {
-    if (!Array.isArray(history) || history.length === 0) {
-      return (typeof price === 'number') ? [price] : [];
-    }
-    return (typeof price === 'number') ? [...history.slice(0, -1), price] : [...history];
-  };
-  const dataEu = buildSeries(card.history_eu, card.price_eu);
-  const dataWw = buildSeries(card.history_ww, card.price_ww);
-  const maxLen = Math.max(dataEu.length, dataWw.length);
-
-  // Pas assez de donnees pour tracer un graphe : on cache le canvas
-  if (maxLen < 2) {
-    ctx.style.display = 'none';
-    const wrap = ctx.closest('.chart-wrap');
-    if (wrap) {
-      wrap.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;font-family:JetBrains Mono,monospace;font-size:10px;color:#6e7da6;letter-spacing:1px;text-align:center;padding:0 20px;">▸ Historique vide — données s\'accumulent à chaque scrape hebdo</div>';
-    }
+  if (typeof Chart === 'undefined') return;
+  const canvas = document.getElementById('chart-' + card.id);
+  if (!canvas) return;
+  const existing = Chart.getChart(canvas);
+  if (existing) existing.destroy();
+  const eu = points(card, 'eu');
+  const ww = points(card, 'ww');
+  const dates = Array.from(new Set(eu.map(p => p.d).concat(ww.map(p => p.d)))).sort();
+  if (dates.length < 2) {
+    const wrap = canvas.closest('.chart-wrap');
+    wrap.innerHTML = '<div class="chart-empty">Historique en construction — un point est ajouté quand une vente nouvelle change la cote.</div>';
     return;
   }
-
-  // Generer des labels relatifs : Now, -1, -2, ...
-  const labels = [];
-  for (let i = maxLen - 1; i >= 0; i--) {
-    labels.push(i === 0 ? 'Now' : `-${i}`);
-  }
-  labels.reverse();
-
-  const grdEu = ctx.getContext('2d').createLinearGradient(0, 0, 0, 90);
-  grdEu.addColorStop(0, 'rgba(0,255,224,0.25)');
-  grdEu.addColorStop(1, 'rgba(0,255,224,0)');
-
-  const grdWw = ctx.getContext('2d').createLinearGradient(0, 0, 0, 90);
-  grdWw.addColorStop(0, 'rgba(255,46,196,0.20)');
-  grdWw.addColorStop(1, 'rgba(255,46,196,0)');
-
-  // Pad avec null pour aligner les series sur la meme longueur (Chart.js gere null)
-  const padLeft = (arr, len) => {
-    if (arr.length >= len) return arr;
-    return [...Array(len - arr.length).fill(null), ...arr];
+  const map = (series) => {
+    const by = Object.fromEntries(series.map(p => [p.d, p.p]));
+    return dates.map(d => (d in by ? by[d] : null));
   };
-  const dataEuPadded = padLeft(dataEu, maxLen);
-  const dataWwPadded = padLeft(dataWw, maxLen);
-
-  // Avec peu de points (< 4) on desactive le lissage spline pour eviter
-  // les artefacts visuels d'interpolation (courbe qui plonge artificiellement)
-  const lineTension = maxLen < 4 ? 0 : 0.35;
-
-  // Echelle Y intelligente : on calcule min/max sur les vraies valeurs
-  // et on ajoute un padding fixe (pas un % qui exagere les petites variations)
-  const allValues = [...dataEu, ...dataWw].filter(v => typeof v === 'number');
-  let yMin, yMax;
-  if (allValues.length) {
-    const dataMin = Math.min(...allValues);
-    const dataMax = Math.max(...allValues);
-    const range = dataMax - dataMin;
-    // Si la variation est faible (<5% de la valeur), on agrandit artificiellement
-    // l'echelle pour eviter une courbe collee aux bords
-    const minPad = Math.max(range * 0.5, dataMax * 0.03);
-    yMin = dataMin - minPad;
-    yMax = dataMax + minPad;
-  }
-
-  new Chart(ctx, {
+  const labels = dates.map(d => /^\d{4}/.test(d) ? fmtDay(d) : d);
+  const ctx = canvas.getContext('2d');
+  const gEu = ctx.createLinearGradient(0, 0, 0, 92);
+  gEu.addColorStop(0, 'rgba(0,255,224,0.28)');
+  gEu.addColorStop(1, 'rgba(0,255,224,0)');
+  const gWw = ctx.createLinearGradient(0, 0, 0, 92);
+  gWw.addColorStop(0, 'rgba(255,46,196,0.22)');
+  gWw.addColorStop(1, 'rgba(255,46,196,0)');
+  const values = eu.map(p => p.p).concat(ww.map(p => p.p));
+  const dataMin = Math.min(...values), dataMax = Math.max(...values);
+  const pad = Math.max((dataMax - dataMin) * 0.35, dataMax * 0.03);
+  new Chart(canvas, {
     type: 'line',
     data: {
       labels,
       datasets: [
-        {
-          label: '🇪🇺 EU', data: dataEuPadded, spanGaps: true,
-          borderColor: '#00ffe0', backgroundColor: grdEu,
-          fill: true, tension: lineTension, pointRadius: 0, pointHoverRadius: 5,
-          pointHoverBackgroundColor: '#fff', pointHoverBorderColor: '#00ffe0',
-          pointHoverBorderWidth: 2, borderWidth: 2
-        },
-        {
-          label: '🌎 WW', data: dataWwPadded, spanGaps: true,
-          borderColor: '#ff2ec4', backgroundColor: grdWw,
-          fill: true, tension: lineTension, pointRadius: 0, pointHoverRadius: 5,
-          pointHoverBackgroundColor: '#fff', pointHoverBorderColor: '#ff2ec4',
-          pointHoverBorderWidth: 2, borderWidth: 2
-        }
+        { label: 'Europe', data: map(eu), spanGaps: true, borderColor: '#00ffe0', backgroundColor: gEu, fill: true, tension: dates.length < 4 ? 0 : 0.28, pointRadius: 0, pointHoverRadius: 4, borderWidth: 2 },
+        { label: 'Monde', data: map(ww), spanGaps: true, borderColor: '#ff2ec4', backgroundColor: gWw, fill: true, tension: dates.length < 4 ? 0 : 0.28, pointRadius: 0, pointHoverRadius: 4, borderWidth: 2 }
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      animation: { duration: 1000, easing: 'easeOutQuart' },
+      animation: REDUCE ? false : { duration: 1100, easing: 'easeOutQuart' },
       interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: { display: false },
         tooltip: {
           backgroundColor: 'rgba(5,6,15,0.95)', borderColor: '#00ffe0', borderWidth: 1,
           titleFont: { family: 'JetBrains Mono', size: 10 },
-          bodyFont: { family: 'JetBrains Mono', size: 11, weight: 'bold' },
-          padding: 8,
-          callbacks: {
-            label: (ctx) => ctx.dataset.label + ' : € ' + ctx.raw
-          }
+          bodyFont: { family: 'JetBrains Mono', size: 11 },
+          callbacks: { label: (item) => item.dataset.label + ' : ' + (item.raw == null ? '—' : fmt(item.raw)) }
         }
       },
-      scales: {
-        x: { display: false },
-        y: { display: false, min: yMin, max: yMax }
-      }
+      scales: { x: { display: false }, y: { display: false, min: dataMin - pad, max: dataMax + pad } }
     }
   });
 }
 
-const MARKET_KEY = 'pkmn-market-pref';
-let currentMarket = (() => {
-  try {
-    const m = localStorage.getItem(MARKET_KEY);
-    return (m === 'ww') ? 'ww' : 'eu';
-  } catch (e) { return 'eu'; }
-})();
-
-function renderStats() {
-  const sumPrev = (mk) => CARDS.reduce((s, c) => {
-    const h = c['history_' + mk];
-    if (!Array.isArray(h) || h.length < 2) return s + (c['price_' + mk] || 0);
-    return s + (h[h.length - 2] || 0);
-  }, 0);
-  const hasAnyHistory = (mk) => CARDS.some(c => Array.isArray(c['history_' + mk]) && c['history_' + mk].length >= 2);
-
-  const totalEu = CARDS.reduce((s, c) => s + (c.price_eu || 0), 0);
-  const totalWw = CARDS.reduce((s, c) => s + (c.price_ww || 0), 0);
-
-  const total = currentMarket === 'ww' ? totalWw : totalEu;
-  const totalOld = currentMarket === 'ww' ? sumPrev('ww') : sumPrev('eu');
-
-  const totalValueEl = document.getElementById('totalValue');
-  totalValueEl.textContent = fmt(total);
-  totalValueEl.classList.toggle('market-ww', currentMarket === 'ww');
-
-  const td = document.getElementById('totalDelta');
-  if (hasAnyHistory(currentMarket) && totalOld > 0) {
-    const totalDelta = pct(totalOld, total);
-    td.textContent = (totalDelta >= 0 ? '+' : '') + totalDelta.toFixed(1) + '% (30j)';
-    td.className = 'delta ' + (totalDelta >= 0 ? 'up' : 'down');
-  } else {
-    td.textContent = '— (en construction)';
-    td.className = 'delta';
-  }
-
-  const avgEl = document.getElementById('avgValue');
-  avgEl.textContent = fmt(total / CARDS.length);
-  avgEl.classList.toggle('market-ww', currentMarket === 'ww');
-
-  document.getElementById('cardCount').textContent = CARDS.length;
-
-  // Top performer : seulement si on a des historiques
-  const moversValid = CARDS
-    .filter(c => Array.isArray(c.history_eu) && c.history_eu.length >= 2 && c.price_eu)
-    .map(c => ({ name: c.name, delta: pct(c.history_eu[0], c.price_eu) }));
-  const tmEl = document.getElementById('topMover');
-  const tmd = document.getElementById('topMoverDelta');
-  if (moversValid.length) {
-    moversValid.sort((a, b) => b.delta - a.delta);
-    tmEl.textContent = moversValid[0].name;
-    tmd.textContent = (moversValid[0].delta >= 0 ? '+' : '') + moversValid[0].delta.toFixed(1) + '%';
-    tmd.className = 'delta ' + (moversValid[0].delta >= 0 ? 'up' : 'down');
-  } else {
-    tmEl.textContent = '—';
-    tmd.textContent = 'en attente';
-    tmd.className = 'delta';
-  }
-
-  // Sync visual state des boutons toggle
-  document.querySelectorAll('.mt-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.market === currentMarket);
+function mergedWishes() {
+  const map = new Map();
+  (vault.wishlist || []).forEach(w => { if (w && w.id) map.set(w.id, { ...w, origin: 'fichier' }); });
+  localWishes().forEach(w => {
+    if (!w || !w.id) return;
+    const prev = map.get(w.id);
+    map.set(w.id, { ...(prev || {}), ...w, origin: prev ? 'fichier' : 'appareil' });
   });
+  map.forEach((w, id) => {
+    const quote = remoteWish[id];
+    if (quote) w.quote = quote;
+  });
+  return [...map.values()];
+}
+function renderWishlist() {
+  const grid = document.getElementById('wishGrid');
+  const empty = document.getElementById('wishEmpty');
+  const items = mergedWishes();
+  if (!items.length) {
+    grid.innerHTML = '';
+    empty.hidden = false;
+    empty.textContent = 'Aucune carte en vue. Ajoute un souhait : son plafond sert à repérer une bonne affaire. La cote automatique arrive quand la carte est aussi dans vault.json.';
+    return;
+  }
+  empty.hidden = true;
+  grid.innerHTML = items.map(w => {
+    const q = w.quote || {};
+    const eu = numOrNull(q.price_eu), ww = numOrNull(q.price_ww);
+    const known = [eu, ww].filter(Boolean);
+    const best = known.length ? Math.min(...known) : null;
+    const target = numOrNull(w.target_price);
+    const deal = !!(target && best && best <= target);
+    const tracked = w.origin === 'fichier';
+    return `<article class="wish-card${deal ? ' deal' : ''}">
+      ${deal ? '<div class="deal-flag">Bonne affaire</div>' : ''}
+      <div class="card-name">${esc(w.name || w.id)}</div>
+      <div class="card-set">${esc([w.set, w.num].filter(Boolean).join(' · '))}</div>
+      <div class="meta-row"><span class="k">Europe</span><span>${eu ? esc(fmt(eu)) : '—'}</span></div>
+      <div class="meta-row"><span class="k">Monde</span><span>${ww ? esc(fmt(ww)) : '—'}</span></div>
+      <div class="meta-row"><span class="k">Plafond</span><span>${target ? esc(fmt(target)) : '—'}</span></div>
+      <div class="kept">${tracked ? 'Suivi par le relevé quotidien' : 'Sur cet appareil seulement — copie le JSON dans vault.json pour la cote auto'}</div>
+      ${w.origin === 'appareil' ? `<div class="wish-actions"><button class="btn" type="button" data-copy="${esc(w.id)}">Copier le JSON</button><button class="btn" type="button" data-del="${esc(w.id)}">Retirer</button></div>` : ''}
+    </article>`;
+  }).join('');
+  grid.querySelectorAll('[data-del]').forEach(btn => btn.addEventListener('click', () => {
+    storeWishes(localWishes().filter(w => w.id !== btn.dataset.del));
+    renderWishlist();
+  }));
+  grid.querySelectorAll('[data-copy]').forEach(btn => btn.addEventListener('click', async () => {
+    const w = localWishes().find(item => item.id === btn.dataset.copy);
+    if (!w) return;
+    const payload = {
+      id: w.id, name: w.name, set: w.set || '', num: w.num || '',
+      target_price: w.target_price || null,
+      url_eu: w.url_eu || '', url_ww: w.url_ww || '', cardmarket_url: w.cardmarket_url || '',
+      must_contain: ['psa 10'], price_min: 20, price_max: 20000
+    };
+    const text = JSON.stringify(payload, null, 2);
+    try { await navigator.clipboard.writeText(text); btn.textContent = 'Copié'; }
+    catch (e) { window.prompt('Copie ce JSON dans vault.json → wishlist', text); }
+  }));
+}
+
+function deviceAlerts() {
+  const lines = [];
+  CARDS.forEach(c => {
+    [['eu', 'Europe'], ['ww', 'Monde']].forEach(([market, label]) => {
+      const price = numOrNull(c['price_' + market]);
+      if (!price) return;
+      if (numOrNull(c.alert_below) && price < c.alert_below) lines.push(`${c.name} (${label}) est sous ${fmt(c.alert_below)} : ${fmt(price)}.`);
+      if (numOrNull(c.alert_above) && price > c.alert_above) lines.push(`${c.name} (${label}) dépasse ${fmt(c.alert_above)} : ${fmt(price)}.`);
+    });
+  });
+  return lines;
+}
+function renderAlerts() {
+  const lines = deviceAlerts();
+  const banner = document.getElementById('alertBanner');
+  if (!lines.length) { banner.hidden = true; return; }
+  const sig = lines.join('|');
+  try { if (sessionStorage.getItem('vault-alert') === sig) { banner.hidden = true; return; } } catch (e) {}
+  document.getElementById('alertText').textContent = lines.join(' ');
+  banner.hidden = false;
+  banner.dataset.sig = sig;
 }
 
 function setMarket(market) {
@@ -617,15 +993,13 @@ function setMarket(market) {
   try { localStorage.setItem(MARKET_KEY, market); } catch (e) {}
   renderStats();
 }
-
 function toggleEditMode() {
   editMode = !editMode;
   document.body.classList.toggle('editing', editMode);
   const btn = document.getElementById('editBtn');
   btn.classList.toggle('active', editMode);
-  btn.textContent = editMode ? '✓ Terminer' : '✎ Mode édition';
+  btn.textContent = editMode ? 'Terminer' : 'Mode édition';
 }
-
 function openModal(cardId, field) {
   const card = CARDS.find(c => c.id === cardId);
   if (!card) return;
@@ -634,66 +1008,124 @@ function openModal(cardId, field) {
   const urlInput = document.getElementById('modalInputUrl');
   priceInput.style.display = 'none';
   urlInput.style.display = 'none';
-
-  if (field === 'price-eu') {
-    document.getElementById('modalTitle').textContent = '🇪🇺 ' + card.name + ' — ' + card.num;
-    document.getElementById('modalSub').textContent = 'Cote PSA 10 marché Europe (en €)';
-    priceInput.value = card.price_eu;
+  priceInput.classList.add('price');
+  const title = document.getElementById('modalTitle');
+  const sub = document.getElementById('modalSub');
+  const showPrice = (text, help, value) => {
+    title.textContent = text;
+    sub.textContent = help;
+    priceInput.value = value ?? '';
     priceInput.style.display = 'block';
-    setTimeout(() => { priceInput.focus(); priceInput.select(); }, 50);
-  } else if (field === 'price-ww') {
-    document.getElementById('modalTitle').textContent = '🌎 ' + card.name + ' — ' + card.num;
-    document.getElementById('modalSub').textContent = 'Cote PSA 10 marché Monde (en €, conversion eBay)';
-    priceInput.value = card.price_ww;
-    priceInput.style.display = 'block';
-    setTimeout(() => { priceInput.focus(); priceInput.select(); }, 50);
-  } else if (field === 'image') {
-    document.getElementById('modalTitle').textContent = '📷 ' + card.name;
-    document.getElementById('modalSub').textContent = 'Colle l\'URL de la photo. Laisse vide pour retirer.';
+    setTimeout(() => { priceInput.focus(); priceInput.select(); }, 40);
+  };
+  if (field === 'price-eu') showPrice(card.name + ' — Europe', 'Cote PSA 10 marché Europe, en euros. Vide pour annuler la saisie de cet appareil.', card.price_eu);
+  else if (field === 'price-ww') showPrice(card.name + ' — Monde', 'Cote PSA 10 marché Monde, en euros.', card.price_ww);
+  else if (field === 'buy') showPrice(card.name + ' — prix d\'achat', 'Prix payé, en euros. Sert à la plus-value. Vide pour effacer la saisie de cet appareil.', card.buy_price);
+  else if (field === 'population') showPrice(card.name + ' — population', 'Nombre de PSA 10. Le relevé essaie de le lire ; sinon cette saisie fait foi sur cet appareil.', card.population);
+  else if (field === 'alert-below') showPrice(card.name + ' — alerte basse', 'Bannière sur cet appareil si la cote passe dessous. L\'e-mail GitHub utilise le même champ dans vault.json.', card.alert_below);
+  else if (field === 'alert-above') showPrice(card.name + ' — alerte haute', 'Bannière sur cet appareil si la cote passe au-dessus. L\'e-mail GitHub lit vault.json.', card.alert_above);
+  else if (field === 'price-cm') showPrice(card.name + ' — Cardmarket loose', 'Prix de la carte non gradée la moins chère chez un vendeur européen. Cardmarket bloque souvent le relevé auto : saisis le prix ici. Le total du coffre reste la cote eBay PSA 10.', card.price_cm);
+  else if (field === 'image') {
+    title.textContent = card.name;
+    sub.textContent = 'Colle l\'URL de la photo. Vide pour revenir à l\'image PSA.';
     urlInput.value = card.image || '';
     urlInput.style.display = 'block';
-    setTimeout(() => { urlInput.focus(); urlInput.select(); }, 50);
+    setTimeout(() => { urlInput.focus(); urlInput.select(); }, 40);
   }
-  document.getElementById('editModal').classList.add('active');
+  const modal = document.getElementById('editModal');
+  modal.classList.add('active');
+  modal.setAttribute('aria-hidden', 'false');
 }
-
 function closeModal() {
-  document.getElementById('editModal').classList.remove('active');
+  const modal = document.getElementById('editModal');
+  modal.classList.remove('active');
+  modal.setAttribute('aria-hidden', 'true');
   currentEdit = { card: null, field: null };
 }
-
+function readNumber(raw) {
+  if (raw.trim() === '') return null;
+  const val = parseFloat(raw.replace(/\s/g, '').replace(',', '.'));
+  if (!Number.isFinite(val) || val < 0) return undefined;
+  return Math.round(val);
+}
+function readDecimal(raw) {
+  if (String(raw).trim() === '') return null;
+  const val = parseFloat(String(raw).replace(/\s/g, '').replace(',', '.'));
+  if (!Number.isFinite(val) || val < 0) return undefined;
+  return Math.round(val * 100) / 100;
+}
 function saveModal() {
   if (!currentEdit.card) return closeModal();
   const { card, field } = currentEdit;
-  if (field === 'price-eu') {
-    const val = parseFloat(document.getElementById('modalInput').value);
-    if (isNaN(val) || val < 0) return;
-    card.price_eu = Math.round(val);
-    // Append a l'historique si il existe deja, sinon initialise avec ce point
-    if (Array.isArray(card.history_eu) && card.history_eu.length > 0) {
-      card.history_eu = [...card.history_eu.slice(0, -1), card.price_eu];
-    } else {
-      card.history_eu = [card.price_eu];
+  const numeric = {
+    'price-eu': 'price_eu', 'price-ww': 'price_ww', buy: 'buy_price',
+    population: 'population', 'alert-below': 'alert_below', 'alert-above': 'alert_above', 'price-cm': 'price_cm'
+  };
+  if (numeric[field]) {
+    const val = field === 'price-cm'
+      ? readDecimal(document.getElementById('modalInput').value)
+      : readNumber(document.getElementById('modalInput').value);
+    if (val === undefined) return;
+    const key = numeric[field];
+    if ((key === 'price_eu' || key === 'price_ww') && (!val || val <= 0)) return;
+    if (val === null || val <= 0) delete card[key];
+    else card[key] = val;
+    if (key === 'price_cm') card.price_cm_source = val > 0 ? 'manuel' : null;
+    save(card.id, key, val === null || val <= 0 ? null : val);
+    if (key === 'price_eu' || key === 'price_ww') {
+      const market = key.slice(6);
+      const hist = card['history_' + market];
+      card['history_' + market] = (Array.isArray(hist) && hist.length && val !== null) ? hist.slice(0, -1).concat([val]) : (val === null ? hist : [val]);
+      const dated = card['history_' + market + '_dated'];
+      if (Array.isArray(dated) && dated.length && val !== null) {
+        const last = dated[dated.length - 1];
+        card['history_' + market + '_dated'] = dated.slice(0, -1).concat([{ ...last, p: val }]);
+      }
     }
-    save(card.id, 'price_eu', card.price_eu);
-  } else if (field === 'price-ww') {
-    const val = parseFloat(document.getElementById('modalInput').value);
-    if (isNaN(val) || val < 0) return;
-    card.price_ww = Math.round(val);
-    if (Array.isArray(card.history_ww) && card.history_ww.length > 0) {
-      card.history_ww = [...card.history_ww.slice(0, -1), card.price_ww];
-    } else {
-      card.history_ww = [card.price_ww];
-    }
-    save(card.id, 'price_ww', card.price_ww);
   } else if (field === 'image') {
     const url = document.getElementById('modalInputUrl').value.trim();
-    card.image = url;
+    card.image = url || DEFAULT_IMAGES[card.id];
     save(card.id, 'image', url);
   }
   renderStats();
   renderCards();
+  renderAlerts();
   closeModal();
+}
+
+function slug(name) {
+  const base = name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48);
+  return base || ('souhait-' + Date.now());
+}
+function openWish() {
+  document.getElementById('wishModal').classList.add('active');
+  document.getElementById('wishModal').setAttribute('aria-hidden', 'false');
+  document.getElementById('wishName').focus();
+}
+function closeWish() {
+  document.getElementById('wishModal').classList.remove('active');
+  document.getElementById('wishModal').setAttribute('aria-hidden', 'true');
+}
+function saveWish() {
+  const name = document.getElementById('wishName').value.trim();
+  if (!name) return;
+  const target = readNumber(document.getElementById('wishTarget').value);
+  const item = {
+    id: slug(name),
+    name,
+    set: document.getElementById('wishSet').value.trim(),
+    num: document.getElementById('wishNum').value.trim(),
+    target_price: target || null,
+    url_eu: document.getElementById('wishEu').value.trim(),
+    url_ww: document.getElementById('wishWw').value.trim(),
+    cardmarket_url: document.getElementById('wishCm').value.trim()
+  };
+  const list = localWishes().filter(w => w.id !== item.id);
+  list.push(item);
+  storeWishes(list);
+  ['wishName','wishSet','wishNum','wishTarget','wishEu','wishWw','wishCm'].forEach(id => { document.getElementById(id).value = ''; });
+  closeWish();
+  renderWishlist();
 }
 
 document.getElementById('editBtn').addEventListener('click', toggleEditMode);
@@ -702,15 +1134,26 @@ document.getElementById('modalSave').addEventListener('click', saveModal);
 document.getElementById('editModal').addEventListener('click', (e) => { if (e.target.id === 'editModal') closeModal(); });
 document.getElementById('modalInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') saveModal(); if (e.key === 'Escape') closeModal(); });
 document.getElementById('modalInputUrl').addEventListener('keydown', (e) => { if (e.key === 'Enter') saveModal(); if (e.key === 'Escape') closeModal(); });
-
-document.querySelectorAll('.mt-btn').forEach(btn => {
-  btn.addEventListener('click', () => setMarket(btn.dataset.market));
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closeWish(); } });
+document.querySelectorAll('.mt-btn').forEach(btn => btn.addEventListener('click', () => setMarket(btn.dataset.market)));
+document.getElementById('addWish').addEventListener('click', openWish);
+document.getElementById('wishCancel').addEventListener('click', closeWish);
+document.getElementById('wishSave').addEventListener('click', saveWish);
+document.getElementById('wishModal').addEventListener('click', (e) => { if (e.target.id === 'wishModal') closeWish(); });
+document.getElementById('alertDismiss').addEventListener('click', () => {
+  const banner = document.getElementById('alertBanner');
+  try { sessionStorage.setItem('vault-alert', banner.dataset.sig || ''); } catch (e) {}
+  banner.hidden = true;
 });
 
 (async () => {
   await loadData();
+  document.body.classList.remove('is-booting');
+  renderStatus();
   renderStats();
   renderCards();
+  renderWishlist();
+  renderAlerts();
 })();
 </script>
 </body>
