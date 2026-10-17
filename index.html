@@ -8,11 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@700;900&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="https://www.psacard.com/cert/145866913/psa/image/57DoD5MGc0a45T7rZvOBbw">
-<link rel="preload" as="image" href="https://www.psacard.com/cert/95360955/psa/image/vWfFGLoOfkGbq605JlutgQ">
-<link rel="preload" as="image" href="https://www.psacard.com/cert/102215566/psa/image/VCCjBrZ3AES-hPUcUnHh2Q">
-<link rel="preload" as="image" href="https://www.psacard.com/cert/102618365/psa/image/sLvYjXjxt0yZrUKGPYGTDw">
-<link rel="preload" as="image" href="https://www.psacard.com/cert/109838459/psa/image/Ure9Ck43B0KUOT_Bfgneeg">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 :root{
@@ -201,8 +196,35 @@ body.market-ww .d-eu,body:not(.market-ww) .d-ww{display:none}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
-  .orb{display:none}
+  .orb,.spark{display:none}
   .photo img{opacity:1;transform:none}
+}
+[hidden]{display:none !important}
+.stage{min-height:calc(100svh - 92px);display:grid;grid-template-columns:minmax(260px,440px) minmax(0,1fr);gap:28px;align-items:center;perspective:1400px}
+.stage-slab{height:min(74vh,680px);transform-style:preserve-3d}
+.stage-slab .tilt,.stage-slab .slab{height:100%}
+.stage-slab .slab{border-radius:22px;box-shadow:0 0 0 1px rgba(0,255,224,.45),0 30px 90px rgba(0,0,0,.55),0 0 80px rgba(255,46,196,.22)}
+.stage-read .main .value{font-size:clamp(52px,7vw,96px);line-height:.9}
+.stage-kicker{font-family:var(--display);letter-spacing:.22em;font-size:12px;color:var(--cyan);margin:0 0 8px}
+.rail{display:flex;gap:22px;overflow-x:auto;padding:28px 8px 48px;scroll-snap-type:x mandatory;perspective:900px}
+.rail-card{flex:0 0 168px;scroll-snap-align:center;background:none;border:0;padding:0;color:inherit;cursor:pointer;transform:rotateY(-22deg) scale(.92);transition:transform .45s cubic-bezier(.16,.84,.32,1)}
+.rail-card.is-on{transform:rotateY(0deg) scale(1.06);z-index:2}
+.rail-card .slab{height:250px;border-radius:16px}
+.sheet{position:fixed;inset:0;z-index:40;background:rgba(5,6,15,.92);display:grid;grid-template-columns:minmax(240px,380px) minmax(0,1fr);gap:22px;padding:22px 22px 28px;overflow:auto;align-content:start}
+.sheet-slab .slab{height:min(78vh,720px);border-radius:22px}
+.sheet-back{position:sticky;top:0;z-index:2;margin-bottom:12px}
+.holo{background:linear-gradient(115deg,transparent 15%,rgba(0,255,224,.35) 30%,rgba(255,255,255,.8) 46%,rgba(255,46,196,.75) 54%,rgba(255,228,54,.6) 64%,transparent 80%);mix-blend-mode:screen;opacity:.72}
+.slab.is-hot .holo{opacity:1}
+.hero-caption,.rail-card .mini-name{display:block;margin-top:8px;font-family:var(--display);letter-spacing:.08em}
+.rail-card .mini-name{font-size:11px;color:var(--muted)}
+.spark{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:spark 9s linear infinite}
+@keyframes spark{from{transform:translate3d(0,20vh,0);opacity:0}15%{opacity:.8}to{transform:translate3d(40px,-80vh,0);opacity:0}}
+@media (max-width:900px){
+  .stage{grid-template-columns:1fr;min-height:auto}
+  .stage-slab{height:68vh}
+  .sheet{grid-template-columns:1fr}
+  .rail-card{transform:none}
+  .rail-card.is-on{transform:scale(1.04)}
 }
 </style>
 </head>
@@ -212,6 +234,12 @@ body.market-ww .d-eu,body:not(.market-ww) .d-ww{display:none}
   <div class="orb orb-b"></div>
   <div class="orb orb-c"></div>
   <div class="gridlines"></div>
+  <span class="spark" style="left:12%;animation-delay:-1s"></span>
+  <span class="spark" style="left:28%;animation-delay:-3s;background:var(--magenta);box-shadow:0 0 10px var(--magenta)"></span>
+  <span class="spark" style="left:46%;animation-delay:-5s"></span>
+  <span class="spark" style="left:63%;animation-delay:-2s;background:var(--violet);box-shadow:0 0 10px var(--violet)"></span>
+  <span class="spark" style="left:78%;animation-delay:-6s"></span>
+  <span class="spark" style="left:90%;animation-delay:-4s;background:var(--yellow);box-shadow:0 0 10px var(--yellow)"></span>
 </div>
 <div class="wrap">
 <header class="topbar">
@@ -229,8 +257,11 @@ body.market-ww .d-eu,body:not(.market-ww) .d-ww{display:none}
 <div class="status" id="statusBar"><span class="chip wait"><i></i> Chargement des cotes…</span></div>
 <div class="banner" id="alertBanner" hidden>
   <p id="alertText"></p>
-  <button type="button" id="alertDismiss">Fermer</button>
 </div>
+<section class="stage">
+  <div class="stage-slab" id="heroMount"></div>
+  <div class="stage-read">
+    <p class="stage-kicker">COFFRE PSA 10</p>
 <section class="hero">
   <article class="stat main">
     <div class="stat-header">
@@ -268,9 +299,18 @@ body.market-ww .d-eu,body:not(.market-ww) .d-ww{display:none}
     </article>
   </div>
 </section>
-<h2 class="section-title">Collection <span class="line"></span></h2>
+    <button class="btn btn-edit" id="gyroBtn" type="button">Incliner avec l'iPad</button>
+  </div>
+</section>
 <p class="boot" id="bootMsg">Ouverture du coffre…</p>
-<div class="cards" id="cardsGrid"></div>
+<div class="rail" id="cardsGrid" aria-label="Galerie des slabs"></div>
+<section class="sheet" id="sheet" hidden>
+  <div>
+    <button class="btn btn-edit sheet-back" id="sheetBack" type="button">Retour au coffre</button>
+    <div class="sheet-slab" id="sheetSlab"></div>
+  </div>
+  <div class="sheet-body" id="sheetBody"></div>
+</section>
 <h2 class="section-title">Liste de souhaits <span class="line"></span></h2>
 <div class="wish-actions">
   <button class="btn btn-edit" id="addWish" type="button">Ajouter un souhait</button>
@@ -279,7 +319,7 @@ body.market-ww .d-eu,body:not(.market-ww) .d-ww{display:none}
 <p class="empty" id="wishEmpty" hidden></p>
 <footer>
   <div id="footNote"></div>
-  <div>Les alertes e-mail partent en issue GitHub quand un seuil de <a href="https://github.com/cgform-source/Poke/edit/main/vault.json">vault.json</a> est franchi, qu'une nouvelle vente apparaît, ou qu'un souhait passe sous son plafond. Pour les recevoir : Watch → Issues, notifications e-mail, ou l'appli GitHub. Les seuils saisis ici restent sur cet appareil et affichent une bannière.</div>
+  <div>Les photos instantanées sont les fichiers <code>images/&lt;id&gt;.webp</code> du dépôt. PSA répond 403 aux runners : le hotlink n'est plus préchargé. Les alertes e-mail partent en issue GitHub quand un seuil de <a href="https://github.com/cgform-source/Poke/edit/main/vault.json">vault.json</a> est franchi. Pour les recevoir : Watch → Issues. Une bannière sur cet appareil se ferme d'un toucher.</div>
   <div><a href="https://github.com/cgform-source/Poke/issues">Issues du dépôt</a></div>
 </footer>
 </div>
@@ -582,7 +622,7 @@ function renderStatus() {
   const psaKind = psa.ok ? 'ok' : (psa.checked_at ? 'bad' : 'wait');
   bar.innerHTML = [
     chip(when ? 'ok' : 'wait', when ? 'Dernier relevé réussi : ' + when : 'Aucun relevé'),
-    chip(ebayKind, ebay.ok ? 'eBay à jour' : (ebay.checked_at ? 'eBay en échec, prix conservés' : 'eBay en attente')),
+    chip(ebayKind, ebay.ok ? 'eBay à jour' : (ebay.failed_since ? 'relevé eBay en échec depuis le ' + fmtDay(ebay.failed_since) : (ebay.checked_at ? 'eBay en échec, prix conservés' : 'eBay en attente'))),
     chip(cmKind, cm.ok ? 'Cardmarket loose' : 'Cardmarket indisponible'),
     chip(psaKind, psa.ok ? 'Population PSA lue' : 'Population PSA à saisir')
   ].join('');
@@ -617,7 +657,11 @@ function renderStats() {
   const d30 = portfolio(currentMarket, 30);
   const dLong = portfolio(currentMarket, null);
   const td = document.getElementById('totalDelta');
-  if (d30 && d30.value != null) {
+  const ebayFailed = sources.ebay && sources.ebay.ok === false && sources.ebay.failed_since;
+  if (ebayFailed) {
+    td.textContent = 'relevé eBay en échec depuis le ' + fmtDay(sources.ebay.failed_since);
+    td.className = 'delta down';
+  } else if (d30 && d30.value != null) {
     td.textContent = fmtPct(d30.value) + ' sur 30 jours';
     td.className = 'delta ' + (d30.value >= 0 ? 'up' : 'down');
   } else {
@@ -699,8 +743,11 @@ function gapHtml(card) {
 }
 function salesHtml(card, market) {
   const list = (card['sales_' + market] || []).filter(s => s && typeof s.price === 'number' && s.price > 0).slice(0, 5);
+  const source = card['source_' + market];
+  const head = source && source.basis === 'annonces' ? 'Annonces actives' : 'Dernières ventes';
   if (!list.length) {
-    return `<div class="sales d-${market}"><div class="sale"><span>Dernières ventes</span><b>au prochain relevé</b></div></div>`;
+    const missing = source && source.ok === false ? 'relevé en échec' : 'au prochain relevé';
+    return `<div class="sales d-${market}"><div class="sale"><span>${head}</span><b>${missing}</b></div></div>`;
   }
   const dated = list.some(s => s.date);
   const rows = (dated ? list.slice().sort((a, b) => String(b.date || '').localeCompare(String(a.date || ''))) : list).slice(0, 5);
@@ -710,108 +757,155 @@ function priceCell(card, market) {
   const value = numOrNull(card['price_' + market]);
   const source = card['source_' + market];
   const kept = source && source.ok === false;
+  const basis = source && source.basis;
   const count = market === 'eu' ? card._salesCountEu : card._salesCountWw;
+  const note = kept
+    ? 'dernier prix connu · non confirmé'
+    : (basis === 'annonces' ? 'annonces actives, pas des ventes' : (basis === 'ventes-ppt' ? 'ventes PSA 10 · USD converti en €' : (basis === 'ventes' ? 'ventes réussies' : '')));
   return `<div class="price-col ${market}">
     <div class="price-label">${market === 'eu' ? 'Europe' : 'Monde'}</div>
     <div class="price-main edit-field" data-card="${card.id}" data-market="${market}" data-field="price-${market}">${value ? `<span class="cur">€</span>${esc(Math.round(value).toLocaleString('fr-FR').replace(/[\u202f\u00a0]/g,' '))}` : '—'}</div>
-    ${count ? `<div class="kept" style="color:var(--muted)">médiane · ${esc(count)} ventes</div>` : ''}
-    ${kept ? `<div class="kept">dernier prix conservé</div>` : ''}
+    ${count && !kept ? `<div class="kept" style="color:var(--muted)">médiane · ${esc(count)} ventes</div>` : ''}
+    ${note ? `<div class="kept">${esc(note)}</div>` : ''}
   </div>`;
 }
 
+let activeId = null;
+let sheetOpen = false;
+function slabInner(c, i) {
+  return `<div class="tilt"><div class="slab" data-card="${c.id}">
+    <div class="psa-label"><span>PSA</span><b>GEM MT 10</b><span class="rank">#${String(i + 1).padStart(2, '0')}</span></div>
+    <div class="photo">
+      <div class="shimmer"></div>
+      <img alt="${esc(c.name)}" referrerpolicy="no-referrer">
+      <div class="holo"></div>
+      <div class="slab-fallback"><strong>${esc(c.nameAlt)}</strong><span>PSA 10 · CERT ${esc(c.cert)}</span></div>
+    </div>
+  </div></div>`;
+}
+function detailHtml(c) {
+  const pop = numOrNull(c.population);
+  const cm = numOrNull(c.price_cm);
+  const cmAuto = c.price_cm_source === 'loose' && !c.price_cm_error;
+  const cmManual = c.price_cm_source === 'manuel' || (cm && c.price_cm_source !== 'loose');
+  return `<div class="card-body" data-id="${c.id}">
+    <div class="card-head">
+      <div>
+        <div class="card-name">${esc(c.name)}</div>
+        <div class="card-set">${esc(c.set)}</div>
+        <div class="cert">▸ <a href="https://www.psacard.com/cert/${esc(c.cert)}/psa" target="_blank" rel="noopener">cert #${esc(c.cert)}</a></div>
+      </div>
+      <div class="card-num">${esc(c.num)}</div>
+    </div>
+    <div class="price-block">${priceCell(c, 'eu')}${priceCell(c, 'ww')}</div>
+    ${gapHtml(c)}
+    ${deltaHtml(c, 'eu')}${deltaHtml(c, 'ww')}
+    ${gainHtml(c, 'eu')}${gainHtml(c, 'ww')}
+    <div class="pop-row"><span class="k">Population PSA 10</span><span class="edit-field" data-card="${c.id}" data-field="population">${pop ? esc(pop.toLocaleString('fr-FR')) : 'à renseigner'}</span></div>
+    <div class="cm-row"><span class="k">Cardmarket · loose</span><span class="edit-field" data-card="${c.id}" data-field="price-cm">${cm ? esc(fmtEur(cm)) : 'Cardmarket indisponible'}</span></div>
+    <div class="kept">${cmAuto ? 'moins cher · carte non gradée · vendeur européen' : (cmManual ? 'prix loose saisi à la main' : 'carte non gradée, vendeur européen — à saisir en mode édition')}</div>
+    <div class="chart-wrap"><canvas id="chart-${c.id}"></canvas></div>
+    ${salesHtml(c, 'eu')}${salesHtml(c, 'ww')}
+    <div class="links">
+      <a class="link eu" href="${esc(c.ebayEuUrl)}" target="_blank" rel="noopener">eBay Europe</a>
+      <a class="link ww" href="${esc(c.ebayWwUrl)}" target="_blank" rel="noopener">eBay Monde</a>
+      <a class="link cm" href="${esc(c.cardmarketUrl)}" target="_blank" rel="noopener">Cardmarket</a>
+    </div>
+    <div class="meta-row"><span class="k">Alerte basse</span><span class="edit-field" data-card="${c.id}" data-field="alert-below">${numOrNull(c.alert_below) ? esc(fmt(c.alert_below)) : '—'}</span></div>
+    <div class="meta-row"><span class="k">Alerte haute</span><span class="edit-field" data-card="${c.id}" data-field="alert-above">${numOrNull(c.alert_above) ? esc(fmt(c.alert_above)) : '—'}</span></div>
+  </div>`;
+}
+function wireDetail(root) {
+  root.querySelectorAll('.edit-field').forEach(el => {
+    el.addEventListener('click', () => { if (editMode) openModal(el.dataset.card, el.dataset.field); });
+  });
+  const canvas = root.querySelector('canvas');
+  if (!canvas) return;
+  const card = CARDS.find(c => c.id === canvas.id.replace('chart-', ''));
+  if (chartObs) chartObs.observe(canvas);
+  else if (card) drawChart(card);
+}
 function renderCards() {
   const grid = document.getElementById('cardsGrid');
   document.getElementById('bootMsg').hidden = true;
-  grid.innerHTML = CARDS.map((c, i) => {
-    const pop = numOrNull(c.population);
-    const cm = numOrNull(c.price_cm);
-    const cmAuto = c.price_cm_source === 'loose' && !c.price_cm_error;
-    const cmManual = c.price_cm_source === 'manuel' || (cm && c.price_cm_source !== 'loose');
-    return `<article class="card" data-id="${c.id}" style="--i:${i};--accent:${c.accent}">
-      <div class="stage"><div class="tilt"><div class="card-inner">
-        <div class="slab" data-card="${c.id}">
-          <div class="psa-label"><span>PSA</span><b>GEM MT 10</b><span class="rank">#${String(i + 1).padStart(2, '0')}</span></div>
-          <div class="photo">
-            <div class="shimmer"></div>
-            <img alt="${esc(c.name)}" referrerpolicy="no-referrer">
-            <div class="holo"></div>
-            <div class="slab-fallback" hidden><strong>${esc(c.nameAlt)}</strong><span>PSA 10 · CERT ${esc(c.cert)}</span></div>
-          </div>
-          <div class="edit-photo">Modifier la photo</div>
-        </div>
-        <div class="card-body">
-          <div class="card-head">
-            <div>
-              <div class="card-name">${esc(c.name)}</div>
-              <div class="card-set">${esc(c.set)}</div>
-              <div class="cert">▸ <a href="https://www.psacard.com/cert/${esc(c.cert)}/psa" target="_blank" rel="noopener">cert #${esc(c.cert)}</a></div>
-            </div>
-            <div class="card-num">${esc(c.num)}</div>
-          </div>
-          <div class="price-block">${priceCell(c, 'eu')}${priceCell(c, 'ww')}</div>
-          ${gapHtml(c)}
-          ${deltaHtml(c, 'eu')}${deltaHtml(c, 'ww')}
-          ${gainHtml(c, 'eu')}${gainHtml(c, 'ww')}
-          <div class="pop-row"><span class="k">Population PSA 10</span><span class="edit-field" data-card="${c.id}" data-field="population">${pop ? esc(pop.toLocaleString('fr-FR')) : 'à renseigner'}</span></div>
-          <div class="cm-row"><span class="k">Cardmarket · loose</span><span class="edit-field" data-card="${c.id}" data-field="price-cm">${cm ? esc(fmtEur(cm)) : 'Cardmarket indisponible'}</span></div>
-          <div class="kept">${cmAuto ? 'moins cher · carte non gradée · vendeur européen' : (cmManual ? 'prix loose saisi à la main' : 'carte non gradée, vendeur européen — à saisir en mode édition')}</div>
-          <div class="chart-wrap"><canvas id="chart-${c.id}"></canvas></div>
-          ${salesHtml(c, 'eu')}${salesHtml(c, 'ww')}
-          <div class="links">
-            <a class="link eu" href="${esc(c.ebayEuUrl)}" target="_blank" rel="noopener">eBay Europe</a>
-            <a class="link ww" href="${esc(c.ebayWwUrl)}" target="_blank" rel="noopener">eBay Monde</a>
-            <a class="link cm" href="${esc(c.cardmarketUrl)}" target="_blank" rel="noopener">Cardmarket</a>
-          </div>
-          <div class="meta-row"><span class="k">Alerte basse</span><span class="edit-field" data-card="${c.id}" data-field="alert-below">${numOrNull(c.alert_below) ? esc(fmt(c.alert_below)) : '—'}</span></div>
-          <div class="meta-row"><span class="k">Alerte haute</span><span class="edit-field" data-card="${c.id}" data-field="alert-above">${numOrNull(c.alert_above) ? esc(fmt(c.alert_above)) : '—'}</span></div>
-        </div>
-      </div></div></div>
-    </article>`;
-  }).join('');
-  grid.querySelectorAll('.card').forEach(card => {
-    mountPhoto(card);
-    bindTilt(card);
-    const canvas = card.querySelector('canvas');
-    if (!canvas) return;
-    if (chartObs) chartObs.observe(canvas);
-    else drawChart(CARDS.find(c => c.id === card.dataset.id));
+  if (!activeId || !CARDS.some(c => c.id === activeId)) {
+    const ranked = CARDS.slice().sort((a, b) => (numOrNull(b['price_' + currentMarket]) || 0) - (numOrNull(a['price_' + currentMarket]) || 0));
+    activeId = ranked[0].id;
+  }
+  const featured = CARDS.find(c => c.id === activeId);
+  const hero = document.getElementById('heroMount');
+  hero.innerHTML = `<div data-id="${featured.id}" style="--accent:${featured.accent};height:100%">${slabInner(featured, CARDS.indexOf(featured))}<div class="hero-caption">${esc(featured.name)} · ${esc(featured.num)}</div></div>`;
+  const heroSlab = hero.querySelector('.slab');
+  if (!sheetOpen) heroSlab.style.viewTransitionName = 'vault-slab';
+  mountPhoto(hero.querySelector('[data-id]'));
+  bindTilt(hero);
+  heroSlab.addEventListener('click', () => {
+    if (editMode) openModal(featured.id, 'image');
+    else openSheet(featured.id);
   });
-  grid.querySelectorAll('.edit-field').forEach(el => {
-    el.addEventListener('click', () => { if (editMode) openModal(el.dataset.card, el.dataset.field); });
+  grid.innerHTML = CARDS.map((c, i) => `<button class="rail-card${c.id === activeId ? ' is-on' : ''}" type="button" data-id="${c.id}" style="--accent:${c.accent}">${slabInner(c, i)}<span class="mini-name">${esc(c.name)}</span></button>`).join('');
+  grid.querySelectorAll('.rail-card').forEach(btn => {
+    mountPhoto(btn);
+    bindTilt(btn);
+    btn.addEventListener('click', () => openSheet(btn.dataset.id));
   });
-  grid.querySelectorAll('.slab').forEach(el => {
-    el.addEventListener('click', () => { if (editMode) openModal(el.dataset.card, 'image'); });
-  });
+  const sheet = document.getElementById('sheet');
+  sheet.hidden = !sheetOpen;
+  if (sheetOpen) {
+    const host = document.getElementById('sheetSlab');
+    host.innerHTML = `<div data-id="${featured.id}" style="--accent:${featured.accent}">${slabInner(featured, CARDS.indexOf(featured))}</div>`;
+    host.querySelector('.slab').style.viewTransitionName = 'vault-slab';
+    mountPhoto(host.querySelector('[data-id]'));
+    bindTilt(host);
+    const body = document.getElementById('sheetBody');
+    body.innerHTML = detailHtml(featured);
+    wireDetail(body);
+  }
   if (renderedOnce) document.body.classList.add('rerender');
   renderedOnce = true;
+}
+function openSheet(id) {
+  activeId = id;
+  sheetOpen = true;
+  const go = () => renderCards();
+  if (!REDUCE && document.startViewTransition) document.startViewTransition(go);
+  else go();
+}
+function closeSheet() {
+  if (!sheetOpen) return;
+  sheetOpen = false;
+  const go = () => renderCards();
+  if (!REDUCE && document.startViewTransition) document.startViewTransition(go);
+  else go();
 }
 
 function mountPhoto(cardEl) {
   const card = CARDS.find(c => c.id === cardEl.dataset.id);
+  if (!card) return;
   const img = cardEl.querySelector('.photo img');
   const shimmer = cardEl.querySelector('.shimmer');
   const fallback = cardEl.querySelector('.slab-fallback');
-  const remote = card.image;
+  if (!img || !fallback) return;
+  fallback.hidden = false;
   const local = card.image === DEFAULT_IMAGES[card.id] ? [`images/${card.id}.webp`, `images/${card.id}.jpg`] : [];
-  const sources = local.concat([remote, remote, remote]).filter(Boolean);
-  const delays = [0, 0, 600, 1400, 2400];
-  let attempt = 0;
-  const fail = () => { shimmer.classList.add('is-hidden'); fallback.hidden = false; img.removeAttribute('src'); };
-  const run = () => {
-    if (attempt >= sources.length) return fail();
-    const src = sources[attempt];
-    const wait = delays[attempt] || 2000;
-    attempt += 1;
-    window.setTimeout(() => {
-      const probe = new Image();
-      probe.referrerPolicy = 'no-referrer';
-      probe.decoding = 'async';
-      probe.onload = () => { img.src = src; img.classList.add('is-in'); shimmer.classList.add('is-hidden'); fallback.hidden = true; };
-      probe.onerror = () => run();
-      probe.src = src;
-    }, wait);
+  const sources = local.concat(card.image ? [card.image] : []);
+  let index = 0;
+  const next = () => {
+    if (index >= sources.length) {
+      shimmer.classList.add('is-hidden');
+      img.removeAttribute('src');
+      return;
+    }
+    const src = sources[index];
+    index += 1;
+    const probe = new Image();
+    probe.referrerPolicy = 'no-referrer';
+    probe.decoding = 'async';
+    probe.onload = () => { img.src = src; img.classList.add('is-in'); shimmer.classList.add('is-hidden'); fallback.hidden = true; };
+    probe.onerror = next;
+    probe.src = src;
   };
-  run();
+  next();
 }
 
 function bindTilt(cardEl) {
@@ -992,6 +1086,7 @@ function setMarket(market) {
   currentMarket = market;
   try { localStorage.setItem(MARKET_KEY, market); } catch (e) {}
   renderStats();
+  renderCards();
 }
 function toggleEditMode() {
   editMode = !editMode;
@@ -1134,16 +1229,44 @@ document.getElementById('modalSave').addEventListener('click', saveModal);
 document.getElementById('editModal').addEventListener('click', (e) => { if (e.target.id === 'editModal') closeModal(); });
 document.getElementById('modalInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') saveModal(); if (e.key === 'Escape') closeModal(); });
 document.getElementById('modalInputUrl').addEventListener('keydown', (e) => { if (e.key === 'Enter') saveModal(); if (e.key === 'Escape') closeModal(); });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closeWish(); } });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closeWish(); closeSheet(); } });
 document.querySelectorAll('.mt-btn').forEach(btn => btn.addEventListener('click', () => setMarket(btn.dataset.market)));
 document.getElementById('addWish').addEventListener('click', openWish);
 document.getElementById('wishCancel').addEventListener('click', closeWish);
 document.getElementById('wishSave').addEventListener('click', saveWish);
 document.getElementById('wishModal').addEventListener('click', (e) => { if (e.target.id === 'wishModal') closeWish(); });
-document.getElementById('alertDismiss').addEventListener('click', () => {
+document.getElementById('alertBanner').addEventListener('click', () => {
   const banner = document.getElementById('alertBanner');
   try { sessionStorage.setItem('vault-alert', banner.dataset.sig || ''); } catch (e) {}
   banner.hidden = true;
+});
+document.getElementById('sheetBack').addEventListener('click', closeSheet);
+document.getElementById('gyroBtn').addEventListener('click', async () => {
+  const arm = () => {
+    if (window._gyroOn) return;
+    window._gyroOn = true;
+    window.addEventListener('deviceorientation', (e) => {
+      if (REDUCE) return;
+      const rx = Math.max(-18, Math.min(18, (e.beta || 0) - 45));
+      const ry = Math.max(-22, Math.min(22, e.gamma || 0));
+      document.querySelectorAll('.stage-slab .tilt, .sheet-slab .tilt').forEach(tilt => {
+        tilt.style.transition = 'none';
+        tilt.style.transform = `rotateX(${(-rx * 0.5).toFixed(2)}deg) rotateY(${(ry * 0.6).toFixed(2)}deg)`;
+        const slab = tilt.querySelector('.slab');
+        const holo = tilt.querySelector('.holo');
+        if (slab) slab.classList.add('is-hot');
+        if (holo) holo.style.transform = `translate3d(${(ry * 4).toFixed(1)}%, 0, 0)`;
+      });
+    });
+  };
+  try {
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+      const state = await DeviceOrientationEvent.requestPermission();
+      if (state !== 'granted') return;
+    }
+  } catch (e) { return; }
+  arm();
+  document.getElementById('gyroBtn').textContent = 'Gyroscope actif';
 });
 
 (async () => {

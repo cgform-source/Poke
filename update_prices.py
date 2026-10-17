@@ -17,6 +17,7 @@ Les blocages anti-bot ne sont pas contournés : on note l'échec et on garde
 la dernière valeur correcte.
 """
 
+import base64
 import io
 import json
 import os
@@ -48,6 +49,10 @@ CARDS = [
         "must_match_one": ["shiny star", "s4a", "190", "ssv"],
         "price_min": 100,
         "price_max": 600,
+        "ppt_search": "Charizard V",
+        "ppt_name": "charizard",
+        "ppt_number": "307",
+        "ppt_set": "shiny star",
     },
     {
         "id": "mentali-v-eh",
@@ -61,6 +66,10 @@ CARDS = [
         "must_match_one": ["eevee heroes", "s6a", "69"],
         "price_min": 150,
         "price_max": 700,
+        "ppt_search": "Espeon V",
+        "ppt_name": "espeon",
+        "ppt_number": "81",
+        "ppt_set": "eevee heroes",
     },
     {
         "id": "dracaufeu-ex-151",
@@ -74,6 +83,10 @@ CARDS = [
         "must_match_one": ["151", "sv2a", "165"],
         "price_min": 400,
         "price_max": 1500,
+        "ppt_search": "Charizard ex",
+        "ppt_name": "charizard",
+        "ppt_number": "201",
+        "ppt_set": "151",
     },
     {
         "id": "pikachu-ex-sv8",
@@ -87,6 +100,10 @@ CARDS = [
         "must_match_one": ["electric breaker", "sv8", "106"],
         "price_min": 500,
         "price_max": 1500,
+        "ppt_search": "Pikachu ex",
+        "ppt_name": "pikachu",
+        "ppt_number": "132",
+        "ppt_set": "electric breaker",
     },
     {
         "id": "umbreon-ex-sv8a",
@@ -100,10 +117,25 @@ CARDS = [
         "must_match_one": ["terastal", "sv8a", "187"],
         "price_min": 400,
         "price_max": 1500,
+        "ppt_search": "Umbreon ex",
+        "ppt_name": "umbreon",
+        "ppt_number": "217",
+        "ppt_set": "terastal",
     },
 ]
 
 MAX_HISTORY = 400
+# Dernier run qui a vraiment lu des ventes (10/10 médianes). Le suivant,
+# le 27 juillet, ne recevait plus que la page « Se connecter ».
+LAST_REAL_READ = "2026-07-20"
+UNMEASURED_THROUGH = "2026-10-17"
+INSIGHTS_SCOPE = "https://api.ebay.com/oauth/api_scope/buy.marketplace.insights"
+BROWSE_SCOPE = "https://api.ebay.com/oauth/api_scope/buy.browse"
+EBAY_TOKEN_URL = "https://api.ebay.com/identity/v1/oauth2/token"
+INSIGHTS_URL = "https://api.ebay.com/buy/marketplace_insights/v1_beta/item_sales/search"
+BROWSE_URL = "https://api.ebay.com/buy/browse/v1/item_summary/search"
+EBAY_CATEGORY = "183454"
+EU_LOCATION = "FR|DE|IT|ES|BE|NL|AT|PT|IE|LU|PL|SE|DK|FI|CH|GB"
 MAX_VALID_RESULTS = 10
 MAX_ITEMS_TO_SCAN = 100
 MAX_SALES_STORED = 10
@@ -267,17 +299,24 @@ def extract_items(soup):
 
 def diagnose(soup, html):
     title = soup.find("title")
+    title_text = title.get_text(strip=True) if title else ""
     if title:
-        print(f"  <title>: {title.get_text(strip=True)[:100]}")
+        print(f"  <title>: {title_text[:100]}")
+    # Le mot « captcha » est aussi dans la page de connexion. Le titre tranche.
+    low_title = title_text.lower()
+    if "se connecter" in low_title or "sign in" in low_title or "s'inscrire" in low_title:
+        print("  → Signal: page de connexion eBay")
+        return "page de connexion eBay"
     lower = html.lower()
     for marker, meaning in [
+        ("se connecter", "page de connexion eBay"),
+        ("sign in", "page de connexion eBay"),
         ("pas de correspondance", "aucun résultat eBay"),
         ("no exact matches", "aucun résultat exact"),
+        ("pardon our interruption", "challenge PerimeterX"),
         ("captcha", "CAPTCHA détecté"),
         ("robot", "anti-bot détecté"),
         ("access denied", "accès refusé"),
-        ("pardon our interruption", "challenge PerimeterX"),
-        ("se connecter", "page de connexion eBay"),
     ]:
         if marker in lower:
             print(f"  → Signal: {meaning}")
@@ -453,8 +492,13 @@ def append_snapshot(entry, hist_key, dated_key, price, today):
     entry[hist_key] = [pt["p"] for pt in entry[dated_key]]
 
 
-def apply_market(entry, market, sales, now_iso, empty_reason):
-    """Met à jour un marché sans jamais écraser un bon prix par 0 ou par un échec."""
+def apply_market(entry, market, sales, now_iso, empty_reason, measured_empty=False, basis=None, direct_price=None):
+    """Met à jour un marché sans jamais écraser un bon prix par 0 ou par un échec.
+
+    measured_empty=True : la source a répondu, il n'y a juste pas de vente nouvelle.
+    Sans ce drapeau, une liste vide est un échec de relevé.
+    direct_price : médiane déjà calculée, sans lignes de ventes à inventer.
+    """
     price_key = f"price_{market}"
     hist_key = f"history_{market}"
     dated_key = f"history_{market}_dated"
@@ -471,20 +515,48 @@ def apply_market(entry, market, sales, now_iso, empty_reason):
         "new_price": old_price,
         "fresh": [],
         "detail": empty_reason or "prix conservé",
+        "basis": basis,
     }
 
-    def keep(detail):
+    def stamp(ok, detail, kept_previous):
         entry[status_key] = {
-            "ok": False,
-            "kept_previous": True,
+            "ok": ok,
+            "kept_previous": kept_previous,
             "detail": detail,
             "checked_at": now_iso,
+            "basis": basis if ok else None,
+            "failed_since": None if ok else (entry.get(status_key) or {}).get("failed_since") or LAST_REAL_READ,
         }
-        result["detail"] = detail
+        result.update(ok=ok, kept=kept_previous, detail=detail, basis=basis if ok else None)
         return result
 
-    if not sales:
-        return keep(empty_reason or "aucune vente exploitable, prix conservé")
+    def keep(detail):
+        result["detail"] = detail
+        return stamp(False, detail, True)
+
+    if not sales and direct_price is None:
+        if measured_empty:
+            detail = empty_reason or "pas de nouvelle vente, dernier prix conservé"
+            return stamp(True, detail, True)
+        return keep(empty_reason or "échec du relevé, dernier prix conservé")
+
+    if not sales and direct_price is not None:
+        try:
+            median = int(round(float(direct_price)))
+        except (TypeError, ValueError):
+            return keep("médiane invalide, prix conservé")
+        if median <= 0:
+            return keep("prix nul rejeté, ancien prix conservé")
+        if old_price == median:
+            return stamp(True, "aucune nouvelle vente, dernier prix conservé", True)
+        entry[price_key] = median
+        append_snapshot(entry, hist_key, dated_key, median, today)
+        if market == "eu":
+            entry["price"] = median
+            entry["history"] = list(entry.get(hist_key) or [])
+        detail = "médiane PSA 10 mise à jour, détail des ventes non fourni"
+        result.update(new_price=median, fresh=[])
+        return stamp(True, detail, False)
 
     prices = [s["price"] for s in sales if isinstance(s.get("price"), (int, float)) and s["price"] > 0]
     median = robust_median(prices)
@@ -512,15 +584,8 @@ def apply_market(entry, market, sales, now_iso, empty_reason):
     entry[count_key] = len(sales)
 
     if same and old_price:
-        detail = "aucune nouvelle vente, dernier prix conservé"
-        entry[status_key] = {
-            "ok": True,
-            "kept_previous": True,
-            "detail": detail,
-            "checked_at": now_iso,
-        }
-        result.update(ok=True, kept=True, new_price=old_price, fresh=[], detail=detail)
-        return result
+        result.update(new_price=old_price, fresh=[])
+        return stamp(True, "aucune nouvelle vente, dernier prix conservé", True)
 
     entry[price_key] = median
     append_snapshot(entry, hist_key, dated_key, median, today)
@@ -529,20 +594,8 @@ def apply_market(entry, market, sales, now_iso, empty_reason):
         entry["history"] = list(entry.get(hist_key) or [])
         entry["sales_count"] = len(sales)
     detail = "référence initiale des ventes" if not had_sales else "nouvelles ventes intégrées"
-    entry[status_key] = {
-        "ok": True,
-        "kept_previous": False,
-        "detail": detail,
-        "checked_at": now_iso,
-    }
-    result.update(
-        ok=True,
-        kept=False,
-        new_price=median,
-        fresh=[] if not had_sales else fresh,
-        detail=detail,
-    )
-    return result
+    result.update(new_price=median, fresh=[] if not had_sales else fresh)
+    return stamp(True, detail, False)
 
 
 def positive_int(value):
@@ -1002,7 +1055,354 @@ def run_selftest():
     assert cheapest_loose_price(html) == 4.5
     assert cheapest_loose_price('<div class="article-row"><span class="price-container">12,00 €</span> BGS 10</div>') is None
     assert blocked("<html>Just a moment", 403)
+    login_html = "<html><title>Se connecter ou s'inscrire | eBay</title><body>captcha</body></html>"
+    assert diagnose(BeautifulSoup(login_html, "html.parser"), login_html) == "page de connexion eBay"
+    quiet_entry = {"price_eu": 265, "history_eu_dated": [{"d": "2026-07-20", "p": 265}]}
+    quiet = apply_market(
+        quiet_entry, "eu", [], "2026-10-18T00:00:00+00:00",
+        "pas de nouvelle vente, dernier prix conservé", measured_empty=True, basis="ventes",
+    )
+    assert quiet["ok"] is True and quiet_entry["source_eu"]["failed_since"] is None
+    direct_entry = {"price_ww": 219}
+    direct = apply_market(
+        direct_entry, "ww", [], "2026-10-18T00:00:00+00:00", "",
+        basis="ventes-ppt", direct_price=230,
+    )
+    assert direct["ok"] is True and direct_entry["price_ww"] == 230 and not direct_entry.get("sales_ww")
+    assert to_eur(100, "USD", 0.9) == 90
+    assert to_eur(10, "GBP", 0.9) is None
+    assert ebay_q({"must_contain": ["psa 10", "charizard", "307"]}) == "psa,10,charizard,307"
+    hist = {
+        "history_eu_dated": [{"d": "2026-07-20", "p": 265}, {"d": "2026-10-12", "p": 265}],
+        "history_ww_dated": [{"d": "2026-07-13", "p": 219}, {"d": "2026-08-03", "p": 219}],
+    }
+    assert drop_unmeasured_history(hist) == 2
+    assert hist["history_eu_dated"] == [{"d": "2026-07-20", "p": 265}]
+    assert [pt["d"] for pt in hist["history_ww_dated"]] == ["2026-07-13"]
+    rows = [{"name": "Charizard V", "cardNumber": "307/190", "setName": "Shiny Star V"}]
+    assert match_ppt(rows, {"ppt_name": "charizard", "ppt_number": "307", "ppt_set": "shiny star"})["name"] == "Charizard V"
+    assert match_ppt(
+        [{"name": "Charizard", "cardNumber": "4", "setName": "Base"}],
+        {"ppt_name": "charizard", "ppt_number": "307", "ppt_set": "shiny star"},
+    ) is None
     print("selftest OK")
+
+
+def drop_unmeasured_history(entry):
+    """Retire les points recopiés après le dernier vrai relevé (20 juil. → 17 oct. 2026)."""
+    removed = 0
+    for market in ("eu", "ww"):
+        key = f"history_{market}_dated"
+        dated = entry.get(key)
+        if not isinstance(dated, list):
+            continue
+        kept = []
+        for pt in dated:
+            day = str((pt or {}).get("d") or "")[:10]
+            if LAST_REAL_READ < day <= UNMEASURED_THROUGH:
+                removed += 1
+                continue
+            kept.append(pt)
+        entry[key] = kept
+        entry[f"history_{market}"] = [
+            pt["p"] for pt in kept if isinstance(pt, dict) and isinstance(pt.get("p"), (int, float))
+        ]
+    if isinstance(entry.get("history_eu"), list):
+        entry["history"] = list(entry["history_eu"])
+    return removed
+
+
+def ebay_q(card):
+    words = []
+    for kw in card.get("must_contain") or []:
+        words.extend(str(kw).split())
+    seen = []
+    for word in words:
+        if word not in seen:
+            seen.append(word)
+    return ",".join(seen)
+
+
+def to_eur(amount, currency, fx):
+    try:
+        value = float(amount)
+    except (TypeError, ValueError):
+        return None
+    if value <= 0:
+        return None
+    cur = (currency or "EUR").upper()
+    if cur == "EUR":
+        return value
+    if cur == "USD" and fx:
+        return value * float(fx)
+    return None
+
+
+def ebay_app_token(client_id, secret, scope):
+    if not client_id or not secret:
+        return None, "secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents"
+    basic = base64.b64encode(f"{client_id}:{secret}".encode()).decode()
+    try:
+        response = requests.post(
+            EBAY_TOKEN_URL,
+            headers={
+                "Authorization": f"Basic {basic}",
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            data={"grant_type": "client_credentials", "scope": scope},
+            timeout=25,
+        )
+    except requests.RequestException as exc:
+        return None, f"jeton eBay injoignable ({exc.__class__.__name__})"
+    if response.status_code != 200:
+        return None, f"jeton eBay refusé HTTP {response.status_code} ({scope.rsplit('/', 1)[-1]})"
+    token = (response.json() or {}).get("access_token")
+    if not token:
+        return None, "jeton eBay vide"
+    return token, None
+
+
+def api_fault(response):
+    try:
+        body = response.json()
+    except ValueError:
+        return f"HTTP {response.status_code}"
+    errors = body.get("errors") or []
+    if not errors:
+        return f"HTTP {response.status_code}"
+    err = errors[0]
+    message = str(err.get("message") or "")[:160]
+    return f"HTTP {response.status_code} {err.get('errorId') or ''} {message}".strip()
+
+
+def collect_sales(rows, card, fx, price_of, date_of):
+    sales = []
+    for row in rows:
+        title = row.get("title") or ""
+        if not title_matches_card(title, card.get("must_contain") or [], card.get("must_match_one") or []):
+            continue
+        amount, currency = price_of(row)
+        euros = to_eur(amount, currency, fx)
+        if euros is None or not (card["price_min"] <= euros <= card["price_max"]):
+            continue
+        sales.append({"price": round(euros, 2), "date": date_of(row), "title": title})
+        if len(sales) >= MAX_VALID_RESULTS:
+            break
+    return sales
+
+
+def ebay_search(url, token, card, market, list_key, price_of, date_of, fx):
+    filt = f"price:[{int(card['price_min'])}..{int(card['price_max'])}],priceCurrency:EUR"
+    if market == "eu":
+        filt += f",itemLocationCountry:{{{EU_LOCATION}}}"
+    params = {"q": ebay_q(card), "category_ids": EBAY_CATEGORY, "limit": "50", "filter": filt}
+    try:
+        response = requests.get(
+            url,
+            headers={
+                "Authorization": f"Bearer {token}",
+                "X-EBAY-C-MARKETPLACE-ID": "EBAY_FR",
+                "Accept": "application/json",
+                "Accept-Language": "fr-FR",
+            },
+            params=params,
+            timeout=30,
+        )
+    except requests.RequestException as exc:
+        return [], f"{exc.__class__.__name__}", False
+    if response.status_code != 200:
+        return [], api_fault(response), False
+    try:
+        payload = response.json()
+    except ValueError:
+        return [], "réponse non JSON", False
+    if list_key not in payload:
+        return [], "réponse sans liste de résultats", False
+    rows = payload.get(list_key) or []
+    sales = collect_sales(rows, card, fx, price_of, date_of)
+    print(f"    {len(rows)} lignes, {len(sales)} retenues")
+    return sales, None, True
+
+
+def price_insights(row):
+    money = row.get("lastSoldPrice") or {}
+    return money.get("value"), money.get("currency")
+
+
+def date_insights(row):
+    raw = row.get("lastSoldDate") or ""
+    return raw[:10] or None
+
+
+def price_browse(row):
+    money = row.get("price") or {}
+    return money.get("value"), money.get("currency")
+
+
+def date_browse(_row):
+    return None
+
+
+def match_ppt(rows, card):
+    want_name = normalize(card.get("ppt_name") or "")
+    want_num = str(card.get("ppt_number") or "").lstrip("0")
+    want_set = normalize(card.get("ppt_set") or "")
+    hits = []
+    for row in rows:
+        if want_name and want_name not in normalize(row.get("name") or ""):
+            continue
+        number = normalize(str(row.get("cardNumber") or ""))
+        tokens = [t.lstrip("0") or "0" for t in re.split(r"\D+", number) if t]
+        if want_num and want_num not in tokens:
+            continue
+        set_name = normalize(row.get("setName") or "")
+        if want_set and want_set not in set_name:
+            continue
+        hits.append(row)
+    if len(hits) == 1:
+        return hits[0]
+    return None
+
+
+def ppt_quote(card, fx):
+    key = os.environ.get("POKEMON_PRICE_TRACKER_API_KEY", "").strip()
+    if not key:
+        return [], "secret POKEMON_PRICE_TRACKER_API_KEY absent", False, None
+    if not fx:
+        return [], "taux USD/EUR indisponible, conversion refusée", False, None
+    try:
+        response = requests.get(
+            "https://www.pokemonpricetracker.com/api/v2/cards",
+            headers={"Authorization": f"Bearer {key}", "Accept": "application/json"},
+            params={
+                "language": "japanese",
+                "search": card.get("ppt_search") or card.get("name"),
+                "limit": "8",
+                "includeEbay": "true",
+            },
+            timeout=30,
+        )
+    except requests.RequestException as exc:
+        return [], f"PokemonPriceTracker {exc.__class__.__name__}", False, None
+    if response.status_code != 200:
+        return [], f"PokemonPriceTracker HTTP {response.status_code}", False, None
+    try:
+        payload = response.json()
+    except ValueError:
+        return [], "PokemonPriceTracker non JSON", False, None
+    chosen = match_ppt(payload.get("data") or [], card)
+    if not chosen:
+        return [], "carte japonaise introuvable chez PokemonPriceTracker", False, None
+    ebay = chosen.get("ebay") or {}
+    listings = ebay.get("soldListings") or []
+    sales = []
+    for row in listings:
+        company = str(row.get("gradingCompany") or row.get("grader") or "").upper()
+        grade = str(row.get("grade") or "")
+        if company and company != "PSA":
+            continue
+        if grade and grade not in ("10", "10.0"):
+            continue
+        amount = row.get("price")
+        if amount is None:
+            amount = row.get("soldPrice")
+        euros = to_eur(amount, row.get("currency") or "USD", fx)
+        if euros is None or not (card["price_min"] <= euros <= card["price_max"]):
+            continue
+        when = str(row.get("date") or row.get("soldDate") or "")[:10] or None
+        sales.append({"price": round(euros, 2), "date": when, "title": (row.get("title") or "PSA 10")[:140]})
+        if len(sales) >= MAX_VALID_RESULTS:
+            break
+    if sales:
+        print(f"    {len(sales)} ventes PSA 10 (PokemonPriceTracker)")
+        return sales, None, True, None
+    grade = (ebay.get("salesByGrade") or {}).get("psa10") or {}
+    euros = to_eur(grade.get("medianPrice"), "USD", fx)
+    if euros is None or not (card["price_min"] <= euros <= card["price_max"]):
+        return [], "médiane PSA 10 absente", False, None
+    print(f"    médiane PSA 10 {euros:.2f} €, sans lignes de ventes")
+    return [], None, True, round(euros, 2)
+
+
+def frankfurter_usd_eur():
+    try:
+        response = requests.get(
+            "https://api.frankfurter.app/latest",
+            params={"from": "USD", "to": "EUR"},
+            timeout=20,
+        )
+        if response.status_code != 200:
+            return None
+        return float(response.json()["rates"]["EUR"])
+    except (requests.RequestException, ValueError, KeyError, TypeError):
+        return None
+
+
+def prepare_sources():
+    client_id = os.environ.get("EBAY_CLIENT_ID", "").strip()
+    secret = os.environ.get("EBAY_CLIENT_SECRET", "").strip()
+    insights, insights_error = ebay_app_token(client_id, secret, INSIGHTS_SCOPE)
+    browse, browse_error = ebay_app_token(client_id, secret, BROWSE_SCOPE)
+    if browse is None and client_id and secret:
+        browse, browse_error = ebay_app_token(client_id, secret, "https://api.ebay.com/oauth/api_scope")
+    ppt = bool(os.environ.get("POKEMON_PRICE_TRACKER_API_KEY", "").strip())
+    fx = frankfurter_usd_eur() if ppt else None
+    print("=== Sources ===")
+    print(f"  Marketplace Insights (ventes) : {'jeton ok' if insights else insights_error}")
+    print(f"  Browse API (annonces actives) : {'jeton ok' if browse else browse_error}")
+    print(f"  PokemonPriceTracker : {'clé présente' if ppt else 'secret POKEMON_PRICE_TRACKER_API_KEY absent'}")
+    print(f"  Taux USD→EUR : {fx if fx else 'non chargé'}")
+    print("  HTML eBay LH_Sold : non utilisé (page « Se connecter ou s'inscrire » depuis le 27 juil. 2026)")
+    return {
+        "insights": insights,
+        "insights_error": insights_error,
+        "browse": browse,
+        "browse_error": browse_error,
+        "fx": fx,
+    }
+
+
+def quote_market(card, market, sources):
+    """Ventes officielles, puis annonces actives, puis médiane PSA 10 mondiale pour le marché Monde."""
+    errors = []
+    fx = sources.get("fx")
+    if sources.get("insights"):
+        print("    Marketplace Insights")
+        sales, err, measured = ebay_search(
+            INSIGHTS_URL, sources["insights"], card, market, "itemSales", price_insights, date_insights, fx
+        )
+        if measured:
+            if sales:
+                return sales, None, False, "ventes", None
+            return [], "pas de nouvelle vente dans les ventes réussies, dernier prix conservé", True, "ventes", None
+        errors.append(f"Marketplace Insights : {err}")
+        print(f"    échec du relevé — Marketplace Insights : {err}")
+    else:
+        errors.append(f"Marketplace Insights : {sources.get('insights_error')}")
+    if sources.get("browse"):
+        print("    Browse API (annonces actives, pas des ventes)")
+        sales, err, measured = ebay_search(
+            BROWSE_URL, sources["browse"], card, market, "itemSummaries", price_browse, date_browse, fx
+        )
+        if measured:
+            if sales:
+                return sales, None, False, "annonces", None
+            return [], "aucune annonce active dans le filtre, dernier prix conservé", True, "annonces", None
+        errors.append(f"Browse API : {err}")
+        print(f"    échec du relevé — Browse API : {err}")
+    else:
+        errors.append(f"Browse API : {sources.get('browse_error')}")
+    if market == "ww" and card.get("ppt_search"):
+        print("    PokemonPriceTracker (ventes PSA 10, USD converti)")
+        sales, err, measured, direct = ppt_quote(card, fx)
+        if measured:
+            return sales, None, not sales and direct is None, "ventes-ppt", direct
+        errors.append(f"PokemonPriceTracker : {err}")
+        print(f"    échec du relevé — PokemonPriceTracker : {err}")
+    elif market == "eu":
+        errors.append("Europe : pas de repli mondial (il effacerait l'écart EU/Monde)")
+    detail = "échec du relevé. " + " | ".join(errors)
+    return [], detail, False, None, None
 
 
 def main():
@@ -1014,43 +1414,49 @@ def main():
     alerts = []
 
     print(f"=== PAPOU VAULT update @ {now} ===")
-    print(f"=== Source eBay: {BASE_URL} | quotidien | prix conservé si échec ===\n")
-
-    session = requests.Session()
-    if not warm_up(session):
-        print("Warm-up échoué, on tente quand même\n")
+    sources = prepare_sources()
+    print()
 
     ebay_ok = 0
     ebay_fail = 0
+    quiet = 0
     for i, card in enumerate(CARDS, 1):
         cid = card["id"]
         print(f"\n[{cid}] ({i}/{len(CARDS)})")
         print(f"  Filtre: contient={card['must_contain']} | un_de={card['must_match_one']}")
         print(f"  Range prix: {card['price_min']}-{card['price_max']}€")
         entry = data["cards"].get(cid, {})
+        drop_unmeasured_history(entry)
         vault_card = (vault.get("cards") or {}).get(cid, {})
 
-        for market, url in (("eu", card["url_eu"]), ("ww", card["url_ww"])):
+        for market in ("eu", "ww"):
             label = "EU" if market == "eu" else "WW"
             print(f"  {'🇪🇺' if market == 'eu' else '🌎'} marché {label}")
             try:
-                sales, error = fetch_url_filtered(session, url, label, card)
-                result = apply_market(entry, market, sales, now, error)
+                sales, error, measured_empty, basis, direct = quote_market(card, market, sources)
+                result = apply_market(
+                    entry, market, sales, now, error,
+                    measured_empty=measured_empty, basis=basis, direct_price=direct,
+                )
             except Exception as exc:
                 print(f"    ERREUR {label}: {exc}")
-                result = apply_market(entry, market, [], now, f"erreur interne, prix conservé")
-            if result["ok"]:
-                ebay_ok += 1
-                print(f"    ✓ {result['detail']} → {result['new_price']}€")
-            else:
+                result = apply_market(entry, market, [], now, f"échec du relevé ({exc.__class__.__name__})")
+            if not result["ok"]:
                 ebay_fail += 1
-                print(f"    ⚠ {result['detail']}")
+                print(f"    ✗ échec du relevé — {result['detail']}")
+            elif result["kept"]:
+                ebay_ok += 1
+                quiet += 1
+                print(f"    ○ pas de nouvelle vente — {result['new_price']}€ ({result.get('basis') or 'source'})")
+            else:
+                ebay_ok += 1
+                print(f"    ✓ {result['detail']} → {result['new_price']}€ [{result.get('basis')}]")
             alerts.extend(threshold_alerts(
                 card["name"], cid, market, result["old_price"], result["new_price"], vault_card, alert_log, now
             ))
             alerts.extend(sale_alerts(card["name"], cid, market, result["fresh"], alert_log, now))
-            if market == "eu":
-                time.sleep(random.uniform(6, 11))
+            if market == "eu" and (sources.get("insights") or sources.get("browse")):
+                time.sleep(1.2)
 
         try:
             fetched, pop_error = fetch_population(card["cert"])
@@ -1085,18 +1491,19 @@ def main():
         record = wish_out.get(wid, {})
         record["name"] = item.get("name") or wid
         record["target_price"] = positive_int(item.get("target_price"))
-        for market, url_key in (("eu", "url_eu"), ("ww", "url_ww")):
-            url = spec[url_key]
-            if not url:
-                apply_market(record, market, [], now, "lien eBay manquant")
-                continue
+        if not item.get("must_contain"):
+            spec["must_contain"] = ["psa", "10"] + [w for w in spec["name"].split() if len(w) > 2][:4]
+        for market in ("eu", "ww"):
             try:
-                sales, error = fetch_url_filtered(session, url, market.upper(), spec)
-                result = apply_market(record, market, sales, now, error)
+                sales, error, measured_empty, basis, direct = quote_market(spec, market, sources)
+                result = apply_market(
+                    record, market, sales, now, error,
+                    measured_empty=measured_empty, basis=basis, direct_price=direct,
+                )
             except Exception as exc:
-                result = apply_market(record, market, [], now, f"erreur, prix conservé ({exc.__class__.__name__})")
-            print(f"  {market}: {result['detail']} → {result['new_price']}")
-            time.sleep(random.uniform(4, 8))
+                result = apply_market(record, market, [], now, f"échec du relevé ({exc.__class__.__name__})")
+            kind = "lu" if result["ok"] else "échec du relevé"
+            print(f"  {market}: {kind} — {result['detail']} → {result['new_price']}")
         prices = [
             record.get("price_eu") if isinstance(record.get("price_eu"), (int, float)) else None,
             record.get("price_ww") if isinstance(record.get("price_ww"), (int, float)) else None,
@@ -1132,12 +1539,17 @@ def main():
     )
     data["sources"] = {
         "ebay": {
-            "ok": ebay_ok > 0,
+            "ok": ebay_fail == 0 and ebay_ok > 0,
             "checked_at": now,
+            "failed_since": None if ebay_fail == 0 else LAST_REAL_READ,
             "detail": (
-                f"{ebay_ok} marché(s) lu(s), {ebay_fail} conservé(s) sans nouveau prix."
-                if ebay_ok
-                else "eBay illisible sur ce run : tous les derniers prix sont conservés."
+                f"{ebay_ok} marché(s) lu(s), dont {quiet} sans nouvelle vente."
+                if ebay_fail == 0
+                else (
+                    f"échec du relevé sur {ebay_fail} marché(s), {ebay_ok} lu(s). "
+                    f"Dernier relevé réel des ventes : {LAST_REAL_READ}. "
+                    "Les prix encore affichés ne sont pas confirmés depuis."
+                )
             ),
         },
         "cardmarket": {
