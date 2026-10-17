@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "aide": "Fichier lu par le site et par le relevé quotidien. Les champs null restent vides. Un nombre saisi ici sert de valeur par défaut (l'interface sur cet appareil peut la remplacer via localStorage). Les alertes e-mail GitHub lisent uniquement ce fichier : seuils alert_below / alert_above, et target_price de la liste de souhaits. Pour les recevoir, surveille le dépôt (Watch → Issues) avec les notifications e-mail ou l'appli GitHub. price_cm est le prix loose Cardmarket (carte non gradée, vendeur européen le moins cher), en euros. La population PSA et ce prix restent à null si le relevé ne peut pas les lire. Ne mets pas 0.",
+  "cards": {
+    "charizard-v-ssv": {
+      "buy_price": null,
+      "population": null,
+      "alert_below": null,
+      "alert_above": null,
+      "price_cm": null
+    },
+    "mentali-v-eh": {
+      "buy_price": null,
+      "population": null,
+      "alert_below": null,
+      "alert_above": null,
+      "price_cm": null
+    },
+    "dracaufeu-ex-151": {
+      "buy_price": null,
+      "population": null,
+      "alert_below": null,
+      "alert_above": null,
+      "price_cm": null
+    },
+    "pikachu-ex-sv8": {
+      "buy_price": null,
+      "population": null,
+      "alert_below": null,
+      "alert_above": null,
+      "price_cm": null
+    },
+    "umbreon-ex-sv8a": {
+      "buy_price": null,
+      "population": null,
+      "alert_below": null,
+      "alert_above": null,
+      "price_cm": null
+    }
+  },
+  "wishlist": []
+}
