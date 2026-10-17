@@ -1,5 +1,5 @@
 {
-  "last_update": "2026-10-12T17:04:45+00:00",
+  "last_update": "2026-10-17T00:30:21+00:00",
   "cards": {
     "charizard-v-ssv": {
       "price": 265,
@@ -17,7 +17,7 @@
         265
       ],
       "sales_count": 0,
-      "last_update": "2026-10-12T17:04:45+00:00",
+      "last_update": "2026-10-17T00:30:21+00:00",
       "history_eu": [
         255,
         255,
@@ -299,20 +299,20 @@
       "sales_eu": [],
       "sales_ww": [],
       "source_eu": {
-        "ok": true,
-        "kept_previous": false,
-        "detail": "Relevé eBay du 12 octobre 2026",
-        "checked_at": "2026-10-12T17:04:45+00:00"
+        "ok": false,
+        "kept_previous": true,
+        "detail": "HTTP 403, prix conservé",
+        "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "source_ww": {
-        "ok": true,
-        "kept_previous": false,
-        "detail": "Relevé eBay du 12 octobre 2026",
-        "checked_at": "2026-10-12T17:04:45+00:00"
+        "ok": false,
+        "kept_previous": true,
+        "detail": "CAPTCHA détecté",
+        "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "population": null,
       "population_source": null,
-      "population_error": "Pas encore collectée. Saisie manuelle possible.",
+      "population_error": "page PSA illisible (HTTP 403), saisie manuelle",
       "price_cm": null,
       "price_cm_source": null,
       "price_cm_error": "Cardmarket indisponible"
@@ -333,7 +333,7 @@
         318
       ],
       "sales_count": 0,
-      "last_update": "2026-10-12T17:04:45+00:00",
+      "last_update": "2026-10-17T00:30:21+00:00",
       "history_eu": [
         270,
         270,
@@ -615,20 +615,20 @@
       "sales_eu": [],
       "sales_ww": [],
       "source_eu": {
-        "ok": true,
-        "kept_previous": false,
-        "detail": "Relevé eBay du 12 octobre 2026",
-        "checked_at": "2026-10-12T17:04:45+00:00"
+        "ok": false,
+        "kept_previous": true,
+        "detail": "CAPTCHA détecté",
+        "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "source_ww": {
-        "ok": true,
-        "kept_previous": false,
-        "detail": "Relevé eBay du 12 octobre 2026",
-        "checked_at": "2026-10-12T17:04:45+00:00"
+        "ok": false,
+        "kept_previous": true,
+        "detail": "HTTP 403, prix conservé",
+        "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "population": null,
       "population_source": null,
-      "population_error": "Pas encore collectée. Saisie manuelle possible.",
+      "population_error": "page PSA illisible (HTTP 403), saisie manuelle",
       "price_cm": null,
       "price_cm_source": null,
       "price_cm_error": "Cardmarket indisponible"
@@ -649,7 +649,7 @@
         815
       ],
       "sales_count": 0,
-      "last_update": "2026-10-12T17:04:45+00:00",
+      "last_update": "2026-10-17T00:30:21+00:00",
       "history_eu": [
         753,
         748,
@@ -931,20 +931,20 @@
       "sales_eu": [],
       "sales_ww": [],
       "source_eu": {
-        "ok": true,
-        "kept_previous": false,
-        "detail": "Relevé eBay du 12 octobre 2026",
-        "checked_at": "2026-10-12T17:04:45+00:00"
+        "ok": false,
+        "kept_previous": true,
+        "detail": "HTTP 403, prix conservé",
+        "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "source_ww": {
-        "ok": true,
-        "kept_previous": false,
-        "detail": "Relevé eBay du 12 octobre 2026",
-        "checked_at": "2026-10-12T17:04:45+00:00"
+        "ok": false,
+        "kept_previous": true,
+        "detail": "CAPTCHA détecté",
+        "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "population": null,
       "population_source": null,
-      "population_error": "Pas encore collectée. Saisie manuelle possible.",
+      "population_error": "page PSA illisible (HTTP 403), saisie manuelle",
       "price_cm": null,
       "price_cm_source": null,
       "price_cm_error": "Cardmarket indisponible"
@@ -965,7 +965,7 @@
         725
       ],
       "sales_count": 0,
-      "last_update": "2026-10-12T17:04:45+00:00",
+      "last_update": "2026-10-17T00:30:21+00:00",
       "history_eu": [
         726,
         736,
@@ -1247,20 +1247,20 @@
       "sales_eu": [],
       "sales_ww": [],
       "source_eu": {
-        "ok": true,
-        "kept_previous": false,
-        "detail": "Relevé eBay du 12 octobre 2026",
-        "checked_at": "2026-10-12T17:04:45+00:00"
+        "ok": false,
+        "kept_previous": true,
+        "detail": "CAPTCHA détecté",
+        "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "source_ww": {
-        "ok": true,
-        "kept_previous": false,
-        "detail": "Relevé eBay du 12 octobre 2026",
-        "checked_at": "2026-10-12T17:04:45+00:00"
+        "ok": false,
+        "kept_previous": true,
+        "detail": "CAPTCHA détecté",
+        "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "population": null,
       "population_source": null,
-      "population_error": "Pas encore collectée. Saisie manuelle possible.",
+      "population_error": "page PSA illisible (HTTP 403), saisie manuelle",
       "price_cm": null,
       "price_cm_source": null,
       "price_cm_error": "Cardmarket indisponible"
@@ -1281,7 +1281,7 @@
         735
       ],
       "sales_count": 0,
-      "last_update": "2026-10-12T17:04:45+00:00",
+      "last_update": "2026-10-17T00:30:21+00:00",
       "history_eu": [
         600,
         600,
@@ -1563,20 +1563,20 @@
       "sales_eu": [],
       "sales_ww": [],
       "source_eu": {
-        "ok": true,
-        "kept_previous": false,
-        "detail": "Relevé eBay du 12 octobre 2026",
-        "checked_at": "2026-10-12T17:04:45+00:00"
+        "ok": false,
+        "kept_previous": true,
+        "detail": "HTTP 403, prix conservé",
+        "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "source_ww": {
-        "ok": true,
-        "kept_previous": false,
-        "detail": "Relevé eBay du 12 octobre 2026",
-        "checked_at": "2026-10-12T17:04:45+00:00"
+        "ok": false,
+        "kept_previous": true,
+        "detail": "CAPTCHA détecté",
+        "checked_at": "2026-10-17T00:30:21+00:00"
       },
       "population": null,
       "population_source": null,
-      "population_error": "Pas encore collectée. Saisie manuelle possible.",
+      "population_error": "page PSA illisible (HTTP 403), saisie manuelle",
       "price_cm": null,
       "price_cm_source": null,
       "price_cm_error": "Cardmarket indisponible"
@@ -1585,19 +1585,19 @@
   "last_success": "2026-10-12T17:04:45+00:00",
   "sources": {
     "ebay": {
-      "ok": true,
-      "checked_at": "2026-10-12T17:04:45+00:00",
-      "detail": "Dernier relevé eBay réussi le 12 octobre 2026. Le cron ne tournait que le lundi ; il passe au quotidien."
+      "ok": false,
+      "checked_at": "2026-10-17T00:30:21+00:00",
+      "detail": "eBay illisible sur ce run : tous les derniers prix sont conservés."
     },
     "cardmarket": {
       "ok": false,
-      "checked_at": null,
+      "checked_at": "2026-10-17T00:30:21+00:00",
       "detail": "Cardmarket indisponible. Saisie manuelle du prix loose (carte non gradée, vendeur européen)."
     },
     "psa": {
       "ok": false,
-      "checked_at": null,
-      "detail": "Population pas encore collectée. Saisie manuelle dans vault.json ou dans l'interface."
+      "checked_at": "2026-10-17T00:30:21+00:00",
+      "detail": "Population non lue. Saisie manuelle dans vault.json ou dans l'interface."
     }
   },
   "wishlist": {},
