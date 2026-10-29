@@ -1,5 +1,5 @@
 {
-  "last_update": "2026-10-28T12:58:51+00:00",
+  "last_update": "2026-10-29T13:05:33+00:00",
   "cards": {
     "charizard-v-ssv": {
       "price": 265,
@@ -26,7 +26,7 @@
         265
       ],
       "sales_count": 0,
-      "last_update": "2026-10-28T12:58:51+00:00",
+      "last_update": "2026-10-29T13:05:33+00:00",
       "history_eu": [
         250,
         250,
@@ -230,7 +230,7 @@
         "ok": false,
         "kept_previous": true,
         "detail": "échec du relevé. Marketplace Insights : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | Browse API : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | Europe : pas de repli mondial (il effacerait l'écart EU/Monde)",
-        "checked_at": "2026-10-28T12:58:51+00:00",
+        "checked_at": "2026-10-29T13:05:33+00:00",
         "basis": null,
         "failed_since": "2026-07-20"
       },
@@ -238,7 +238,7 @@
         "ok": false,
         "kept_previous": true,
         "detail": "échec du relevé. Marketplace Insights : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | Browse API : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | PokemonPriceTracker : secret POKEMON_PRICE_TRACKER_API_KEY absent",
-        "checked_at": "2026-10-28T12:58:51+00:00",
+        "checked_at": "2026-10-29T13:05:33+00:00",
         "basis": null,
         "failed_since": "2026-07-20"
       },
@@ -274,7 +274,7 @@
         318
       ],
       "sales_count": 0,
-      "last_update": "2026-10-28T12:58:51+00:00",
+      "last_update": "2026-10-29T13:05:33+00:00",
       "history_eu": [
         235,
         235,
@@ -478,7 +478,7 @@
         "ok": false,
         "kept_previous": true,
         "detail": "échec du relevé. Marketplace Insights : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | Browse API : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | Europe : pas de repli mondial (il effacerait l'écart EU/Monde)",
-        "checked_at": "2026-10-28T12:58:51+00:00",
+        "checked_at": "2026-10-29T13:05:33+00:00",
         "basis": null,
         "failed_since": "2026-07-20"
       },
@@ -486,7 +486,7 @@
         "ok": false,
         "kept_previous": true,
         "detail": "échec du relevé. Marketplace Insights : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | Browse API : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | PokemonPriceTracker : secret POKEMON_PRICE_TRACKER_API_KEY absent",
-        "checked_at": "2026-10-28T12:58:51+00:00",
+        "checked_at": "2026-10-29T13:05:33+00:00",
         "basis": null,
         "failed_since": "2026-07-20"
       },
@@ -522,7 +522,7 @@
         815
       ],
       "sales_count": 0,
-      "last_update": "2026-10-28T12:58:51+00:00",
+      "last_update": "2026-10-29T13:05:33+00:00",
       "history_eu": [
         917,
         917,
@@ -726,7 +726,7 @@
         "ok": false,
         "kept_previous": true,
         "detail": "échec du relevé. Marketplace Insights : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | Browse API : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | Europe : pas de repli mondial (il effacerait l'écart EU/Monde)",
-        "checked_at": "2026-10-28T12:58:51+00:00",
+        "checked_at": "2026-10-29T13:05:33+00:00",
         "basis": null,
         "failed_since": "2026-07-20"
       },
@@ -734,7 +734,7 @@
         "ok": false,
         "kept_previous": true,
         "detail": "échec du relevé. Marketplace Insights : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | Browse API : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | PokemonPriceTracker : secret POKEMON_PRICE_TRACKER_API_KEY absent",
-        "checked_at": "2026-10-28T12:58:51+00:00",
+        "checked_at": "2026-10-29T13:05:33+00:00",
         "basis": null,
         "failed_since": "2026-07-20"
       },
@@ -770,7 +770,7 @@
         725
       ],
       "sales_count": 0,
-      "last_update": "2026-10-28T12:58:51+00:00",
+      "last_update": "2026-10-29T13:05:33+00:00",
       "history_eu": [
         600,
         765,
@@ -974,7 +974,7 @@
         "ok": false,
         "kept_previous": true,
         "detail": "échec du relevé. Marketplace Insights : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | Browse API : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | Europe : pas de repli mondial (il effacerait l'écart EU/Monde)",
-        "checked_at": "2026-10-28T12:58:51+00:00",
+        "checked_at": "2026-10-29T13:05:33+00:00",
         "basis": null,
         "failed_since": "2026-07-20"
       },
@@ -982,7 +982,7 @@
         "ok": false,
         "kept_previous": true,
         "detail": "échec du relevé. Marketplace Insights : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | Browse API : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | PokemonPriceTracker : secret POKEMON_PRICE_TRACKER_API_KEY absent",
-        "checked_at": "2026-10-28T12:58:51+00:00",
+        "checked_at": "2026-10-29T13:05:33+00:00",
         "basis": null,
         "failed_since": "2026-07-20"
       },
@@ -1018,7 +1018,7 @@
         735
       ],
       "sales_count": 0,
-      "last_update": "2026-10-28T12:58:51+00:00",
+      "last_update": "2026-10-29T13:05:33+00:00",
       "history_eu": [
         713,
         698,
@@ -1222,7 +1222,7 @@
         "ok": false,
         "kept_previous": true,
         "detail": "échec du relevé. Marketplace Insights : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | Browse API : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | Europe : pas de repli mondial (il effacerait l'écart EU/Monde)",
-        "checked_at": "2026-10-28T12:58:51+00:00",
+        "checked_at": "2026-10-29T13:05:33+00:00",
         "basis": null,
         "failed_since": "2026-07-20"
       },
@@ -1230,7 +1230,7 @@
         "ok": false,
         "kept_previous": true,
         "detail": "échec du relevé. Marketplace Insights : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | Browse API : secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET absents | PokemonPriceTracker : secret POKEMON_PRICE_TRACKER_API_KEY absent",
-        "checked_at": "2026-10-28T12:58:51+00:00",
+        "checked_at": "2026-10-29T13:05:33+00:00",
         "basis": null,
         "failed_since": "2026-07-20"
       },
@@ -1246,18 +1246,18 @@
   "sources": {
     "ebay": {
       "ok": false,
-      "checked_at": "2026-10-28T12:58:51+00:00",
+      "checked_at": "2026-10-29T13:05:33+00:00",
       "failed_since": "2026-07-20",
       "detail": "échec du relevé sur 10 marché(s), 0 lu(s). Dernier relevé réel des ventes : 2026-07-20. Les prix encore affichés ne sont pas confirmés depuis."
     },
     "cardmarket": {
       "ok": false,
-      "checked_at": "2026-10-28T12:58:51+00:00",
+      "checked_at": "2026-10-29T13:05:33+00:00",
       "detail": "Cardmarket indisponible. Saisie manuelle du prix loose (carte non gradée, vendeur européen)."
     },
     "psa": {
       "ok": false,
-      "checked_at": "2026-10-28T12:58:51+00:00",
+      "checked_at": "2026-10-29T13:05:33+00:00",
       "detail": "Population non lue. Saisie manuelle dans vault.json ou dans l'interface."
     }
   },
